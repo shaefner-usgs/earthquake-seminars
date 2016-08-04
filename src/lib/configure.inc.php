@@ -10,9 +10,34 @@ $PROMPTS = array(
   // )
 
   'MOUNT_PATH' => array(
-    'prompt' => 'URL Path for application',
-    'default' => '/mount/path',
+    'prompt' => 'URL path for application',
+    'default' => '/regional/nca/seminars',
     'secure' => false
+  ),
+  'APP_DIR' => array(
+    'prompt' => 'Absolute path to application root directory',
+    'default' => $APP_DIR,
+    'secure' => false
+  ),
+  'DATA_DIR' => array(
+    'prompt' => 'Absolute path to application data directory',
+    'default' => str_replace('/apps/', '/data/', $APP_DIR),
+    'secure' => false
+  ),
+  'DB_DSN' => array(
+    'prompt' => 'Database connection DSN string',
+    'default' => 'mysql:host=***REMOVED***.wr.usgs.gov;port=3306;dbname=ehpdb',
+    'secure' => false
+  ),
+  'DB_USER' => array(
+    'prompt' => 'Read-only username for database connections',
+    'default' => 'web',
+    'secure' => false
+  ),
+  'DB_PASS' => array(
+    'prompt' => 'Password for database user',
+    'default' => '',
+    'secure' => true
   )
 
 );
