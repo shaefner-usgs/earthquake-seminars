@@ -1,0 +1,42 @@
+.site-sectionnav {
+
+  > section > section > a,
+  > section > section > header {
+    color: #333;
+    display: block;
+    transition: background .25s ease-out;
+  }
+
+  > section > section > a {
+    padding: .5em 1em .5em 2.5em;
+    position: relative;
+  }
+
+  > section > section > header {
+    font-weight: 400;
+    text-shadow: 0 0 2px #fff;
+    padding: .66667em 1em 0 1.5em;
+    position: relative;
+
+    &:before {
+      background-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .1) 2.5em, transparent);
+      content: '';
+      height: 1px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  > section > section > a {
+    background-image: none;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #f4f4f4;
+      text-decoration: underline;
+    }
+  }
+
+}
