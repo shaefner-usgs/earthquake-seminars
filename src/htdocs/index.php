@@ -1,24 +1,32 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+
+$year = safeParam('year', date('Y'));
+
 if (!isset($TEMPLATE)) {
-  // template functions
-  include_once 'functions.inc.php';
-
-  // defines the $CONFIG hash of configuration variables
-  include_once '../conf/config.inc.php';
-
-  $HEAD = '<link rel="stylesheet" href="css/index.css"/>';
-  $FOOT = '<script src="js/index.js"></script>';
+  $TITLE = 'Earthquake Science Center Seminars';
+  $NAVIGATION = true;
+  $HEAD = '<link rel="stylesheet" href="'. $MOUNT_PATH . '/css/index.css" />';
+  $FOOT = '';
 
   include 'template.inc.php';
 }
 
+$db = new Db();
+
+$rsSeminars = $db->querySeminars($year);
+
+$seminarsHtml = '<ul>';
+while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
+  $seminarsHtml .= sprintf('<li>%s</li>',
+    $row->topic
+  );
+}
+$seminarsHtml .= '</ul>';
+
 ?>
 
-<div id="application">
-  <noscript>
-    <a href="https://www.google.com/search?q=javascript">
-      This page requires javascript.
-    </a>
-  </noscript>
-</div>
+<?php print $seminarsHtml; ?>
