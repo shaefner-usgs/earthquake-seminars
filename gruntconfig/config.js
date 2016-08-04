@@ -10,7 +10,7 @@ var config,
     iniConfig,
     packageJson;
 
-basePort = 8880;
+basePort = 9100;
 iniConfig = ini.parse(fs.readFileSync('./src/conf/config.ini', 'utf-8'));
 packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 

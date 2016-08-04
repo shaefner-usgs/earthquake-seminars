@@ -1,10 +1,10 @@
 {
-  "name": "hazdev-project-skeleton",
-  "version": "0.1.0",
-  "description": "Skeleton for web applications.",
+  "name": "earthquake-seminars",
+  "version": "1.0.0",
+  "description": "Earthquake Science Center Seminars",
   "repository": {
     "type": "git",
-    "url": "https://github.com/usgs/hazdev-skeleton.git"
+    "url": "https://github.com/usgs/earthquake-seminars.git"
   },
   "keywords": [
     "usgs"
