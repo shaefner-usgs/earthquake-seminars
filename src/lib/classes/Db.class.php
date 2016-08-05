@@ -72,6 +72,29 @@ class Db {
   }
 
   /**
+   * Query db to get seminar committee members
+   *
+   * @param $who {String}
+   *
+   * @return {Function}
+   */
+  public function queryCommittee ($who=NULL) {
+    if ($who === 'all') {
+      $order = ' `role` ASC, `name` ASC';
+      $where = ' `role` LIKE "committee%"';
+    } else {
+      $order = ' `name` ASC';
+      $where = ' `role` = "committee"';
+    }
+
+    $sql = "SELECT * FROM seminars_staff
+      WHERE $where
+      ORDER BY $order";
+
+    return $this->_execQuery($sql);
+  }
+
+  /**
    * Query db to get details for given seminar
    *
    * @param $id {Int}
@@ -91,15 +114,14 @@ class Db {
    * Query db to get a list of seminars
    *
    * @param $year {Int} default is NULL
-   *     filter seminar list to only include seminars in given year (defaults
-   *     to upcoming seminars; filters out upcoming if passed current year)
+   *     filter seminar list to include only seminars in given year (defaults
+   *     to upcoming seminars; only past seminars incl. if passed current year)
    *
    * @return {Function}
    */
   public function querySeminars ($year=NULL) {
-    $filter = NULL;
     $today = date('Y-m-d');
-    $where = "`publish` = 'yes'";
+    $where = '`publish` = "yes"';
 
     $params = [
       'today' => $today
@@ -111,8 +133,10 @@ class Db {
       // for current year, only include past seminars
       $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
     } else {
+      $filter = NULL;
       $where .= ' AND `datetime` >= :today';
     }
+
     $sql = "SELECT * FROM seminars_list
       WHERE $where
       ORDER BY `datetime` ASC";
