@@ -11,18 +11,25 @@ if (preg_match("@^$section/?$@", $url)) {
   $matches = true;
 }
 
-// Create navGroup for archived seminars organized by year
-$archives = '';
+// Concatenate navItems for each year of past seminars
+$navItems = '';
 $beginYear = 2000;
-$endYear = date('Y');
-for ($year = $endYear; $year >= $beginYear; $year --) {
-  $archives .= navItem("$section/$year", $year);
+$currentYear = date('Y');
+for ($year = $currentYear; $year >= $beginYear; $year --) {
+  $navItems .= navItem("$section/$year", $year);
+}
+
+// Only expand navGroup if viewing past seminars
+if (preg_match("@^$section/\d{4}$@", $url)) {
+  $pastNav = navGroup('Past', $navItems);
+} else {
+  $pastNav = navItem("$section/$currentYear", 'Past');
 }
 
 $NAVIGATION =
   navGroup('Seminars',
     navItem("$section", 'Upcoming', $matches) .
-    navGroup('Past', $archives) .
+    $pastNav .
     navItem("$section/committees.php", 'Seminar Committee') .
     navItem("http://online.wr.usgs.gov/kiosk/mparea3.html",
       'Campus Map and Directions')
