@@ -30,7 +30,7 @@ $NAVIGATION =
   navGroup('Seminars',
     navItem("$section", 'Upcoming', $matches) .
     $pastNav .
-    navItem("$section/committees.php", 'Seminar Committee') .
+    navItem("$section/committee.php", 'Seminar Committee') .
     navItem("http://online.wr.usgs.gov/kiosk/mparea3.html",
       'Campus Map and Directions')
   );
