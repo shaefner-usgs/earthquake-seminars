@@ -80,7 +80,7 @@ class Db {
    */
   public function queryCommittee ($who=NULL) {
     if ($who === 'all') {
-      $order = ' `role` ASC, `name` ASC';
+      $order = ' `role` DESC, `name` ASC';
       $where = ' `role` LIKE "committee%"';
     } else {
       $order = ' `name` ASC';
