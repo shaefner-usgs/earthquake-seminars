@@ -91,21 +91,32 @@ class Db {
    * Query db to get a list of seminars
    *
    * @param $year {Int} default is NULL
-   *     filter seminar list to only include seminars in given year
+   *     filter seminar list to only include seminars in given year (defaults
+   *     to upcoming seminars; filters out upcoming if passed current year)
    *
    * @return {Function}
    */
   public function querySeminars ($year=NULL) {
+    $filter = NULL;
+    $today = date('Y-m-d');
+    $where = "`publish` = 'yes'";
+
+    $params = [
+      'today' => $today
+    ];
+
     if ($year) {
       $filter = "$year%";
-      $whereClause = ' WHERE `datetime` LIKE :filter';
+      $params['filter'] = $filter;
+      // for current year, only include past seminars
+      $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
+    } else {
+      $where .= ' AND `datetime` >= :today';
     }
     $sql = "SELECT * FROM seminars_list
-      $whereClause
-      ORDER BY `datetime` DESC";
+      WHERE $where
+      ORDER BY `datetime` ASC";
 
-    return $this->_execQuery($sql, [
-      'filter' => $filter
-    ]);
+    return $this->_execQuery($sql, $params);
   }
 }
