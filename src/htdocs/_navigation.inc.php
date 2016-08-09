@@ -31,8 +31,7 @@ $NAVIGATION =
     navItem("$section", 'Upcoming', $matches) .
     $pastNav .
     navItem("$section/committee.php", 'Committee') .
-    navItem("http://online.wr.usgs.gov/kiosk/mparea3.html",
-      'Campus Map and Directions')
+    navItem("$section/related.php", 'Related Seminars')
   );
 
 print $NAVIGATION;
