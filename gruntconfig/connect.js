@@ -48,6 +48,10 @@ var connect = {
       to: '/index.php?year=$1'
     },
     {
+      from: '^' + MOUNT_PATH + '/(id[0-9]+)$',
+      to: '/seminar.php?id=$1'
+    },
+    {
       from: '^' + MOUNT_PATH + '/?(.*)$',
       to: '/$1'
     }
