@@ -13,14 +13,16 @@ h2 {
   > li {
     border-bottom: 1px solid #eee;
 
-    a {
-      background: #fff;
-      color: $text-color;
+    > a, > div {
       display: flex;
       font-weight: 300;
-      padding: 1.5em 3px;
+      padding: 1.25em 3px;
+    }
+    > a {
+      color: $text-color;
+      background: #fff;
       text-decoration: none;
-      transition: background 0.25s ease-in-out;
+      transition: background 0.33s ease-in-out;
 
       &:hover {
         background: rgba(255,255,0,.10);
@@ -32,12 +34,21 @@ h2 {
       font-weight: normal;
       margin: 0;
     }
+    mark {
+      padding: 0;
+      background: none;
+      color: #c00;
+    }
     p {
       margin: .25em 0 0;
     }
     span {
       color: #999;
       display: block;
+
+      mark {
+        color: rgba(204, 0, 0, 0.5);
+      }
     }
     time {
       flex: 0 0 auto;
@@ -55,4 +66,8 @@ h2 {
       order: 2;
     }
   }
+}
+
+.archives .time {
+  display: none;
 }
