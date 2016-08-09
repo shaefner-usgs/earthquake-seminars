@@ -106,7 +106,7 @@ $seminarsHtml .= '</ul>';
   Middlefield Road, Menlo Park, CA</a>.</p>
 
 <p>We record most seminars. You can watch live or
-  <a href="seminars/<?php print $currentYear; ?>">check the archives</a> to
+  <a href="<?php print "$MOUNT_PATH/$currentYear"; ?>">check the archives</a> to
   view a past seminar.</p>
 
 <h3>Video Podcast</h3>
