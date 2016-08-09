@@ -1,1 +1,58 @@
 @import '_subnav.scss';
+@import '_variables.scss';
+
+h2 {
+  border-bottom: 1px solid #ddd;
+  margin: 1.5em 0 0;
+  padding: 0 0 .5em;
+}
+
+.seminars {
+  margin: 0 0 3.5em;
+
+  > li {
+    border-bottom: 1px solid #eee;
+
+    a {
+      background: #fff;
+      color: $text-color;
+      display: flex;
+      font-weight: 300;
+      padding: 1.5em 3px;
+      text-decoration: none;
+      transition: background 0.25s ease-in-out;
+
+      &:hover {
+        background: rgba(255,255,0,.10);
+      }
+    }
+    h3 {
+      color: #000;
+      font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+      font-weight: normal;
+      margin: 0;
+    }
+    p {
+      margin: .25em 0 0;
+    }
+    span {
+      color: #999;
+      display: block;
+    }
+    time {
+      flex: 0 0 auto;
+      order: 1;
+      width: 8em;
+    }
+
+    .action {
+      flex: 0 0 auto;
+      order: 3;
+      width: 8em;
+    }
+    .topic {
+      flex: 1 1 auto;
+      order: 2;
+    }
+  }
+}
