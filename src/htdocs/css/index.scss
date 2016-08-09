@@ -7,6 +7,10 @@ h2 {
   padding: 0 0 .5em;
 }
 
+.archives .time {
+  display: none;
+}
+
 .seminars {
   margin: 0 0 3.5em;
 
@@ -19,25 +23,25 @@ h2 {
       padding: 1.25em 3px;
     }
     > a {
-      color: $text-color;
       background: #fff;
+      color: $text-color;
       text-decoration: none;
-      transition: background 0.33s ease-in-out;
+      transition: background .33s ease-in-out;
 
       &:hover {
-        background: rgba(255,255,0,.10);
+        background: rgba(255, 255, 0, .10);
       }
     }
     h3 {
       color: #000;
-      font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+      font-family: $font-sans;
       font-weight: normal;
       margin: 0;
     }
     mark {
-      padding: 0;
       background: none;
       color: #c00;
+      padding: 0;
     }
     p {
       margin: .25em 0 0;
@@ -47,7 +51,7 @@ h2 {
       display: block;
 
       mark {
-        color: rgba(204, 0, 0, 0.5);
+        color: rgba(204, 0, 0, .5);
       }
     }
     time {
@@ -66,8 +70,4 @@ h2 {
       order: 2;
     }
   }
-}
-
-.archives .time {
-  display: none;
 }
