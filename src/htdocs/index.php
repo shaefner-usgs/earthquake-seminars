@@ -4,6 +4,7 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+$currentYear = date('Y');
 $year = safeParam('year');
 
 if (!isset($TEMPLATE)) {
@@ -25,7 +26,9 @@ if ($year) {
   $cssClass = ' archives';
 }
 
+// Create HTML for seminars list
 $prevMonth = NULL;
+$seminarsHtml = '';
 while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
   $affiliation = NULL;
   $timestamp = strtotime($row->datetime);
@@ -44,6 +47,7 @@ while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
     $seminarTime = "<mark>$seminarTime</mark>";
   }
 
+  // Show month & year header; open/close <ul>'s
   if ($seminarMonth !== $prevMonth) {
     if ($prevMonth) {
       $seminarsHtml .= '</ul>';
@@ -57,7 +61,7 @@ while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
 
   // speaker field empty if no seminar (committee posts "no seminar" messages
   if ($row->speaker) {
-    $openTag = '<a href="seminars/' . $row->ID . '">';
+    $openTag = '<a href="seminars/id' . $row->ID . '">';
     $closeTag = '</a>';
   } else {
     $openTag = '<div>';
@@ -90,5 +94,29 @@ while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
 $seminarsHtml .= '</ul>';
 
 ?>
+
+<p>Seminars typically take place at <strong>10:30 AM Wednesdays</strong> in the
+  <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS Campus
+  is located at <a href="/contactus/menlo/menloloc.php" title="Campus Map and Directions">345
+  Middlefield Road, Menlo Park, CA</a>.</p>
+
+<p>We record most seminars. You can watch live or
+  <a href="seminars/<?php print $currentYear; ?>">check the archives</a> to
+  view a past seminar.</p>
+
+<h3>Video Podcast</h3>
+
+<ul class="feeds no-style">
+  <li class="itunes">
+    <a href="http://itunes.apple.com/us/podcast/usgs-earthquake-science-center/id413770595">
+      iTunes
+    </a>
+  </li>
+  <li class="xml">
+    <a href="<?php print $MOUNT_PATH; ?>/podcast.xml">
+      XML (Atom)
+    </a>
+  </li>
+</ul>
 
 <?php print $seminarsHtml; ?>
