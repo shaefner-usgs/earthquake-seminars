@@ -13,6 +13,11 @@ if (!isset($TEMPLATE)) {
   $HEAD = '<link rel="stylesheet" href="'. $MOUNT_PATH . '/css/index.css" />';
   $FOOT = '';
 
+  // Don't cache
+  $expires = date(DATE_RFC2822);
+  header('Cache-control: no-cache, must-revalidate');
+  header("Expires: $expires");
+
   include 'template.inc.php';
 }
 
