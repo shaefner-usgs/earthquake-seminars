@@ -27,11 +27,19 @@ if (preg_match("@^$section/\d{4}$@", $url)) {
 }
 
 $NAVIGATION =
-  navGroup('Seminars',
+  navGroup('Earthquake Seminars',
     navItem("$section", 'Upcoming', $matches) .
     $pastNav .
-    navItem("$section/committee.php", 'Committee') .
-    navItem("$section/related.php", 'Related Seminars')
+    navItem("$section/committee.php", 'Committee')
+  );
+
+$NAVIGATION .=
+  navGroup('Related Seminars',
+    navItem('http://online.wr.usgs.gov/calendar/', 'USGS Evening Public Lecture') .
+    navItem('http://wwwrcamnl.wr.usgs.gov/prc/', 'USGS Western Region Colloquium') .
+    navItem('http://volcanoes.usgs.gov/seminar.html', 'USGS Volcano Hazards') .
+    navItem('http://wwwrcamnl.wr.usgs.gov/wrdseminar/', 'USGS Water Resources') .
+    navItem('https://earth.stanford.edu/geophysics/events', 'Stanford Geophysics')
   );
 
 print $NAVIGATION;
