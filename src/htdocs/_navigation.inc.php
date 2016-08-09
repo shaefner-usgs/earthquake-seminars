@@ -21,9 +21,9 @@ for ($year = $currentYear; $year >= $beginYear; $year --) {
 
 // Only expand navGroup if viewing past seminars
 if (preg_match("@^$section/\d{4}$@", $url)) {
-  $pastNav = navGroup('Past', $navItems);
+  $pastNav = navGroup('Archives', $navItems);
 } else {
-  $pastNav = navItem("$section/$currentYear", 'Past');
+  $pastNav = navItem("$section/$currentYear", 'Archives');
 }
 
 $NAVIGATION =
