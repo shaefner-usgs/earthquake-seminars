@@ -1,3 +1,5 @@
+/* jshint ignore:start */
+
 (function() {
 
 	var map, markers, cluster, lookup, max = 0;
@@ -315,6 +317,8 @@
 	};
 
 })();
+
+/* jshint ignore:end */
 
 	/*
 			livestream: {
