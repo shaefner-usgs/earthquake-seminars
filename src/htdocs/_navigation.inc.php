@@ -16,14 +16,14 @@ $navItems = '';
 $beginYear = 2000;
 $currentYear = date('Y');
 for ($year = $currentYear; $year >= $beginYear; $year --) {
-  $navItems .= navItem("$section/$year", $year);
+  $navItems .= navItem("$section/archives/$year", $year);
 }
 
 // Only expand navGroup if viewing past seminars
-if (preg_match("@^$section/\d{4}$@", $url)) {
+if (preg_match("@^$section/archives/\d{4}$@", $url)) {
   $pastNav = navGroup('Archives', $navItems);
 } else {
-  $pastNav = navItem("$section/$currentYear", 'Archives');
+  $pastNav = navItem("$section/archives/$currentYear", 'Archives');
 }
 
 $NAVIGATION =

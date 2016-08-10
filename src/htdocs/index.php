@@ -64,9 +64,9 @@ while ($row = $rsSeminars->fetch(PDO::FETCH_OBJ)) {
     $affiliation = ', ' . $row->affiliation;
   }
 
-  // speaker field empty if no seminar (committee posts "no seminar" messages
+  // speaker field empty if no seminar (committee posts "no seminar" messages)
   if ($row->speaker) {
-    $openTag = '<a href="seminars/id' . $row->ID . '">';
+    $openTag = '<a href="' . $MOUNT_PATH . '/' . $row->ID . '">';
     $closeTag = '</a>';
   } else {
     $openTag = '<div>';
@@ -106,7 +106,7 @@ $seminarsHtml .= '</ul>';
   Middlefield Road, Menlo Park, CA</a>.</p>
 
 <p>We record most seminars. You can watch live or
-  <a href="<?php print "$MOUNT_PATH/$currentYear"; ?>">check the archives</a> to
+  <a href="<?php print "$MOUNT_PATH/archives/$currentYear"; ?>">check the archives</a> to
   view a past seminar.</p>
 
 <h3>Video Podcast</h3>

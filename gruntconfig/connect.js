@@ -44,11 +44,11 @@ var connect = {
       redirect: 'permanent'
     },
     {
-      from: '^' + MOUNT_PATH + '/([0-9]{4})$',
+      from: '^' + MOUNT_PATH + '/archives/([0-9]{4})$',
       to: '/index.php?year=$1'
     },
     {
-      from: '^' + MOUNT_PATH + '/(id[0-9]+)$',
+      from: '^' + MOUNT_PATH + '/([0-9]+)$',
       to: '/seminar.php?id=$1'
     },
     {
