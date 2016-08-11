@@ -19,6 +19,15 @@ class SeminarListView {
     $this->_year = $year;
   }
 
+  private function _getCssClass () {
+    $cssClass = ' upcoming';
+    if ($this->_year) {
+      $cssClass = ' archives';
+    }
+
+    return $cssClass;
+  }
+
   private function _getDescription () {
     return '<p>Seminars typically take place at <strong>10:30 AM
       Wednesdays</strong> in the <strong>Rambo Auditorium</strong> (main USGS
@@ -66,6 +75,7 @@ class SeminarListView {
 
         // Show month & year header; open/close <ul>'s
         if ($seminar->month !== $prevMonth) {
+          $cssClass = $this->_getCssClass();
           if ($prevMonth) {
             $seminarListHtml .= '</ul>';
           }
