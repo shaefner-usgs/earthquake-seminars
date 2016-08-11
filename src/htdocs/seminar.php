@@ -4,7 +4,10 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$id = substr(safeParam('id', 'id1056'), 2);
+include_once '../lib/classes/Seminar.class.php'; // model
+include_once '../lib/classes/SeminarView.class.php'; // view
+
+$id = safeParam('id', '1056');
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
@@ -22,8 +25,19 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
+// Db query result: details for selected seminar
 $rsSeminar = $db->querySeminar($id);
 
-$row = $rsSeminar->fetch(PDO::FETCH_OBJ);
+// Create seminar model
+$rsSeminar->setFetchMode(
+  PDO::FETCH_CLASS,
+  'Seminar'
+);
+$seminarModel = $rsSeminar->fetch();
 
-print $row->topic;
+if ($seminarModel) {
+  $view = new SeminarView($seminarModel);
+  $view->render();
+} else {
+  print '<p class="alert error">ERROR: Seminar Not Found</p>';
+}
