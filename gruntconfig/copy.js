@@ -45,6 +45,15 @@ var copy = {
     options: {
       mode: true
     }
+  },
+
+  jwplayer: {
+    cwd: 'src/lib/jwplayer-7.5.2',
+    dest: config.build + '/' + config.src + '/htdocs/lib/jwplayer-7.5.2',
+    expand: true,
+    src: [
+      '**/*'
+    ]
   }
 
 };
