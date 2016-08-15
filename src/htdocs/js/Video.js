@@ -39,6 +39,7 @@ var Video = function (options) {
     // v7+ requires a key
     jwplayer.key = options.key;
 
+    _COUNT ++;
     jwplayerOpts = _buildOptions();
     if (jwplayerOpts.file) {
       _setupPlayer(jwplayerOpts);
@@ -59,8 +60,6 @@ var Video = function (options) {
         opts,
         stream,
         track;
-
-    _COUNT ++;
 
     // check if video is a live stream (rtmp live streaming is supported)
     // expects this syntax in <video> src attr: {stream}?streamer={application}
@@ -110,7 +109,7 @@ var Video = function (options) {
    * Create the playlist array for jwplayer
    * Expects the playlist to be defined using an html definition list, <dl>
    *
-   * @return {Object}
+   * @return {Array}
    *    playlist in format jwplayer expects
    */
   _buildPlaylist = function () {
@@ -262,7 +261,6 @@ var Video = function (options) {
         jwplayer().play();
       }, 15000);
     });
-
   };
 
 
