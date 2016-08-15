@@ -14,11 +14,20 @@ class SeminarView {
   }
 
   private function _getVideoTag () {
-    return '<video src="' . $this->_model->videoSrc . '" width="704"
-      height="396" crossorigin="anonymous" controls="controls">
-        <track label="English" kind="captions"
+    if ($this->_model->live) {
+      $videoSrc = 'mplive?streamer=rtmp://video2.wr.usgs.gov/live';
+      $video = '<video src="' . $videoSrc . '" width="704" height="396"
+          controls="controls">
+        </video>';
+    } else {
+      $video = '<video src="' . $this->_model->videoSrc . '" width="704"
+          height="396" crossorigin="anonymous" controls="controls">
+          <track label="English" kind="captions"
           src="' . $this->_model->videoTrack . '" default="default">
-      </video>';
+        </video>';
+    }
+
+    return $video;
   }
 
   private function _getSeminar () {

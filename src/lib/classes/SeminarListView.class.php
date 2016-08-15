@@ -64,6 +64,8 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
+        $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
+        $live = '';
 
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->day !== 'Wednesday' && !$this->_year) {
@@ -86,9 +88,14 @@ class SeminarListView {
         // speaker field will be empty if there's no seminar
         // (committee likes to post "no seminar" messages)
         if ($seminar->speaker) {
-          $seminar->openTag = '<a href="' . $GLOBALS['MOUNT_PATH'] . '/' .
-            $seminar->ID . '">';
+          $seminar->openTag = '<a href="' . $href . '">';
           $seminar->closeTag = '</a>';
+
+          if ($seminar->live) {
+            $live = '<div class="live">
+                <button class="green">Live now</button>
+              </div>';
+          }
         } else {
           $seminar->openTag = '<div>';
           $seminar->closeTag = '</div>';
@@ -103,6 +110,7 @@ class SeminarListView {
               <time datetime="%s">
                 %s <span class="time">%s</span>
               </time>
+              %s
             %s
           </li>',
           $seminar->openTag,
@@ -111,6 +119,7 @@ class SeminarListView {
           date('c', $seminar->timestamp),
           $seminar->dateShort,
           $seminar->time,
+          $live,
           $seminar->closeTag
         );
 
