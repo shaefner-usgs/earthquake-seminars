@@ -22,6 +22,7 @@ class Seminar {
       $this->_data['date'] = date('l, F j', $timestamp);
       $this->_data['dateShort'] = date('D, M j', $timestamp);
       $this->_data['day'] = date('l', $timestamp);
+      $this->_data['live'] = $this->_isLive($timestamp);
       $this->_data['month'] = date('F', $timestamp);
       $this->_data['time'] = date('g:i A', $timestamp);
       $this->_data['timestamp'] = $timestamp;
@@ -40,6 +41,19 @@ class Seminar {
       $speaker .= ', ' . $this->_data['affiliation'];
       $this->_data['speaker'] = $speaker;
     }
+  }
+
+  private function _isLive ($seminarStart) {
+    $buffer = 5 * 60; // 5 mins
+    $isLive = false;
+    $now = time();
+    $seminarEnd = $seminarStart + (60 * 60); // seminars last 60 mins
+
+    if ($now >= $seminarStart - $buffer && $now <= $seminarEnd + $buffer) {
+      $isLive = true;
+    }
+
+    return $isLive;
   }
 
   public function __get ($name) {
