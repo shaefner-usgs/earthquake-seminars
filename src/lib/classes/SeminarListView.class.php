@@ -60,6 +60,7 @@ class SeminarListView {
     if (!$this->_collection->seminars) {
       $seminarListHtml = '<p class="alert info">No Seminars Found</p>';
     } else {
+      $cssClass = $this->_getCssClass();
       $prevMonth = NULL;
       $seminarListHtml = '';
 
@@ -77,7 +78,6 @@ class SeminarListView {
 
         // Show month & year header; open/close <ul>'s
         if ($seminar->month !== $prevMonth) {
-          $cssClass = $this->_getCssClass();
           if ($prevMonth) {
             $seminarListHtml .= '</ul>';
           }
@@ -91,6 +91,7 @@ class SeminarListView {
           $seminar->openTag = '<a href="' . $href . '">';
           $seminar->closeTag = '</a>';
 
+          // show 'live now' button
           if ($seminar->live) {
             $live = '<div class="live">
                 <button class="green">Live now</button>
