@@ -30,7 +30,9 @@ $seminarCollection = new seminarCollection();
 // Db query result: seminars in a given year, or future seminars if $year=NULL
 $rsSeminars = $db->querySeminars($year);
 
-$seminars = $rsSeminars->fetchAll(PDO::FETCH_CLASS, Seminar);
+// Create seminar collection
+$rsSeminars->setFetchMode(PDO::FETCH_CLASS, Seminar);
+$seminars = $rsSeminars->fetchAll();
 foreach($seminars as $seminar) {
   $seminarCollection->add($seminar);
 }

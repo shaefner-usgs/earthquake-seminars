@@ -18,22 +18,42 @@ class SeminarView {
       height="396" crossorigin="anonymous" controls="controls">
         <track label="English" kind="captions"
           src="' . $this->_model->videoTrack . '" default="default">
-    </video>';
+      </video>';
+  }
+
+  private function _getSeminar () {
+    if (!$this->_model->ID) {
+      $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
+    } else {
+      $summary = '';
+      if ($this->_model->summary) {
+        $summary =  autop($this->_model->summary);
+      }
+
+      $seminarHtml = sprintf('
+        <h2>%s</h2>
+        %s
+        <div class="row">
+        <div class="column three-of-four">
+        %s
+        </div>
+        <div class="column one-of-four">
+        <h4>%s</h4>
+        <p>%s</p>
+        </div>
+        </div>',
+        $this->_model->topic,
+        $summary,
+        $this->_getVideoTag(),
+        $this->_model->speaker,
+        $this->_model->date
+      );
+    }
+
+    return $seminarHtml;
   }
 
   public function render () {
-    print '<h2>' . $this->_model->topic . '</h2>';
-    if ($this->_model->summary) {
-      print autop($this->_model->summary);
-    }
-    print '<div class="row">';
-    print '  <div class="column three-of-four">';
-    print $this->_getVideoTag();
-    print '  </div>';
-    print '  <div class="column one-of-four">';
-    print '  <h4>' . $this->_model->speaker . '</h4>';
-    print '   <p>' . $this->_model->date . '</p>';
-    print '  </div>';
-    print '</div>';
+    print $this->_getSeminar();
   }
 }

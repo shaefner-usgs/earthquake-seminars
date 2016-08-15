@@ -29,20 +29,16 @@ if (!isset($TEMPLATE)) {
 }
 
 $db = new Db();
+$seminarModel = new Seminar();
 
 // Db query result: details for selected seminar
 $rsSeminar = $db->querySeminar($id);
 
-// Create seminar model
-$rsSeminar->setFetchMode(
-  PDO::FETCH_CLASS,
-  'Seminar'
-);
-$seminarModel = $rsSeminar->fetch();
-
-if ($seminarModel) {
-  $view = new SeminarView($seminarModel);
-  $view->render();
-} else {
-  print '<p class="alert error">ERROR: Seminar Not Found</p>';
+// Create seminar model from selected seminar
+if ($rsSeminar->rowCount() === 1) {
+  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, Seminar);
+  $seminarModel = $rsSeminar->fetch();
 }
+
+$view = new SeminarView($seminarModel);
+$view->render();
