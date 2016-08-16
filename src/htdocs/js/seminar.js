@@ -1,9 +1,13 @@
 'use strict';
 
 
-var Video = require('Video');
+var VideoPlayer = require('VideoPlayer');
 
 // convert video tag to jwplayer instance to maximize compatibility
-Video({
-  el: document.querySelector('video')
-});
+var video = document.querySelector('video');
+
+if (video) {
+  VideoPlayer({
+    el: video
+  });
+}
