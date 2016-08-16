@@ -21,18 +21,29 @@ class SeminarView {
       if ($this->_model->summary) {
         $summary = autop($this->_model->summary); // add <p> tag(s) to summary
       }
+
+      $host = '';
+      if ($this->_model->host) {
+        $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
+      }
+
       $video = $this->_getVideo();
 
       $seminarHtml = sprintf('
         <h2>%s</h2>
         %s
         <div class="row %s">
-          <div class="column three-of-four">
+          <div class="column two-of-three video">
             %s
           </div>
-          <div class="column one-of-four">
+          <div class="column one-of-three">
             <h4>%s</h4>
-            <p>%s</p>
+            <p>%s <span class="time">at %s</p>
+            <dl>
+              <dt class="location">Location:</dt>
+              <dd class="location">%s</dd>
+              %s
+            </dl>
           </div>
         </div>',
         $this->_model->topic,
@@ -40,7 +51,10 @@ class SeminarView {
         $this->_model->period,
         $video,
         $this->_model->speaker,
-        $this->_model->date
+        $this->_model->date,
+        $this->_model->time,
+        $this->_model->location,
+        $host
       );
     }
 
@@ -48,13 +62,11 @@ class SeminarView {
   }
 
   private function _getVideo () {
-    $height = 396;
     $video = '';
-    $width = 704;
 
     if ($this->_model->period === 'past') { // recorded video
-      $video = '<video src="' . $this->_model->videoSrc . '" width="' . $width . '"
-          height="' . $height . '" crossorigin="anonymous" controls="controls">
+      $video = '<video src="' . $this->_model->videoSrc . '" width="100%"
+          crossorigin="anonymous" controls="controls">
           <track label="English" kind="captions"
           src="' . $this->_model->videoTrack . '" default="default">
         </video>';
@@ -64,7 +76,7 @@ class SeminarView {
         watch.</p>';
     } else if ($this->_model->period === 'live') { // live stream
       $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
-          width="' . $width . '" height="' . $height . '" controls="controls">
+          width="100%" controls="controls">
         </video>';
       $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
         View on a mobile device</a></p>';

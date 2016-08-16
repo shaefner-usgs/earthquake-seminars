@@ -1,0 +1,22 @@
+dl {
+  >dd {
+    margin: 0;
+  }
+  >dt {
+    font-weight: normal;
+    margin-top: 1em;
+  }
+}
+
+h4 {
+  margin-top: 0;
+}
+
+.past .location,
+.past .time {
+  display: none;
+}
+
+.video {
+  margin-bottom: 1em;
+}

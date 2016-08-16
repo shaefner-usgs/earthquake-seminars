@@ -64,24 +64,25 @@ var Video = function (options) {
     // check if video is a live stream (rtmp live streaming is supported)
     // expects this syntax in <video> src attr: {stream}?streamer={application}
     if (_el.getAttribute('src').search(/streamer=/) !== -1) {
+      application = _el.getAttribute('src').split('?streamer=')[1];
       livestream = true;
       stream = _el.getAttribute('src').split('?streamer=')[0];
-      application = _el.getAttribute('src').split('?streamer=')[1];
+
       file = application + '/' + stream;
     } else {
-      livestream = false;
       file = _el.getAttribute('src');
+      livestream = false;
     }
 
     opts = {
-      id: _el.getAttribute('id') || 'jwplayer' + _COUNT,
-      livestream: livestream, // whether or not this is a livestream instance
-      file: file,
-      image: _el.getAttribute('poster') || '',
-      controls: _el.hasAttribute('controls'),
+      aspectratio: '16:9',
       autostart: _el.hasAttribute('autoplay'),
-      width: +_el.getAttribute('width') || 600,
-      height: +_el.getAttribute('height') || 400
+      controls: _el.hasAttribute('controls'),
+      file: file,
+      id: _el.getAttribute('id') || 'jwplayer' + _COUNT,
+      image: _el.getAttribute('poster') || '',
+      livestream: livestream, // whether or not this is a livestream instance
+      width: '100%'
     };
 
     // NOTE: only 1 playlist per page is supported
@@ -130,12 +131,12 @@ var Video = function (options) {
     playlist = [];
 
     for (i = 0; i < items.length; i++) {
-      dt = items[i].dt; // <dt> elems (title, video href)
-      title = dt.textContent;
-      video = dt.querySelector('a').getAttribute('href');
       captions = null;
       description = null;
+      dt = items[i].dt; // <dt> elems (title, video href)
       image = null;
+      title = dt.textContent;
+      video = dt.querySelector('a').getAttribute('href');
 
       for (j = 0; j < items[i].dd.length; j++) {
         dd = items[i].dd[j]; // <dd> elems (description, poster img, captions)
@@ -183,9 +184,9 @@ var Video = function (options) {
     var child,
         children,
         i,
-        type,
         item,
-        items;
+        items,
+        type;
 
     items = [];
 
