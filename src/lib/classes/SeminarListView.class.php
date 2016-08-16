@@ -54,7 +54,7 @@ class SeminarListView {
 
       foreach ($this->_collection->seminars as $seminar) {
         $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
-        $live = '';
+        $livenow = '';
 
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->type === 'upcoming' && $seminar->day !== 'Wednesday') {
@@ -70,7 +70,7 @@ class SeminarListView {
             $seminarListHtml .= '</ul>';
           }
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
-          $seminarListHtml .= '<ul class="seminars no-style">';
+          $seminarListHtml .= '<ul class="' . $seminar->type . ' seminars no-style">';
         }
 
         // speaker field will be empty if there's no seminar
@@ -79,9 +79,9 @@ class SeminarListView {
           $seminar->openTag = '<a href="' . $href . '">';
           $seminar->closeTag = '</a>';
 
-          // show 'live now' button
-          if ($seminar->live) {
-            $live = '<div class="live">
+          // show "Live now" button
+          if ($seminar->period === 'live') {
+            $livenow = '<div class="livenow">
                 <button class="green">Live now</button>
               </div>';
           }
@@ -102,14 +102,14 @@ class SeminarListView {
               %s
             %s
           </li>',
-          $seminar->type,
+          $seminar->period,
           $seminar->openTag,
           $seminar->topic,
           $seminar->speaker,
           date('c', $seminar->timestamp),
           $seminar->dateShort,
           $seminar->time,
-          $live,
+          $livenow,
           $seminar->closeTag
         );
 
@@ -124,6 +124,8 @@ class SeminarListView {
   public function render () {
     print $this->_getDescription();
     print $this->_getPodcasts();
+    print '<div class="">';
     print $this->_getSeminarList();
+    print '</div>';
   }
 }
