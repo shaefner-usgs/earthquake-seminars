@@ -64,13 +64,13 @@ class SeminarView {
         <h2>%s</h2>
         %s
         <div class="row">
-        <div class="column three-of-four">
-        %s
-        </div>
-        <div class="column one-of-four">
-        <h4>%s</h4>
-        <p>%s</p>
-        </div>
+          <div class="column three-of-four">
+            %s
+          </div>
+          <div class="column one-of-four">
+            <h4>%s</h4>
+            <p>%s</p>
+          </div>
         </div>',
         $this->_model->topic,
         $summary,
