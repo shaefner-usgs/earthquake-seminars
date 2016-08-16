@@ -37,5 +37,5 @@ foreach($seminars as $seminar) {
   $seminarCollection->add($seminar);
 }
 
-$view = new SeminarListView($seminarCollection, $year);
+$view = new SeminarListView($seminarCollection);
 $view->render();

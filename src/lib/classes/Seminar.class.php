@@ -26,6 +26,7 @@ class Seminar {
       $this->_data['month'] = date('F', $timestamp);
       $this->_data['time'] = date('g:i A', $timestamp);
       $this->_data['timestamp'] = $timestamp;
+      $this->_data['type'] = $this->_getType($timestamp);
       $this->_data['videoSrc'] = $videoDomain . $videoPath . '/' . $videoFile;
       $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $this->_data['videoSrc']);
       $this->_data['year'] = $year;
@@ -41,6 +42,18 @@ class Seminar {
       $speaker .= ', ' . $this->_data['affiliation'];
       $this->_data['speaker'] = $speaker;
     }
+  }
+
+  private function _getType ($timestamp) {
+    $seminarDate = date('Y-m-d', $timestamp);
+    $todaysDate = date('Y-m-d');
+    $type = 'archive';
+
+    if ($seminarDate >= $todaysDate) {
+      $type = 'upcoming';
+    }
+
+    return $type;
   }
 
   private function _isLive ($seminarStart) {

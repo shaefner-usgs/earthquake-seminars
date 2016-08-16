@@ -10,32 +10,21 @@ include_once '../conf/config.inc.php'; // app config
  */
 class SeminarListView {
   private $_collection;
-  private $_currentYear;
-  private $_year;
 
-  public function __construct (SeminarCollection $collection, $year) {
+  public function __construct (SeminarCollection $collection) {
     $this->_collection = $collection;
-    $this->_currentYear = date('Y');
-    $this->_year = $year;
-  }
-
-  private function _getCssClass () {
-    $cssClass = ' upcoming';
-    if ($this->_year) {
-      $cssClass = ' archives';
-    }
-
-    return $cssClass;
   }
 
   private function _getDescription () {
+    $currentYear = date('Y');
+
     return '<p>Seminars typically take place at <strong>10:30 AM
       Wednesdays</strong> in the <strong>Rambo Auditorium</strong> (main USGS
       Conference Room). The USGS Campus is located at
       <a href="/contactus/menlo/menloloc.php" title="Campus Map and
       Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
       <p>We record most seminars. You can watch live or
-      <a href="' . $GLOBALS['MOUNT_PATH'] . "/archives/$this->_currentYear" .
+      <a href="' . $GLOBALS['MOUNT_PATH'] . "/archives/$currentYear" .
       '">check the archives</a> to view a past seminar.</p>';
   }
 
@@ -60,7 +49,6 @@ class SeminarListView {
     if (!$this->_collection->seminars) {
       $seminarListHtml = '<p class="alert info">No Seminars Found</p>';
     } else {
-      $cssClass = $this->_getCssClass();
       $prevMonth = NULL;
       $seminarListHtml = '';
 
@@ -69,10 +57,10 @@ class SeminarListView {
         $live = '';
 
         // Flag upcoming seminars that aren't on the "regular" day/time
-        if ($seminar->day !== 'Wednesday' && !$this->_year) {
+        if ($seminar->type === 'upcoming' && $seminar->day !== 'Wednesday') {
           $seminar->dateShort = "<mark>$seminar->dateShort</mark>";
         }
-        if ($seminar->time !== '10:30 AM' && !$this->_year) {
+        if ($seminar->type === 'upcoming' && $seminar->time !== '10:30 AM') {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 
@@ -82,7 +70,7 @@ class SeminarListView {
             $seminarListHtml .= '</ul>';
           }
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
-          $seminarListHtml .= '<ul class="seminars no-style' . $cssClass . '">';
+          $seminarListHtml .= '<ul class="seminars no-style">';
         }
 
         // speaker field will be empty if there's no seminar
@@ -102,7 +90,7 @@ class SeminarListView {
           $seminar->closeTag = '</div>';
         }
 
-        $seminarListHtml .= sprintf('<li>
+        $seminarListHtml .= sprintf('<li class="%s">
             %s
               <div class="topic">
                 <h3>%s</h3>
@@ -114,6 +102,7 @@ class SeminarListView {
               %s
             %s
           </li>',
+          $seminar->type,
           $seminar->openTag,
           $seminar->topic,
           $seminar->speaker,
