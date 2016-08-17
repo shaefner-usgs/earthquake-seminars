@@ -1,8 +1,8 @@
 dl {
-  >dd {
+  > dd {
     margin: 0;
   }
-  >dt {
+  > dt {
     font-weight: normal;
     margin-top: 1em;
   }
@@ -10,6 +10,12 @@ dl {
 
 h4 {
   margin-top: 0;
+}
+
+.flash {
+  border-top: 1px solid #ddd;
+  margin-top: 1.5em;
+  padding: .5em 0;
 }
 
 .past .location,
