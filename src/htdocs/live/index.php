@@ -1,21 +1,33 @@
 <?php
 
-	$TITLE = "Live Webcast";
-	$CONTACT = "shaefner";
-  $TEMPLATE = "onecolumn";
-  $WIDGETS = 'jwplayer';
-  $SHARE = false;
+include_once '../../conf/config.inc.php'; // app config
 
-  include $_SERVER['DOCUMENT_ROOT'] . "/template/template.inc.php";
+if (!isset($TEMPLATE)) {
+  $TITLE = 'Live Webcast - Earthquake Science Center';
+  $NAVIGATION = true;
+  $HEAD = '';
+  $FOOT = '
+    <script src="../lib/jwplayer-7.5.2/jwplayer.js"></script>
+    <script src="../js/seminar.js"></script>
+  ';
+
+  include 'template.inc.php';
+}
 
 ?>
 
-<div id="live" class="nine column">
-  <video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live" width="704" height="396" controls></video>
-</div>
-
-<div class="three column">
-  <p>We usually start broadcasting the live stream at least 5 minutes before the start of the lecture or presentation.</p>
-  <p>Requires the <a href="http://get.adobe.com/flashplayer/">Adobe Flash Player</a> plug-in.</p>
-  <p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">View on a mobile device</a></p>
+<div class="row live">
+  <div class="column two-of-three video">
+    <video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
+      width="100%" controls="controls">
+    </video>
+    <p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">View
+      on a mobile device</a></p>
+  </div>
+  <div class="column one-of-three">
+    <p style="margin-top: 0;">We usually start broadcasting live webcasts at
+      least 5 minutes before the start of the lecture or presentation.</p>
+    <p><a href="http://get.adobe.com/flashplayer/">Adobe Flash Player</a> is
+    <strong>required</strong> to view live webcasts.</p>
+  </div>
 </div>
