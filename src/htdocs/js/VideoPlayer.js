@@ -225,7 +225,6 @@ var Video = function (options) {
    */
   _setupPlayer = function (opts) {
     var fixedOpts,
-        p,
         player;
 
     // fixedOpts are applied to all jwplayer instances
@@ -249,10 +248,23 @@ var Video = function (options) {
 
     // if player can't be setup in livestream mode, assume no Flash, alert user
     jwplayer().onSetupError(function(/*e*/) {
+      var flash,
+          p,
+          video;
+
       if (opts.livestream) {
-        p = document.querySelector('#' + opts.id + ' p');
-        p.innerHTML = '<a href="https://get.adobe.com/flashplayer/" ' +
-          'style="color: #fff">Flash Player</a> is required to view live streams.';
+        flash = document.querySelector('.' + 'flash');
+        if (flash) {
+          flash.classList.add('error');
+        } else {
+          p = document.createElement('p');
+          p.classList.add('error');
+          p.innerHTML = '<a href="http://get.adobe.com/flashplayer/">Adobe' +
+            'Flash Player</a> is <strong>required</strong> to view live webcasts.';
+
+          video = document.querySelector('#' + opts.id);
+          video.parentNode.insertBefore(p, video.nextSibling); // insert after
+        }
       }
     });
 
