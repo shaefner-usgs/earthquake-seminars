@@ -57,10 +57,10 @@ class SeminarListView {
         $livenow = '';
 
         // Flag upcoming seminars that aren't on the "regular" day/time
-        if ($seminar->type === 'upcoming' && $seminar->day !== 'Wednesday') {
+        if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
           $seminar->dateShort = "<mark>$seminar->dateShort</mark>";
         }
-        if ($seminar->type === 'upcoming' && $seminar->time !== '10:30 AM') {
+        if ($seminar->category === 'upcoming' && $seminar->time !== '10:30 AM') {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 
@@ -70,7 +70,7 @@ class SeminarListView {
             $seminarListHtml .= '</ul>';
           }
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
-          $seminarListHtml .= '<ul class="' . $seminar->type . ' seminars no-style">';
+          $seminarListHtml .= '<ul class="' . $seminar->category . ' seminars no-style">';
         }
 
         // speaker field will be empty if there's no seminar
@@ -80,7 +80,7 @@ class SeminarListView {
           $seminar->closeTag = '</a>';
 
           // show "Live now" button
-          if ($seminar->period === 'live') {
+          if ($seminar->status === 'live') {
             $livenow = '<div class="livenow">
                 <button class="green">Live now</button>
               </div>';
@@ -102,7 +102,7 @@ class SeminarListView {
               %s
             %s
           </li>',
-          $seminar->period,
+          $seminar->status,
           $seminar->openTag,
           $seminar->topic,
           $seminar->speaker,

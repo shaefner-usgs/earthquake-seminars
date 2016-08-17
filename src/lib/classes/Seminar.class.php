@@ -41,42 +41,42 @@ class Seminar {
     $videoPath = '/ehz/' . $year;
     $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
 
+    $this->_data['category'] = $this->_getCategory();
     $this->_data['date'] = date('F j, Y', $timestamp);
     $this->_data['dateShort'] = date('D, M j', $timestamp);
     $this->_data['day'] = date('l', $timestamp);
     $this->_data['month'] = date('F', $timestamp);
-    $this->_data['period'] = $this->_getPeriod($timestamp);
+    $this->_data['status'] = $this->_getStatus($timestamp);
     $this->_data['time'] = date('g:i A', $timestamp);
     $this->_data['timestamp'] = $timestamp;
-    $this->_data['type'] = $this->_getType();
     $this->_data['videoSrc'] = $videoSrc;
     $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $videoSrc);
     $this->_data['year'] = $year;
   }
 
-  private function _getPeriod ($timestamp) {
-    $period = 'past'; // default value
-    if ($this->_seminarDate === $this->_todaysDate) {
-      if (time() < $timestamp) {
-        $period = 'today';
-      }
-      if ($this->_isLive($timestamp)) {
-        $period = 'live'; // "live" trumps "today" due to buffer
-      }
-    } else if ($this->_seminarDate > $this->_todaysDate) {
-      $period = 'future';
+  private function _getCategory () {
+    $category = 'archive'; // default value
+    if ($this->_seminarDate >= $this->_todaysDate) {
+      $category = 'upcoming';
     }
 
-    return $period;
+    return $category;
   }
 
-  private function _getType () {
-    $type = 'archive'; // default value
-    if ($this->_seminarDate >= $this->_todaysDate) {
-      $type = 'upcoming';
+  private function _getStatus ($timestamp) {
+    $status = 'past'; // default value
+    if ($this->_seminarDate === $this->_todaysDate) {
+      if (time() < $timestamp) {
+        $status = 'today';
+      }
+      if ($this->_isLive($timestamp)) {
+        $status = 'live'; // "live" trumps "today" due to buffer
+      }
+    } else if ($this->_seminarDate > $this->_todaysDate) {
+      $status = 'future';
     }
 
-    return $type;
+    return $status;
   }
 
   private function _isLive ($seminarStart) {

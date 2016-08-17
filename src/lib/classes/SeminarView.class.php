@@ -22,7 +22,7 @@ class SeminarView {
         $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
       }
       $note = '';
-      if ($this->_model->period === 'live') {
+      if ($this->_model->status === 'live') {
         $note = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
           Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
       }
@@ -52,7 +52,7 @@ class SeminarView {
         </div>',
         $this->_model->topic,
         $summary,
-        $this->_model->period,
+        $this->_model->status,
         $video,
         $this->_model->speaker,
         $this->_model->date,
@@ -69,17 +69,17 @@ class SeminarView {
   private function _getVideo () {
     $video = '';
 
-    if ($this->_model->period === 'past') { // recorded video
+    if ($this->_model->status === 'past') { // recorded video
       $video = '<video src="' . $this->_model->videoSrc . '" width="100%"
           crossorigin="anonymous" controls="controls">
           <track label="English" kind="captions"
           src="' . $this->_model->videoTrack . '" default="default">
         </video>';
-    } else if ($this->_model->period === 'today') { // seminar later today
+    } else if ($this->_model->status === 'today') { // seminar later today
       $video = '<h3>This seminar will be live streamed today</h3>
         <p>Please reload this page at ' . $this->_model->time . ' to
         watch.</p>';
-    } else if ($this->_model->period === 'live') { // live stream
+    } else if ($this->_model->status === 'live') { // live stream
       $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
           width="100%" controls="controls">
         </video>';
