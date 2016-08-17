@@ -17,16 +17,19 @@ class SeminarView {
     if (!$this->_model->ID) {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
-      $summary = '';
-      if ($this->_model->summary) {
-        $summary = autop($this->_model->summary); // add <p> tag(s) to summary
-      }
-
       $host = '';
       if ($this->_model->host) {
         $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
       }
-
+      $note = '';
+      if ($this->_model->period === 'live') {
+        $note = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
+          Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
+      }
+      $summary = '';
+      if ($this->_model->summary) {
+        $summary = autop($this->_model->summary); // add <p> tag(s) to summary
+      }
       $video = $this->_getVideo();
 
       $seminarHtml = sprintf('
@@ -44,6 +47,7 @@ class SeminarView {
               <dd class="location">%s</dd>
               %s
             </dl>
+            %s
           </div>
         </div>',
         $this->_model->topic,
@@ -54,7 +58,8 @@ class SeminarView {
         $this->_model->date,
         $this->_model->time,
         $this->_model->location,
-        $host
+        $host,
+        $note
       );
     }
 
