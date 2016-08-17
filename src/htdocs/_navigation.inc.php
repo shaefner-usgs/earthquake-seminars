@@ -1,7 +1,5 @@
 <?php
 
-include_once '../conf/config.inc.php'; // app config
-
 $section = $MOUNT_PATH;
 $url = $_SERVER['REQUEST_URI'];
 
