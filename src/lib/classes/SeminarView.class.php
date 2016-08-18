@@ -80,7 +80,7 @@ class SeminarView {
 
           if ($this->_remoteFileExists($track)) {
             $video .= '<track label="English" kind="captions"
-            src="' . $this->_model->videoTrack . '" default="default">
+            src="' . $this->_model->videoTrack . '" default="default" />
             ';
           }
 
