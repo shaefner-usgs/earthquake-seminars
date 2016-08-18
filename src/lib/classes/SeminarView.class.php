@@ -49,7 +49,12 @@ class SeminarView {
             </dl>
             %s
           </div>
-        </div>',
+        </div>
+        <p>Closed captions are usually available a few days after the seminar. 
+          To turn them on, press the &lsquo;CC&rsquo; button on the video
+          player. For older seminars that don&rsquo;t have closed captions,
+          please <a href="mailto:shaefner@usgs.gov">email us</a>,
+          and we will do our best to accommodate your request.</p>',
         $this->_model->topic,
         $summary,
         $this->_model->status,
@@ -85,12 +90,14 @@ class SeminarView {
           }
 
           $video .= '</video>';
+        } else {
+          $video = '<h3>Video not found</h3>
+            <p>Please try back later. Videos are usually posted within a few hours.</p>';
         }
       }
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<h3>This seminar will be webcast live today</h3>
-        <p>Please reload this page at ' . $this->_model->time . ' Pacific to
-        watch.</p>';
+        <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
       }
       else if ($this->_model->status === 'live') { // live stream
         $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
