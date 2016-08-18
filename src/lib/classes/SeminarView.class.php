@@ -13,6 +13,38 @@ class SeminarView {
     $this->_model = $model;
   }
 
+  private function _getPlaylist () {
+    $playlist = simplexml_load_file($this->_model->videoPlaylist);
+
+    $dl = '<dl class="playlist">';
+    foreach($playlist->channel->item as $item) {
+      $title = $item->title;
+      $description = $item->description;
+
+      // jwplayer supports both JWPlayer RSS and  Media RSS namespaces
+      $url = '';
+      if (is_array($item->xpath('jwplayer:source[1]'))) {
+        $media = $item->xpath('jwplayer:source[1]');
+        $url = $media[0]['file'];
+      } else if (is_array($item->xpath('media:content[1]'))) {
+        $media = $item->xpath('media:content[1]');
+        $url = $media[0]['url'];
+      }
+      $dl .= sprintf('<dt><a href="%s">%s</a></dt>
+        <dd class="description">%s</dd>',
+        $url,
+        $title,
+        $description
+      );
+    }
+    $dl .= '</dl>';
+
+    $video = $this->_getVideoTag($url);
+    $video .= $dl;
+
+    return $video;
+  }
+
   private function _getSeminar () {
     if (!$this->_model->ID) {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
@@ -83,7 +115,10 @@ class SeminarView {
     if ($this->_model->video === 'yes') {
       if ($this->_model->status === 'past') { // recorded video
         if ($this->_remoteFileExists($this->_model->videoSrc)) { // mp4 file
-          $video = $this->_getVideoTag($this->_model->status);
+          $video = $this->_getVideoTag();
+        }
+        else if ($this->_remoteFileExists($this->_model->videoPlaylist)) { // xml file
+          $video = $this->_getPlaylist();
         } else {
           $video = '<h3>Video not found</h3>
             <p>Please try back later. Videos are usually posted within a few hours.</p>';
@@ -94,7 +129,7 @@ class SeminarView {
         <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
       }
       else if ($this->_model->status === 'live') { // live stream
-        $video = $this->_getVideoTag($this->_model->status);
+        $video = $this->_getVideoTag();
         $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
         View on a mobile device</a></p>';
       }
@@ -106,9 +141,12 @@ class SeminarView {
     return $video;
   }
 
-  private function _getVideoTag ($type) {
-    if ($type === 'past') {
-      $videoTag = '<video src="' . $this->_model->videoSrc . '" width="100%"
+  private function _getVideoTag ($src=NULL) {
+    if (!$src) {
+      $src = $this->_model->videoSrc;
+    }
+    if ($this->_model->status === 'past') {
+      $videoTag = '<video src="' . $src . '" width="100%"
         crossorigin="anonymous" controls="controls">';
 
       if ($this->_remoteFileExists($this->_model->videoTrack)) { // vtt file
@@ -118,7 +156,7 @@ class SeminarView {
 
       $videoTag .= '</video>';
     }
-    else if ($type === 'live') {
+    else if ($this->_model->status === 'live') {
       $videoTag = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
         width="100%" controls="controls"></video>';
     }

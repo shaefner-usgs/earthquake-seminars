@@ -49,6 +49,7 @@ class Seminar {
     $this->_data['status'] = $this->_getStatus($timestamp);
     $this->_data['time'] = date('g:i A', $timestamp);
     $this->_data['timestamp'] = $timestamp;
+    $this->_data['videoPlaylist'] = str_replace('mp4', 'xml', $videoSrc);
     $this->_data['videoSrc'] = $videoSrc;
     $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $videoSrc);
     $this->_data['year'] = $year;
