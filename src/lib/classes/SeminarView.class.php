@@ -47,7 +47,7 @@ class SeminarView {
           <div class="column two-of-three video">
             %s
           </div>
-          <div class="column one-of-three">
+          <div class="column one-of-three details">
             <h4>%s</h4>
             <p>%s <span class="time">at %s</p>
             <dl>

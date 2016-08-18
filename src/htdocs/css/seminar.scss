@@ -25,6 +25,10 @@ h4 {
   padding: .5em 0;
 }
 
+.details {
+  margin-bottom: 1em;
+}
+
 .flash {
   border-top: 1px solid #ddd;
   margin-top: 1.5em;
@@ -50,4 +54,8 @@ h4 {
 
 .video {
   margin-bottom: 1em;
+
+  h3 {
+    margin-top: 0;
+  }
 }
