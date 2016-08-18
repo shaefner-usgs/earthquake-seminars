@@ -17,13 +17,21 @@ class SeminarView {
     if (!$this->_model->ID) {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
+      $captions = '';
+      if ($this->_model->status !== 'future') {
+        $captions = '<p class="captions">Closed captions are usually available a
+          few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
+          button on the video player. For older seminars that don&rsquo;t have
+          closed captions, please <a href="mailto:shaefner@usgs.gov">email
+          us</a>, and we will do our best to accommodate your request.</p>';
+      }
       $host = '';
       if ($this->_model->host) {
         $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
       }
-      $note = '';
+      $flash = '';
       if ($this->_model->status === 'live') {
-        $note = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
+        $flash = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
           Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
       }
       $summary = '';
@@ -50,11 +58,7 @@ class SeminarView {
             %s
           </div>
         </div>
-        <p>Closed captions are usually available a few days after the seminar.
-          To turn them on, press the &lsquo;CC&rsquo; button on the video
-          player. For older seminars that don&rsquo;t have closed captions,
-          please <a href="mailto:shaefner@usgs.gov">email us</a>,
-          and we will do our best to accommodate your request.</p>',
+        %s',
         $this->_model->topic,
         $summary,
         $this->_model->category,
@@ -65,7 +69,8 @@ class SeminarView {
         $this->_model->time,
         $this->_model->location,
         $host,
-        $note
+        $flash,
+        $captions
       );
     }
 
