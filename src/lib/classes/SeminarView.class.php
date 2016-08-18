@@ -82,20 +82,8 @@ class SeminarView {
 
     if ($this->_model->video === 'yes') {
       if ($this->_model->status === 'past') { // recorded video
-        $src = $this->_model->videoSrc;
-        $track = $this->_model->videoTrack;
-
-        if ($this->_remoteFileExists($src)) {
-          $video = '<video src="' . $src . '" width="100%" crossorigin="anonymous"
-            controls="controls">';
-
-          if ($this->_remoteFileExists($track)) {
-            $video .= '<track label="English" kind="captions"
-            src="' . $this->_model->videoTrack . '" default="default" />
-            ';
-          }
-
-          $video .= '</video>';
+        if ($this->_remoteFileExists($this->_model->videoSrc)) { // mp4 file
+          $video = $this->_getVideoTag($this->_model->status);
         } else {
           $video = '<h3>Video not found</h3>
             <p>Please try back later. Videos are usually posted within a few hours.</p>';
@@ -106,9 +94,7 @@ class SeminarView {
         <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
       }
       else if ($this->_model->status === 'live') { // live stream
-        $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
-        width="100%" controls="controls">
-        </video>';
+        $video = $this->_getVideoTag($this->_model->status);
         $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
         View on a mobile device</a></p>';
       }
@@ -118,6 +104,26 @@ class SeminarView {
     }
 
     return $video;
+  }
+
+  private function _getVideoTag ($type) {
+    if ($type === 'past') {
+      $videoTag = '<video src="' . $this->_model->videoSrc . '" width="100%"
+        crossorigin="anonymous" controls="controls">';
+
+      if ($this->_remoteFileExists($this->_model->videoTrack)) { // vtt file
+        $videoTag .= '<track label="English" kind="captions"
+          src="' . $this->_model->videoTrack . '" default="default" />';
+      }
+
+      $videoTag .= '</video>';
+    }
+    else if ($type === 'live') {
+      $videoTag = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
+        width="100%" controls="controls"></video>';
+    }
+
+    return $videoTag;
   }
 
   private function _remoteFileExists ($url) {
