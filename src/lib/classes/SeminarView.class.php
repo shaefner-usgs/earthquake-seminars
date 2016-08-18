@@ -69,25 +69,71 @@ class SeminarView {
   private function _getVideo () {
     $video = '';
 
-    if ($this->_model->status === 'past') { // recorded video
-      $video = '<video src="' . $this->_model->videoSrc . '" width="100%"
-          crossorigin="anonymous" controls="controls">
-          <track label="English" kind="captions"
-          src="' . $this->_model->videoTrack . '" default="default">
-        </video>';
-    } else if ($this->_model->status === 'today') { // seminar later today
-      $video = '<h3>This seminar will be live streamed today</h3>
-        <p>Please reload this page at ' . $this->_model->time . ' to
+    if ($this->_model->video === 'yes') {
+      if ($this->_model->status === 'past') { // recorded video
+        $src = $this->_model->videoSrc;
+        $track = $this->_model->videoTrack;
+
+        if ($this->_remoteFileExists($src)) {
+          $video = '<video src="' . $src . '" width="100%" crossorigin="anonymous"
+            controls="controls">';
+
+          if ($this->_remoteFileExists($track)) {
+            $video .= '<track label="English" kind="captions"
+            src="' . $this->_model->videoTrack . '" default="default">
+            ';
+          }
+
+          $video .= '</video>';
+        }
+      }
+      else if ($this->_model->status === 'today') { // seminar later today
+        $video = '<h3>This seminar will be webcast live today</h3>
+        <p>Please reload this page at ' . $this->_model->time . ' Pacific to
         watch.</p>';
-    } else if ($this->_model->status === 'live') { // live stream
-      $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
-          width="100%" controls="controls">
+      }
+      else if ($this->_model->status === 'live') { // live stream
+        $video = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
+        width="100%" controls="controls">
         </video>';
-      $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
+        $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
         View on a mobile device</a></p>';
+      }
+    } else {
+      $video = '<h3>Video not available</h3>
+        <p>This seminar was not recorded or is not available to view online.</p>';
     }
 
     return $video;
+  }
+
+  private function _remoteFileExists ($url) {
+    $size = 0;
+
+    $urlComponents = parse_url($url);
+    $host = $urlComponents['host'];
+    $fp = fsockopen($host, 80, $errno, $errstr, 5);
+
+    if (!$fp) {
+      return false;
+    } else {
+      $out = "GET $url HTTP/1.1\r\n"; // HEAD vs GET ??
+      $out .= "Host: $host\r\n";
+      $out .= "Connection: Close\r\n\r\n";
+      fwrite($fp, $out);
+
+      $needle = 'Content-Length: ';
+      while (!feof($fp)) {
+        $header = fgets ($fp, 128);
+        if (preg_match("/$needle/i", $header)) {
+          $size = trim(substr($header, strlen($needle)));
+          break;
+        }
+      }
+      fclose ($fp);
+    }
+
+    return $size;
   }
 
   public function render () {
