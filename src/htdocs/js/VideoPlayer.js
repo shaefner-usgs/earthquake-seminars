@@ -255,10 +255,10 @@ var Video = function (options) {
       if (opts.livestream) {
         flash = document.querySelector('.' + 'flash');
         if (flash) {
-          flash.classList.add('error');
+          flash.classList.add('alert', 'error', 'no-icon');
         } else {
           p = document.createElement('p');
-          p.classList.add('error');
+          p.classList.add('alert', 'error', 'no-icon');
           p.innerHTML = '<a href="http://get.adobe.com/flashplayer/">Adobe' +
             'Flash Player</a> is <strong>required</strong> to view live webcasts.';
 
