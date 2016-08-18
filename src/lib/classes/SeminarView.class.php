@@ -35,7 +35,7 @@ class SeminarView {
       $seminarHtml = sprintf('
         <h2>%s</h2>
         %s
-        <div class="row %s">
+        <div class="row %s %s">
           <div class="column two-of-three video">
             %s
           </div>
@@ -50,13 +50,14 @@ class SeminarView {
             %s
           </div>
         </div>
-        <p>Closed captions are usually available a few days after the seminar. 
+        <p>Closed captions are usually available a few days after the seminar.
           To turn them on, press the &lsquo;CC&rsquo; button on the video
           player. For older seminars that don&rsquo;t have closed captions,
           please <a href="mailto:shaefner@usgs.gov">email us</a>,
           and we will do our best to accommodate your request.</p>',
         $this->_model->topic,
         $summary,
+        $this->_model->category,
         $this->_model->status,
         $video,
         $this->_model->speaker,
