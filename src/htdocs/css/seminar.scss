@@ -18,9 +18,22 @@ h4 {
   padding: .5em 0;
 }
 
+.future {
+  .details {
+    width: 100%;
+  }
+  .video {
+    display: none;
+  }
+}
+
 .past .location,
 .past .time {
   display: none;
+}
+
+.row {
+  margin-top: 2em;
 }
 
 .video {
