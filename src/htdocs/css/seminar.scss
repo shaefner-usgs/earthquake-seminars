@@ -12,10 +12,6 @@ h4 {
   margin-top: 0;
 }
 
-.alert.flash {
-  padding: .5em 3px;
-}
-
 .archive {
   .location,
   .time {
@@ -23,10 +19,20 @@ h4 {
   }
 }
 
+.captions {
+  border-top: 1px solid #eee;
+  margin-top: 2em;
+  padding: .5em 0;
+}
+
 .flash {
   border-top: 1px solid #ddd;
   margin-top: 1.5em;
   padding: .5em 0;
+
+  &.alert {
+    padding: .5em 3px;
+  }
 }
 
 .future {
