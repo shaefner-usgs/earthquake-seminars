@@ -95,6 +95,23 @@ class Db {
   }
 
   /**
+   * Query db to get past seminars w/ videos for podcast
+   *
+   * @return {Function}
+   */
+  public function queryPodcastVideos () {
+    // look for seminars at least 90 mins old
+    $datetime = date('Y-m-d H:i:s', strtotime('-90 mins'));
+
+    $sql = "SELECT * FROM seminars_list
+      WHERE `publish` = 'yes' AND `video` = 'yes' AND `datetime` < '$datetime'
+      ORDER BY `datetime` DESC
+      LIMIT 12";
+
+    return $this->_execQuery($sql);
+  }
+
+  /**
    * Query db to get details for given seminar
    *
    * @param $id {Int}
