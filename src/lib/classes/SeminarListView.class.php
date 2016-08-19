@@ -37,8 +37,8 @@ class SeminarListView {
           </a>
         </li>
         <li class="xml">
-          <a href="' . $GLOBALS['MOUNT_PATH'] . '/podcast.xml">
-            XML (Atom)
+          <a href="' . $GLOBALS['MOUNT_PATH'] . '/feed">
+            RSS Feed
           </a>
         </li>
       </ul>';
