@@ -27,7 +27,7 @@ if (!isset($TEMPLATE)) {
   <div class="column one-of-three">
     <p style="margin-top: 0;">We usually start broadcasting live webcasts at
       least 5 minutes before the start of the lecture or presentation.</p>
-    <p><a href="http://get.adobe.com/flashplayer/">Adobe Flash Player</a> is
-    <strong>required</strong> to view live webcasts.</p>
+    <p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe Flash
+      Player</a> is <strong>required</strong> to view live webcasts.</p>
   </div>
 </div>
