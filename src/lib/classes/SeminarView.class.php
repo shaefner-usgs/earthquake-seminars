@@ -1,5 +1,7 @@
 <?php
 
+include_once '../lib/_functions.inc.php'; // app functions
+
 /**
  * Seminar view
  * - creates the HTML for seminar.php
@@ -114,10 +116,10 @@ class SeminarView {
 
     if ($this->_model->video === 'yes') {
       if ($this->_model->status === 'past') { // recorded video
-        if ($this->_remoteFileExists($this->_model->videoSrc)) { // mp4 file
+        if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
           $video = $this->_getVideoTag();
         }
-        else if ($this->_remoteFileExists($this->_model->videoPlaylist)) { // xml file
+        else if (remoteFileExists($this->_model->videoPlaylist)) { // xml file
           $video = $this->_getPlaylist();
         } else {
           $video = '<h3>Video not found</h3>
@@ -149,7 +151,7 @@ class SeminarView {
       $videoTag = '<video src="' . $src . '" width="100%"
         crossorigin="anonymous" controls="controls">';
 
-      if ($this->_remoteFileExists($this->_model->videoTrack)) { // vtt file
+      if (remoteFileExists($this->_model->videoTrack)) { // vtt file
         $videoTag .= '<track label="English" kind="captions"
           src="' . $this->_model->videoTrack . '" default="default" />';
       }
@@ -162,35 +164,6 @@ class SeminarView {
     }
 
     return $videoTag;
-  }
-
-  private function _remoteFileExists ($url) {
-    $size = 0;
-
-    $urlComponents = parse_url($url);
-    $host = $urlComponents['host'];
-    $fp = fsockopen($host, 80, $errno, $errstr, 5);
-
-    if (!$fp) {
-      return false;
-    } else {
-      $out = "GET $url HTTP/1.1\r\n"; // HEAD vs GET ??
-      $out .= "Host: $host\r\n";
-      $out .= "Connection: Close\r\n\r\n";
-      fwrite($fp, $out);
-
-      $needle = 'Content-Length: ';
-      while (!feof($fp)) {
-        $header = fgets ($fp, 128);
-        if (preg_match("/$needle/i", $header)) {
-          $size = trim(substr($header, strlen($needle)));
-          break;
-        }
-      }
-      fclose ($fp);
-    }
-
-    return $size;
   }
 
   public function render () {

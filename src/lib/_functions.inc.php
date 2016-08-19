@@ -26,6 +26,46 @@ function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
   return $value;
 }
 
+/**
+ * Check if a file exists on a remote server
+ *
+ * @param $url {String}
+ *    The remote URL to check
+ *
+ * @return $size {Int}
+ *    The size of the remote file (returns 0 if not found)
+ */
+function remoteFileExists ($url) {
+  $size = 0;
+
+  $urlComponents = parse_url($url);
+  $host = $urlComponents['host'];
+  $fp = fsockopen($host, 80, $errno, $errstr, 5);
+
+  if ($fp) {
+    $out = "GET $url HTTP/1.1\r\n"; // HEAD vs GET ??
+    $out .= "Host: $host\r\n";
+    $out .= "Connection: Close\r\n\r\n";
+    fwrite($fp, $out);
+
+    $needle = 'Content-Length: ';
+    while (!feof($fp)) {
+      $header = fgets ($fp, 128);
+      if (preg_match("/$needle/i", $header)) {
+        $size = trim(substr($header, strlen($needle)));
+        break;
+      }
+    }
+    fclose ($fp);
+  }
+
+  return $size;
+}
+
+/* ----------------------------------------------------------------------------
+  The following functions were lifted from WordPress, including autop and
+  its supporting functions
+ */
 
 /**
  * Replaces double line-breaks with paragraph elements.
