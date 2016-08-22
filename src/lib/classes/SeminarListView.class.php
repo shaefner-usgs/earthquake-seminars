@@ -47,18 +47,18 @@ class SeminarListView {
         // speaker field will be empty if there's no seminar
         // (committee likes to post "no seminar" messages)
         if ($seminar->speaker) {
-          $seminar->openTag = '<a href="' . $href . '">';
-          $seminar->closeTag = '</a>';
+          $openTag = '<a href="' . $href . '">';
+          $closeTag = '</a>';
 
           // show "Live now" button
-          if ($seminar->status === 'live') {
+          if ($seminar->video === 'yes' && $seminar->status === 'live') {
             $livenow = '<div class="livenow">
                 <button class="green">Live now</button>
               </div>';
           }
         } else {
-          $seminar->openTag = '<div>';
-          $seminar->closeTag = '</div>';
+          $openTag = '<div>';
+          $closeTag = '</div>';
         }
 
         $seminarListHtml .= sprintf('<li class="%s">
@@ -74,14 +74,14 @@ class SeminarListView {
             %s
           </li>',
           $seminar->status,
-          $seminar->openTag,
+          $openTag,
           $seminar->topic,
           $seminar->speaker,
           date('c', $seminar->timestamp),
           $seminar->dateShort,
           $seminar->time,
           $livenow,
-          $seminar->closeTag
+          $closeTag
         );
 
         $prevMonth = $seminar->month;
