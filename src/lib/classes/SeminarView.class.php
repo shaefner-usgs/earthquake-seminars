@@ -15,6 +15,12 @@ class SeminarView {
     $this->_model = $model;
   }
 
+  /**
+   * Parse playlist XML file to create HTML that VideoPlayer.js uses to
+   * populate jwplayer's playlist option
+   *
+   * @return $video {String}
+   */
   private function _getPlaylist () {
     $playlist = simplexml_load_file($this->_model->videoPlaylist);
 
@@ -47,6 +53,11 @@ class SeminarView {
     return $video;
   }
 
+  /**
+   * Create HTML for Seminar
+   *
+   * @return $seminarHtml {String}
+   */
   private function _getSeminar () {
     if (!$this->_model->ID) {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
@@ -111,6 +122,11 @@ class SeminarView {
     return $seminarHtml;
   }
 
+  /**
+   * Create HTML for video player section based on user's view
+   *
+   * @return $video {String}
+   */
   private function _getVideo () {
     $video = '';
 
@@ -143,6 +159,14 @@ class SeminarView {
     return $video;
   }
 
+  /**
+   * Create <video> tag
+   *
+   * @param $src {String} default is NULL
+   *     use provided $src or obtain from the model
+   *
+   * @return $videoTag {String}
+   */
   private function _getVideoTag ($src=NULL) {
     if (!$src) {
       $src = $this->_model->videoSrc;

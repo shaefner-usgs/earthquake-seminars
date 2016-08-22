@@ -15,12 +15,18 @@ class SeminarListView {
     $this->_collection = $collection;
   }
 
+  /**
+   * Create <li> tag for each seminar in list
+   *
+   * @param $seminar {Object}
+   *
+   * @return $liTag {String}
+   */
   private function _getLiTag ($seminar) {
     $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
     $livenow = '';
 
-    // speaker field will be empty if there's no seminar
-    // (committee likes to post "no seminar" messages)
+    // speaker field will be empty if there's no seminar ("no seminar" notices)
     if ($seminar->speaker) {
       $openTag = '<a href="' . $href . '">';
       $closeTag = '</a>';
@@ -62,7 +68,11 @@ class SeminarListView {
     return $liTag;
   }
 
-  // Create HTML for seminars list
+  /**
+   * Create HTML for seminars list
+   *
+   * @return $seminarListHtml {String}
+   */
   private function _getSeminarList () {
     if (!$this->_collection->seminars) {
       $seminarListHtml = '<p class="alert info">No Seminars Found</p>';

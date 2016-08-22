@@ -22,7 +22,17 @@ class Seminar {
     }
   }
 
-  // add affiliation to speaker field
+  public function __get ($name) {
+    return $this->_data[$name];
+  }
+
+  public function __set ($name, $value) {
+    $this->_data[$name] = $value;
+  }
+
+  /**
+   * Add affiliation to speaker field
+   */
   private function _addAffiliation () {
     $speaker = $this->_data['speaker'];
     if ($this->_data['affiliation']) {
@@ -31,7 +41,11 @@ class Seminar {
     }
   }
 
-  // Add non-db fields to model
+  /**
+   * Add non-db fields to model
+   *
+   * @param $datetime {String}
+   */
   private function _addFields ($datetime) {
     $timestamp = strtotime($datetime);
     $year = date('Y', $timestamp);
@@ -55,6 +69,11 @@ class Seminar {
     $this->_data['year'] = $year;
   }
 
+  /**
+   * Get seminar category (either 'archive' or 'upcoming')
+   *
+   * @return $category {String}
+   */
   private function _getCategory () {
     $category = 'archive'; // default value
     if ($this->_seminarDate >= $this->_todaysDate) {
@@ -64,14 +83,21 @@ class Seminar {
     return $category;
   }
 
+  /**
+   * Get seminar status for video player
+   *
+   * @param $timestamp {Int}
+   *
+   * @return $status {String}
+   */
   private function _getStatus ($timestamp) {
     $status = 'past'; // default value
     if ($this->_seminarDate === $this->_todaysDate) {
       if (time() < $timestamp) {
         $status = 'today';
       }
-      if ($this->_isLive($timestamp)) {
-        $status = 'live'; // "live" trumps "today" due to buffer
+      if ($this->_isLive($timestamp)) { // 'live' trumps 'today' due to buffer
+        $status = 'live';
       }
     } else if ($this->_seminarDate > $this->_todaysDate) {
       $status = 'future';
@@ -80,9 +106,17 @@ class Seminar {
     return $status;
   }
 
+  /**
+   * Check if seminar is live now
+   *
+   * @param $seminarStart {Int}
+   *     timestamp of seminar begin time
+   *
+   * @return $isLive {Boolean}
+   */
   private function _isLive ($seminarStart) {
     $buffer = 5 * 60; // 5 mins
-    $isLive = false;
+    $isLive = false; // default value
     $now = time();
     $seminarEnd = $seminarStart + (60 * 60); // seminars last 60 mins
 
@@ -91,13 +125,5 @@ class Seminar {
     }
 
     return $isLive;
-  }
-
-  public function __get ($name) {
-    return $this->_data[$name];
-  }
-
-  public function __set ($name, $value) {
-    $this->_data[$name] = $value;
   }
 }
