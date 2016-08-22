@@ -41,7 +41,7 @@ var Video = function (options) {
 
     _COUNT ++;
     jwplayerOpts = _buildOptions();
-    if (jwplayerOpts.file) {
+    if (jwplayerOpts.file) { // file prop is required by jwplayer
       _setupPlayer(jwplayerOpts);
     }
   };
@@ -224,8 +224,7 @@ var Video = function (options) {
    *    jwplayer options
    */
   _setupPlayer = function (opts) {
-    var fixedOpts,
-        player;
+    var fixedOpts;
 
     // fixedOpts are applied to all jwplayer instances
     fixedOpts = {
@@ -243,14 +242,15 @@ var Video = function (options) {
     opts = Util.extend({}, fixedOpts, opts);
 
     // instantiate player
-    player = jwplayer(opts.id);
-    player.setup(opts);
+    jwplayer(opts.id).setup(opts);
 
     // if player can't be setup in livestream mode, assume no Flash, alert user
-    jwplayer().onSetupError(function(/*e*/) {
+    jwplayer(opts.id).on('setupError', function(e) {
       var flash,
           p,
           video;
+
+      console.log(e);
 
       if (opts.livestream) {
         flash = document.querySelector('.' + 'flash');
