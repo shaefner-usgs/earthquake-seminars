@@ -15,6 +15,53 @@ class SeminarListView {
     $this->_collection = $collection;
   }
 
+  private function _getLiTag ($seminar) {
+    $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
+    $livenow = '';
+
+    // speaker field will be empty if there's no seminar
+    // (committee likes to post "no seminar" messages)
+    if ($seminar->speaker) {
+      $openTag = '<a href="' . $href . '">';
+      $closeTag = '</a>';
+
+      // show "Live now" button
+      if ($seminar->video === 'yes' && $seminar->status === 'live') {
+        $livenow = '<div class="livenow">
+            <button class="green">Live now</button>
+          </div>';
+      }
+    } else {
+      $openTag = '<div>';
+      $closeTag = '</div>';
+    }
+
+    $liTag .= sprintf('<li class="%s">
+        %s
+          <div class="topic">
+            <h3>%s</h3>
+            <p>%s</p>
+          </div>
+          <time datetime="%s">
+            %s <span class="time">%s</span>
+          </time>
+          %s
+        %s
+      </li>',
+      $seminar->status,
+      $openTag,
+      $seminar->topic,
+      $seminar->speaker,
+      date('c', $seminar->timestamp),
+      $seminar->dateShort,
+      $seminar->time,
+      $livenow,
+      $closeTag
+    );
+
+    return $liTag;
+  }
+
   // Create HTML for seminars list
   private function _getSeminarList () {
     if (!$this->_collection->seminars) {
@@ -24,9 +71,6 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
-        $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
-        $livenow = '';
-
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
           $seminar->dateShort = "<mark>$seminar->dateShort</mark>";
@@ -43,48 +87,10 @@ class SeminarListView {
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
           $seminarListHtml .= '<ul class="' . $seminar->category . ' seminars no-style">';
         }
-
-        // speaker field will be empty if there's no seminar
-        // (committee likes to post "no seminar" messages)
-        if ($seminar->speaker) {
-          $openTag = '<a href="' . $href . '">';
-          $closeTag = '</a>';
-
-          // show "Live now" button
-          if ($seminar->video === 'yes' && $seminar->status === 'live') {
-            $livenow = '<div class="livenow">
-                <button class="green">Live now</button>
-              </div>';
-          }
-        } else {
-          $openTag = '<div>';
-          $closeTag = '</div>';
-        }
-
-        $seminarListHtml .= sprintf('<li class="%s">
-            %s
-              <div class="topic">
-                <h3>%s</h3>
-                <p>%s</p>
-              </div>
-              <time datetime="%s">
-                %s <span class="time">%s</span>
-              </time>
-              %s
-            %s
-          </li>',
-          $seminar->status,
-          $openTag,
-          $seminar->topic,
-          $seminar->speaker,
-          date('c', $seminar->timestamp),
-          $seminar->dateShort,
-          $seminar->time,
-          $livenow,
-          $closeTag
-        );
-
         $prevMonth = $seminar->month;
+
+        // Get <li> with seminar details
+        $seminarListHtml .= $this->_getLiTag($seminar);
       }
       $seminarListHtml .= '</ul>';
     }
