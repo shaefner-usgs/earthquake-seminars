@@ -15,35 +15,6 @@ class SeminarListView {
     $this->_collection = $collection;
   }
 
-  private function _getDescription () {
-    $currentYear = date('Y');
-
-    return '<p>Seminars typically take place at <strong>10:30 AM
-      Wednesdays</strong> in the <strong>Rambo Auditorium</strong> (main USGS
-      Conference Room). The USGS Campus is located at
-      <a href="/contactus/menlo/menloloc.php" title="Campus Map and
-      Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
-      <p>We record most seminars. You can watch live or
-      <a href="' . $GLOBALS['MOUNT_PATH'] . "/archives/$currentYear" .
-      '">check the archives</a> to view a past seminar.</p>';
-  }
-
-  private function _getPodcasts () {
-    return '<h3>Video Podcast</h3>
-      <ul class="feeds no-style">
-        <li class="itunes">
-          <a href="http://itunes.apple.com/us/podcast/usgs-earthquake-science-center/id413770595">
-            iTunes
-          </a>
-        </li>
-        <li class="xml">
-          <a href="' . $GLOBALS['MOUNT_PATH'] . '/feed">
-            RSS Feed
-          </a>
-        </li>
-      </ul>';
-  }
-
   // Create HTML for seminars list
   private function _getSeminarList () {
     if (!$this->_collection->seminars) {
@@ -64,7 +35,7 @@ class SeminarListView {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 
-        // Show month & year header; open/close <ul>'s
+        // Show month & year headers; open/close <ul>'s
         if ($seminar->month !== $prevMonth) {
           if ($prevMonth) {
             $seminarListHtml .= '</ul>';
@@ -122,10 +93,6 @@ class SeminarListView {
   }
 
   public function render () {
-    print $this->_getDescription();
-    print $this->_getPodcasts();
-    print '<div class="">';
     print $this->_getSeminarList();
-    print '</div>';
   }
 }
