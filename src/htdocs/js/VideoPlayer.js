@@ -267,13 +267,6 @@ var Video = function (options) {
         }
       }
     });
-
-    // repeatedly try to play livestream when server is offline
-    jwplayer().onBuffer(function() {
-      setTimeout(function(){
-        jwplayer().play();
-      }, 15000);
-    });
   };
 
 
