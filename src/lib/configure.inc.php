@@ -11,7 +11,7 @@ $PROMPTS = array(
 
   'MOUNT_PATH' => array(
     'prompt' => 'URL path for application',
-    'default' => '/regional/nca/seminars',
+    'default' => '/contactus/menlo/seminars',
     'secure' => false
   ),
   'APP_DIR' => array(
@@ -26,7 +26,7 @@ $PROMPTS = array(
   ),
   'DB_DSN' => array(
     'prompt' => 'Database connection DSN string',
-    'default' => 'mysql:host=***REMOVED***.wr.usgs.gov;port=3306;dbname=ehpdb',
+    'default' => 'mysql:host=127.0.0.1;port=3306;dbname=web',
     'secure' => false
   ),
   'DB_USER' => array(
