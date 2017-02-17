@@ -36,7 +36,7 @@ class Seminar {
     $timestamp = strtotime($datetime);
     $year = date('Y', $timestamp);
 
-    $videoDomain = 'http://media.wr.usgs.gov';
+    $videoDomain = 'https://media.wr.usgs.gov';
     $videoFile = str_replace('-', '', substr($datetime, 0, 10)) . '.mp4';
     $videoPath = '/ehz/' . $year;
     $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
