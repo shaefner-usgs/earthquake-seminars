@@ -8,8 +8,8 @@ var MOUNT_PATH = config.ini.MOUNT_PATH;
 
 var addMiddleware = function (connect, options, middlewares) {
   middlewares.unshift(
-    require('grunt-connect-rewrite/lib/utils').rewriteRequest,
     require('grunt-connect-proxy/lib/utils').proxyRequest,
+    require('grunt-connect-rewrite/lib/utils').rewriteRequest,
     require('gateway')(options.base[0], {
       '.php': 'php-cgi',
       'env': {

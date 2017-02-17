@@ -1,3 +1,4 @@
+@import '_feeds.scss';
 @import '_subnav.scss';
 @import '_variables.scss';
 
@@ -9,25 +10,6 @@ h2 {
 
 .archive .time {
   display: none;
-}
-
-.feeds {
-  display: flex;
-
-  a {
-    padding: 2px 0 2px 25px;
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 0px 4px;
-    margin-right: 1em;
-  }
-
-  .itunes a {
-    background-image: url('../img/itunes.png');
-  }
-  .xml a {
-    background-image: url('../img/xml.png');
-  }
 }
 
 .seminars {

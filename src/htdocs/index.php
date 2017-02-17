@@ -4,6 +4,8 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+include_once '_feeds.inc.php'; // sets $feeds
+
 include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarListView.class.php'; // view
 include_once '../lib/classes/SeminarCollection.class.php'; // collection
@@ -38,4 +40,19 @@ foreach($seminars as $seminar) {
 }
 
 $view = new SeminarListView($seminarCollection);
+
+?>
+
+<p>Seminars typically take place at <strong>10:30 AM Wednesdays</strong> in
+  the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS
+  Campus is located at <a href="/contactus/menlo/menloloc.php" title="Campus
+  Map and Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
+
+<p>We record most seminars. You can watch live or
+  <a href="<?php print $MOUNT_PATH; ?>/archives/<?php print $currentYear; ?>">check
+  the archives</a> to view a past seminar.</p>
+
+<?php
+
+print $feeds;
 $view->render();

@@ -4,6 +4,8 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+include_once '_feeds.inc.php'; // sets $feeds
+
 include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarView.class.php'; // view
 
@@ -42,3 +44,5 @@ if ($rsSeminar->rowCount() === 1) {
 
 $view = new SeminarView($seminarModel);
 $view->render();
+
+print $feeds;

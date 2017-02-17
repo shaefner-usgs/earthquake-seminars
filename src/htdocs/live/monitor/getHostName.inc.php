@@ -14,10 +14,10 @@ if (preg_match('/^[\w\.]+$/', $_GET['ip'])) {
 function gethost($ip) {
   $host = exec("dig +short +time=1 -x $ip 2>&1");
 
-	if (!$host || preg_match('/not found/', $host) || preg_match('/timed out/', $host)) {
-	  $r = 'unknown';
+  if (!$host || preg_match('/not found/', $host) || preg_match('/timed out/', $host)) {
+    $r = 'unknown';
   } else {
-	  $r = substr($host, 0, -1);
+    $r = substr($host, 0, -1);
   }
   return $r;
 }

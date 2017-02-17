@@ -15,6 +15,12 @@ class SeminarView {
     $this->_model = $model;
   }
 
+  /**
+   * Parse playlist XML file to create HTML that VideoPlayer.js uses to
+   * populate jwplayer's playlist option
+   *
+   * @return $video {String}
+   */
   private function _getPlaylist () {
     $playlist = simplexml_load_file($this->_model->videoPlaylist);
 
@@ -47,12 +53,17 @@ class SeminarView {
     return $video;
   }
 
+  /**
+   * Create HTML for Seminar
+   *
+   * @return $seminarHtml {String}
+   */
   private function _getSeminar () {
     if (!$this->_model->ID) {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
       $captions = '';
-      if ($this->_model->status !== 'future') {
+      if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
         $captions = '<p class="captions">Closed captions are usually available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
           button on the video player. For older seminars that don&rsquo;t have
@@ -64,7 +75,7 @@ class SeminarView {
         $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
       }
       $flash = '';
-      if ($this->_model->status === 'live') {
+      if ($this->_model->video === 'yes' && $this->_model->status === 'live') {
         $flash = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
           Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
       }
@@ -111,6 +122,11 @@ class SeminarView {
     return $seminarHtml;
   }
 
+  /**
+   * Create HTML for video player section based on user's view
+   *
+   * @return $video {String}
+   */
   private function _getVideo () {
     $video = '';
 
@@ -121,7 +137,7 @@ class SeminarView {
         }
         else if (remoteFileExists($this->_model->videoPlaylist)) { // xml file
           $video = $this->_getPlaylist();
-        } else {
+        } else { // no file found
           $video = '<h3>Video not found</h3>
             <p>Please try back later. Videos are usually posted within a few hours.</p>';
         }
@@ -136,13 +152,21 @@ class SeminarView {
         View on a mobile device</a></p>';
       }
     } else {
-      $video = '<h3>Video not available</h3>
-        <p>This seminar was not recorded or is not available to view online.</p>';
+      $video = '<h3>No webcast</h3>
+        <p>This seminar is not available to view online.</p>';
     }
 
     return $video;
   }
 
+  /**
+   * Create <video> tag
+   *
+   * @param $src {String} default is NULL
+   *     use provided $src or obtain from the model
+   *
+   * @return $videoTag {String}
+   */
   private function _getVideoTag ($src=NULL) {
     if (!$src) {
       $src = $this->_model->videoSrc;

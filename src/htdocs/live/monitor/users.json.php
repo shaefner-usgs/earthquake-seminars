@@ -24,62 +24,62 @@ $xmlstr = file_get_contents('http://video2.wr.usgs.gov:8086/serverinfo/');
 $xml = new SimpleXMLElement($xmlstr);
 
 if ($xml) {
-	$metadata = array();
-	$features = array();
-	$metadata['status'] = 'inactive'; // default value
+  $metadata = array();
+  $features = array();
+  $metadata['status'] = 'inactive'; // default value
 
-	foreach($xml->VHost[0]->Application as $application) {
+  foreach($xml->VHost[0]->Application as $application) {
 
-		if ($application->Name == 'live') { // only look at connections that are watching 'live' stream
-			$metadata['duration'] = (String) $application->TimeRunning;
-			$metadata['date'] = $date;
-			$metadata['current'] = (String) $application->ConnectionsCurrent;
-			$metadata['total'] = (String) $application->ConnectionsTotal;
+    if ($application->Name == 'live') { // only look at connections that are watching 'live' stream
+      $metadata['duration'] = (String) $application->TimeRunning;
+      $metadata['date'] = $date;
+      $metadata['current'] = (String) $application->ConnectionsCurrent;
+      $metadata['total'] = (String) $application->ConnectionsTotal;
 
-			// check if stream is currently running
-			// sometimes stream is 'loaded' even when it's not actively streaming
-			if ((String) $application->Status === 'loaded') {
-				$metadata['status'] = 'loaded';
-			}
-			// only set to 'active' is there are active connections (wirecast itself is considered an active connection)
-			if ((Int) $application->ConnectionsCurrent > 0) {
-				$metadata['status'] = 'active';
-			}
+      // check if stream is currently running
+      // sometimes stream is 'loaded' even when it's not actively streaming
+      if ((String) $application->Status === 'loaded') {
+        $metadata['status'] = 'loaded';
+      }
+      // only set to 'active' is there are active connections (wirecast itself is considered an active connection)
+      if ((Int) $application->ConnectionsCurrent > 0) {
+        $metadata['status'] = 'active';
+      }
 
-			// Desktop users (Flash)
-			if ($application->ApplicationInstance->Client) { // suppress warning if no clients connected
-				foreach($application->ApplicationInstance->Client as $client) { // loop thru client connections
+      // Desktop users (Flash)
+      if ($application->ApplicationInstance->Client) { // suppress warning if no clients connected
+        foreach($application->ApplicationInstance->Client as $client) { // loop thru client connections
 
-					if (preg_match("/Wirecast/", $client->FlashVersion)) {
-						$type = 'wirecast'; // wirecast client
-					} else {
-						$type = 'desktop';
-					}
+          if (preg_match("/Wirecast/", $client->FlashVersion)) {
+            $type = 'wirecast'; // wirecast client
+          } else {
+            $type = 'desktop';
+          }
 
-					$feature = buildUserJson($client, $type);
-					array_push($features, $feature);
-				}
-			}
+          $feature = buildUserJson($client, $type);
+          array_push($features, $feature);
+        }
+      }
 
-			// Mobile users (iPhone, Android)
-			if ($application->ApplicationInstance->HTTPSession) {
-				foreach($application->ApplicationInstance->HTTPSession as $httpsession) {
-					$type = 'mobile';
-					$feature = buildUserJson($httpsession, $type);
-					array_push($features, $feature);
-				}
-			}
+      // Mobile users (iPhone, Android)
+      if ($application->ApplicationInstance->HTTPSession) {
+        foreach($application->ApplicationInstance->HTTPSession as $httpsession) {
+          $type = 'mobile';
+          $feature = buildUserJson($httpsession, $type);
+          array_push($features, $feature);
+        }
+      }
 
-		}
-	}
+    }
+  }
 
-	$json_array = array(
-		'type' => 'FeatureCollection',
-		'metadata' => $metadata,
-		'features' => $features
-	);
+  $json_array = array(
+    'type' => 'FeatureCollection',
+    'metadata' => $metadata,
+    'features' => $features
+  );
 
-	print json_encode($json_array);
+  print json_encode($json_array);
 }
 
 geoip_close($iplocator);
@@ -87,42 +87,42 @@ geoip_close($iplocator);
 
 function buildUserJson($user, $type) {
 
-	// try to get host name from IP address
-	$name = gethost ($user->IpAddress);
+  // try to get host name from IP address
+  $name = gethost ($user->IpAddress);
 
-	// try to get lat, lng from IP address
-	$geo = geoip_record_by_addr($GLOBALS['iplocator'], $user->IpAddress);
-	if ($geo) {
-		$feature['geometry'] = array(
-			'type' => 'Point',
-			'coordinates' => array($geo->longitude, $geo->latitude)
-		);
-	}
+  // try to get lat, lng from IP address
+  $geo = geoip_record_by_addr($GLOBALS['iplocator'], $user->IpAddress);
+  if ($geo) {
+    $feature['geometry'] = array(
+      'type' => 'Point',
+      'coordinates' => array($geo->longitude, $geo->latitude)
+    );
+  }
 
-	$feature['type'] = 'Feature';
-	$feature['id'] = count($GLOBALS['features']) + 1;
+  $feature['type'] = 'Feature';
+  $feature['id'] = count($GLOBALS['features']) + 1;
 
-	$feature['properties'] = array(
-		'ip' => (String) $user->IpAddress,
-		'name' => $name,
-		'start' => (String) $user->DateStarted,
-		'duration' => (String) $user->TimeRunning,
-		'version' => (String) $user->FlashVersion,
-		'referrer' => (String) $user->Referrer,
-		'type' => $type
-	);
+  $feature['properties'] = array(
+    'ip' => (String) $user->IpAddress,
+    'name' => $name,
+    'start' => (String) $user->DateStarted,
+    'duration' => (String) $user->TimeRunning,
+    'version' => (String) $user->FlashVersion,
+    'referrer' => (String) $user->Referrer,
+    'type' => $type
+  );
 
-	return $feature;
+  return $feature;
 }
 
 
 function gethost($ip) {
   $host = exec("dig +short +time=1 -x $ip 2>&1");
 
-	if (!$host || preg_match('/not found/', $host) || preg_match('/timed out/', $host)) {
-	  $r = 'unknown';
+  if (!$host || preg_match('/not found/', $host) || preg_match('/timed out/', $host)) {
+    $r = 'unknown';
   } else {
-	  $r = substr($host, 0, -1);
+    $r = substr($host, 0, -1);
   }
   return $r;
 }

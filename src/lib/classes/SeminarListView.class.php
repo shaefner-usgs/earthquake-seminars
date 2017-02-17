@@ -15,36 +15,64 @@ class SeminarListView {
     $this->_collection = $collection;
   }
 
-  private function _getDescription () {
-    $currentYear = date('Y');
+  /**
+   * Create <li> tag for each seminar in list
+   *
+   * @param $seminar {Object}
+   *
+   * @return $liTag {String}
+   */
+  private function _getLiTag ($seminar) {
+    $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
+    $livenow = '';
 
-    return '<p>Seminars typically take place at <strong>10:30 AM
-      Wednesdays</strong> in the <strong>Rambo Auditorium</strong> (main USGS
-      Conference Room). The USGS Campus is located at
-      <a href="/contactus/menlo/menloloc.php" title="Campus Map and
-      Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
-      <p>We record most seminars. You can watch live or
-      <a href="' . $GLOBALS['MOUNT_PATH'] . "/archives/$currentYear" .
-      '">check the archives</a> to view a past seminar.</p>';
+    // speaker field will be empty if there's no seminar ("no seminar" notices)
+    if ($seminar->speaker) {
+      $openTag = '<a href="' . $href . '">';
+      $closeTag = '</a>';
+
+      // show "Live now" button
+      if ($seminar->video === 'yes' && $seminar->status === 'live') {
+        $livenow = '<div class="livenow">
+            <button class="green">Live now</button>
+          </div>';
+      }
+    } else {
+      $openTag = '<div>';
+      $closeTag = '</div>';
+    }
+
+    $liTag .= sprintf('<li class="%s">
+        %s
+          <div class="topic">
+            <h3>%s</h3>
+            <p>%s</p>
+          </div>
+          <time datetime="%s">
+            %s <span class="time">%s</span>
+          </time>
+          %s
+        %s
+      </li>',
+      $seminar->status,
+      $openTag,
+      $seminar->topic,
+      $seminar->speaker,
+      date('c', $seminar->timestamp),
+      $seminar->dateShort,
+      $seminar->time,
+      $livenow,
+      $closeTag
+    );
+
+    return $liTag;
   }
 
-  private function _getPodcasts () {
-    return '<h3>Video Podcast</h3>
-      <ul class="feeds no-style">
-        <li class="itunes">
-          <a href="http://itunes.apple.com/us/podcast/usgs-earthquake-science-center/id413770595">
-            iTunes
-          </a>
-        </li>
-        <li class="xml">
-          <a href="' . $GLOBALS['MOUNT_PATH'] . '/feed">
-            RSS Feed
-          </a>
-        </li>
-      </ul>';
-  }
-
-  // Create HTML for seminars list
+  /**
+   * Create HTML for seminars list
+   *
+   * @return $seminarListHtml {String}
+   */
   private function _getSeminarList () {
     if (!$this->_collection->seminars) {
       $seminarListHtml = '<p class="alert info">No Seminars Found</p>';
@@ -53,9 +81,6 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
-        $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
-        $livenow = '';
-
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
           $seminar->dateShort = "<mark>$seminar->dateShort</mark>";
@@ -64,7 +89,7 @@ class SeminarListView {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 
-        // Show month & year header; open/close <ul>'s
+        // Show month & year headers; open/close <ul>'s
         if ($seminar->month !== $prevMonth) {
           if ($prevMonth) {
             $seminarListHtml .= '</ul>';
@@ -72,48 +97,10 @@ class SeminarListView {
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
           $seminarListHtml .= '<ul class="' . $seminar->category . ' seminars no-style">';
         }
-
-        // speaker field will be empty if there's no seminar
-        // (committee likes to post "no seminar" messages)
-        if ($seminar->speaker) {
-          $seminar->openTag = '<a href="' . $href . '">';
-          $seminar->closeTag = '</a>';
-
-          // show "Live now" button
-          if ($seminar->status === 'live') {
-            $livenow = '<div class="livenow">
-                <button class="green">Live now</button>
-              </div>';
-          }
-        } else {
-          $seminar->openTag = '<div>';
-          $seminar->closeTag = '</div>';
-        }
-
-        $seminarListHtml .= sprintf('<li class="%s">
-            %s
-              <div class="topic">
-                <h3>%s</h3>
-                <p>%s</p>
-              </div>
-              <time datetime="%s">
-                %s <span class="time">%s</span>
-              </time>
-              %s
-            %s
-          </li>',
-          $seminar->status,
-          $seminar->openTag,
-          $seminar->topic,
-          $seminar->speaker,
-          date('c', $seminar->timestamp),
-          $seminar->dateShort,
-          $seminar->time,
-          $livenow,
-          $seminar->closeTag
-        );
-
         $prevMonth = $seminar->month;
+
+        // Get <li> with seminar details
+        $seminarListHtml .= $this->_getLiTag($seminar);
       }
       $seminarListHtml .= '</ul>';
     }
@@ -122,10 +109,6 @@ class SeminarListView {
   }
 
   public function render () {
-    print $this->_getDescription();
-    print $this->_getPodcasts();
-    print '<div class="">';
     print $this->_getSeminarList();
-    print '</div>';
   }
 }
