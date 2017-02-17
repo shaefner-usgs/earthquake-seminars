@@ -61,6 +61,10 @@ file_put_contents($HTTPD_CONF, '
 
   # Prevent apache from adding trailing slash on "real" directories by explicitly requesting index.php
   RewriteRule ^' . $MOUNT_PATH . '$ ' . $MOUNT_PATH . '/index.php [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/live$ ' .
+    $MOUNT_PATH . '/live/index.php [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/live/monitor$ ' .
+    $MOUNT_PATH . '/live/monitor/index.php [L,PT]
 
   # Pretty URLs
   RewriteRule ^' . $MOUNT_PATH . '/archives/([0-9]{4})$ ' .
