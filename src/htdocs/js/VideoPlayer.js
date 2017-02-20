@@ -14,7 +14,7 @@ _DEFAULTS = {
 };
 
 
-var Video = function (options) {
+var VideoPlayer = function (options) {
   var _this,
       _initialize,
 
@@ -276,4 +276,4 @@ var Video = function (options) {
 };
 
 
-module.exports = Video;
+module.exports = VideoPlayer;
