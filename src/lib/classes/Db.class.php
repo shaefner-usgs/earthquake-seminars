@@ -75,6 +75,7 @@ class Db {
    * Query db to get seminar committee members
    *
    * @param $who {String}
+   *     defaults to current committee members only
    *
    * @return {Function}
    */
@@ -128,15 +129,15 @@ class Db {
   }
 
   /**
-   * Query db to get a list of seminars
+   * Query db to get a list of seminars (defaults to upcoming seminars)
    *
-   * @param $year {Int} default is NULL
-   *     filter seminar list to include only seminars in given year (defaults
-   *     to upcoming seminars; only past seminars incl. if passed current year)
+   * @param $filter {Mixed} default is NULL
+   *     year: filter list to a given year (only past seminars included)
+   *     datetime: filter list to a specific time
    *
    * @return {Function}
    */
-  public function querySeminars ($year=NULL) {
+  public function querySeminars ($filter=NULL) {
     $today = date('Y-m-d');
     $where = '`publish` = "yes"';
 
@@ -144,13 +145,18 @@ class Db {
       'today' => $today
     ];
 
-    if ($year) {
-      $filter = "$year%";
+    if ($filter) {
       $params['filter'] = $filter;
-      // for current year, only include past seminars
-      $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
-    } else {
-      $filter = NULL;
+      if (preg_match('/\d{4}/', $filter)) { // year
+        $params['filter'] = "$year%";
+        // Only include past seminars
+        $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
+      }
+      else { // assume datetime
+        $where .= ' AND `datetime` = :filter';
+      }
+    }
+    else { // default
       $where .= ' AND `datetime` >= :today';
     }
 
