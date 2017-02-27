@@ -16,7 +16,6 @@ $db = new Db;
 
 // 2.5 hour announcement
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+150 minutes'));
-$datetime = '2017-02-15 10:30:00';
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
@@ -162,8 +161,7 @@ function sendEmail ($seminar) {
     $committee['poc']['name'],
     $committee['poc']['email']
   );
-  //$to = 'GS-G-WR_EHZ_Seminars@usgs.gov';
-  $to = 'shaefner@usgs.gov';
+  $to = 'GS-G-WR_EHZ_Seminars@usgs.gov';
   $subject = 'Earthquake Seminar ' . $when . ' - ' . $seminar['speaker'];
 
   mail ($to, $subject, $seminar['message'], $headers);
