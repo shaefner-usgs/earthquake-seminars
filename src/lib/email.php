@@ -21,7 +21,7 @@ $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
 // 2 day announcement
-$datetime = strftime("%Y-%m-%d %H:%M:00", strtotime("+2 days"));
+$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+2 days'));
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
@@ -34,11 +34,16 @@ prepare($rsSeminars);
  * @return {Array}
  */
 function createEmail ($recordSet) {
+  global $committee;
   $row = $recordSet->fetch();
 
   // Assume -no seminar- if speaker is empty (committee likes to post no seminar msg on web page)
   if (!$row['speaker'] || ($row['publish'] === 'no')) {
     return;
+  }
+
+  if (!$committee) {
+    $committee = getCommittee();
   }
 
   $affiliation = $row['affiliation'];
@@ -55,7 +60,7 @@ function createEmail ($recordSet) {
 
   if ($row['video'] === 'yes') {
     $id = $row['ID'];
-    $video_msg = "Webcast (live and archive):\nhttps://earthquake.usgs.gov/contactus/menlo/seminars/$id/";
+    $video_msg = "Webcast (live and archive):\nhttps://earthquake.usgs.gov/contactus/menlo/seminars/$id";
   } else {
     $video_msg = 'This seminar will not be webcast.';
   }
@@ -82,7 +87,7 @@ $video_msg
 Please contact the Seminar co-Chairs for speaker suggestions or if you would
 like to meet with the speaker:
 
-$committee";
+{$committee['list']}";
 
   return [
     'datetime' => $row['datetime'],
@@ -144,10 +149,6 @@ function prepare($recordSet) {
 function sendEmail ($seminar) {
   global $committee;
 
-  if (!$committee) {
-    $committee = getCommittee();
-  }
-
   $seminarDay = date('l', strtotime($seminar['datetime']));
   $today = date('l');
   if ($seminarDay === $today) {
@@ -161,9 +162,9 @@ function sendEmail ($seminar) {
     $committee['poc']['name'],
     $committee['poc']['email']
   );
-  //$to = "GS-G-WR_EHZ_Seminars@usgs.gov";
-  $to = "shaefner@usgs.gov";
-  $subject = 'Earthquake Seminar ' . $when . '-' . $seminar['speaker'];
+  //$to = 'GS-G-WR_EHZ_Seminars@usgs.gov';
+  $to = 'shaefner@usgs.gov';
+  $subject = 'Earthquake Seminar ' . $when . ' - ' . $seminar['speaker'];
 
   mail ($to, $subject, $seminar['message'], $headers);
 }
