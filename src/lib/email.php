@@ -18,22 +18,13 @@ $db = new Db;
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+150 minutes'));
 $datetime = '2017-02-15 10:30:00';
 $rsSeminars = $db->querySeminars($datetime);
-if ($rsSeminars->rowCount() > 0) {
-  $msg = createMsg($rsSeminars);
-  if ($msg) {
-    sendEmail($msg);
-  }
-}
+prepare($rsSeminars);
 
 // 2 day announcement
 $datetime = strftime("%Y-%m-%d %H:%M:00", strtotime("+2 days"));
 $rsSeminars = $db->querySeminars($datetime);
-if ($rsSeminars->rowCount() > 0) {
-  $msg = createMsg($rsSeminars);
-  if ($msg) {
-    sendEmail($msg);
-  }
-}
+prepare($rsSeminars);
+
 
 /**
  * Create email message
@@ -42,7 +33,7 @@ if ($rsSeminars->rowCount() > 0) {
  *
  * @return {Array}
  */
-function createMsg ($recordSet) {
+function createEmail ($recordSet) {
   $row = $recordSet->fetch();
 
   // Assume -no seminar- if speaker is empty (committee likes to post no seminar msg on web page)
@@ -88,7 +79,8 @@ $video_msg
 
 -------------------------------------------------------------------------------
 
-Please contact the Seminar co-Chairs for speaker suggestions:
+Please contact the Seminar co-Chairs for speaker suggestions or if you would
+like to meet with the speaker:
 
 $committee";
 
@@ -130,18 +122,33 @@ function getCommittee () {
 }
 
 /**
+ * Call methods to create email and then send it
+ *
+ * @param $recordSet {Recordset}
+ *
+ */
+function prepare($recordSet) {
+  if ($recordSet->rowCount() > 0) {
+    $email = createEmail($recordSet);
+    if ($email) {
+      sendEmail($email);
+    }
+  }
+}
+
+/**
  * Send email
  *
- * @param $msg {Array}
+ * @param $seminar {Array}
  */
-function sendEmail ($msg) {
+function sendEmail ($seminar) {
   global $committee;
 
   if (!$committee) {
     $committee = getCommittee();
   }
 
-  $seminarDay = date('l', strtotime($msg['datetime']));
+  $seminarDay = date('l', strtotime($seminar['datetime']));
   $today = date('l');
   if ($seminarDay === $today) {
     $when = "today at $time";
@@ -156,7 +163,7 @@ function sendEmail ($msg) {
   );
   //$to = "GS-G-WR_EHZ_Seminars@usgs.gov";
   $to = "shaefner@usgs.gov";
-  $subject = 'Earthquake Seminar ' . $when . '-' . $msg['speaker'];
+  $subject = 'Earthquake Seminar ' . $when . '-' . $seminar['speaker'];
 
-  mail ($to, $subject, $msg['message'], $headers);
+  mail ($to, $subject, $seminar['message'], $headers);
 }
