@@ -146,13 +146,14 @@ class Db {
     ];
 
     if ($filter) {
-      $params['filter'] = $filter;
-      if (preg_match('/\d{4}/', $filter)) { // year
+      if (preg_match('/^\d{4}$/', $filter)) { // year
         $params['filter'] = "$filter%";
         // Only include past seminars
         $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
       }
       else { // assume datetime
+        unset($params['today']);
+        $params['filter'] = $filter;
         $where .= ' AND `datetime` = :filter';
       }
     }
