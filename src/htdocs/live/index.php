@@ -1,13 +1,13 @@
 <?php
 
-include_once '../conf/config.inc.php'; // app config
+include_once '../../conf/config.inc.php'; // app config
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Live Webcast - Earthquake Science Center';
   $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '
-    <script src="lib/jwplayer-7.5.2/jwplayer.js"></script>
+    <script src="lib/jwplayer/jwplayer.js"></script>
     <script src="js/seminar.js"></script>
   ';
 
