@@ -15,10 +15,10 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="lib/jwplayer-7.5.2/skins/five.css" />
+    <link rel="stylesheet" href="lib/jwplayer/skins/five.css" />
     <link rel="stylesheet" href="css/seminar.css" />';
   $FOOT = '
-    <script src="lib/jwplayer-7.5.2/jwplayer.js"></script>
+    <script src="lib/jwplayer/jwplayer.js"></script>
     <script src="js/seminar.js"></script>
   ';
 
