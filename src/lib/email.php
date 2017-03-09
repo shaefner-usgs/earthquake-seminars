@@ -25,9 +25,9 @@ $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+2 days'));
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
-$test = '2017-03-08 10:30:00';
-$rsSeminars = $db->querySeminars($test);
-prepare($rsSeminars);
+// $test = '2017-03-08 10:30:00';
+// $rsSeminars = $db->querySeminars($test);
+// prepare($rsSeminars);
 
 /**
  * Create email message
@@ -165,8 +165,8 @@ function sendEmail ($seminar) {
     $committee['poc']['name'],
     $committee['poc']['email']
   );
-  $to = 'shaefner@usgs.gov';
-  //$to = 'GS-G-WR_EHZ_Seminars@usgs.gov, gs-camnl_all@usgs.gov';
+  //$to = 'shaefner@usgs.gov';
+  $to = 'GS-G-WR_EHZ_Seminars@usgs.gov, gs-camnl_all@usgs.gov';
   $subject = 'Earthquake Seminar ' . $when . ' - ' . $seminar['speaker'];
 
   mail($to, $subject, $seminar['message'], $headers);
