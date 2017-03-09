@@ -6,9 +6,10 @@
  *   called by crontab (esc user) every 15 minutes
  */
 
-include_once '../conf/config.inc.php'; // app config
-include_once '../lib/_functions.inc.php'; // app functions
-include_once '../lib/classes/Db.class.php'; // db connector, queries
+$cwd = dirname(__FILE__);
+
+include_once "$cwd/../conf/config.inc.php"; // app config
+include_once "$cwd/../lib/classes/Db.class.php"; // db connector, queries
 
 $committee = '';
 
