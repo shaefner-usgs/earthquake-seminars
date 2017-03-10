@@ -63,7 +63,7 @@ function createEmail ($recordSet) {
 
   $summary = '';
   if ($row['summary']) {
-    $summary = "\n" . $row['summary'];
+    $summary = "\n\n" . $row['summary'];
   }
 
   if ($row['video'] === 'yes') {
