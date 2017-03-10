@@ -38,6 +38,16 @@ $PROMPTS = array(
     'prompt' => 'Password for database user',
     'default' => '',
     'secure' => true
+  ),
+  'NASA_EMAIL' => array(
+    'prompt' => 'NASA Email address(es) to receive seminar announcements',
+    'default' => '',
+    'secure' => false
+  ),
+  'USGS_EMAIL' => array(
+    'prompt' => 'USGS Email address(es) to receive seminar announcements',
+    'default' => '',
+    'secure' => false
   )
 
 );
