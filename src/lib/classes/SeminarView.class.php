@@ -72,7 +72,8 @@ class SeminarView {
       }
       $host = '';
       if ($this->_model->host) {
-        $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
+        $host = '<dt class="host">Host:</dt>
+          <dd class="host">' . $this->_model->host . '</dd>';
       }
       $flash = '';
       if ($this->_model->video === 'yes' && $this->_model->status === 'live') {
