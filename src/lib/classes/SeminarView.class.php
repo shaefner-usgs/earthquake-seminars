@@ -64,7 +64,7 @@ class SeminarView {
     } else {
       $captions = '';
       if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
-        $captions = '<p class="captions">Closed captions are usually available a
+        $captions = '<p class="captions">Closed captions are typically available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
           button on the video player. For older seminars that don&rsquo;t have
           closed captions, please <a href="mailto:shaefner@usgs.gov">email
@@ -140,7 +140,7 @@ class SeminarView {
           $video = $this->_getPlaylist();
         } else { // no file found
           $video = '<h3>Video not found</h3>
-            <p>Please try back later. Videos are usually posted within a few hours.</p>';
+            <p>Please try back later. Videos are usually posted within 24 hours.</p>';
         }
       }
       else if ($this->_model->status === 'today') { // seminar later today
