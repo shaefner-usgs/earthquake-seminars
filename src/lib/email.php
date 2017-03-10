@@ -11,9 +11,9 @@ $cwd = dirname(__FILE__);
 include_once "$cwd/../conf/config.inc.php"; // app config
 include_once "$cwd/../lib/classes/Db.class.php"; // db connector, queries
 
-$committee = '';
-
 $db = new Db;
+
+$committee = '';
 
 // 2.5 hour announcement
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+150 minutes'));
@@ -24,6 +24,11 @@ prepare($rsSeminars);
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+2 days'));
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
+
+// 6 day announcement
+$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+6 days'));
+$rsSeminars = $db->querySeminars($datetime);
+prepare($rsSeminars, $CONFIG['NASA_EMAIL']);
 
 // $test = '2017-03-08 10:30:00';
 // $rsSeminars = $db->querySeminars($test);
@@ -133,12 +138,16 @@ function getCommittee () {
  * Call methods to create email and then send it
  *
  * @param $recordSet {Recordset}
- *
+ * @param $to {String} email address
+ *     optional parameter to set an alernate email address for announcement
  */
-function prepare($recordSet) {
+function prepare($recordSet, $to=NULL) {
   if ($recordSet->rowCount() > 0) {
     $email = createEmail($recordSet);
     if ($email) {
+      if ($to) {
+        $email['to'] = $to;
+      }
       sendEmail($email);
     }
   }
@@ -165,8 +174,13 @@ function sendEmail ($seminar) {
     $committee['poc']['name'],
     $committee['poc']['email']
   );
-  //$to = 'shaefner@usgs.gov';
-  $to = 'GS-G-WR_EHZ_Seminars@usgs.gov, gs-camnl_all@usgs.gov';
+
+  $to = $CONFIG['USGS_EMAIL'];;
+  if ($seminar['to']) { // will be set for notices sent to NASA in advance
+    $to = $seminar['to'];
+    $when = "next $seminarDay";
+  }
+
   $subject = 'Earthquake Seminar ' . $when . ' - ' . $seminar['speaker'];
 
   mail($to, $subject, $seminar['message'], $headers);
