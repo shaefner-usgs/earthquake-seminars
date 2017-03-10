@@ -26,7 +26,7 @@ $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
 // 6 day announcement
-$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+6 days'));
+$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+7 days'));
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars, $CONFIG['NASA_EMAIL']);
 
