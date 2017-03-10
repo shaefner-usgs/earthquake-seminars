@@ -28,7 +28,7 @@ prepare($rsSeminars);
 // 6 day announcement
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+7 days'));
 $rsSeminars = $db->querySeminars($datetime);
-prepare($rsSeminars, $CONFIG['NASA_EMAIL']);
+prepare($rsSeminars, $NASA_EMAIL);
 
 // $test = '2017-03-08 10:30:00';
 // $rsSeminars = $db->querySeminars($test);
@@ -175,7 +175,7 @@ function sendEmail ($seminar) {
     $committee['poc']['email']
   );
 
-  $to = $CONFIG['USGS_EMAIL'];;
+  $to = $GLOBALS['USGS_EMAIL'];;
   if ($seminar['to']) { // will be set for notices sent to NASA in advance
     $to = $seminar['to'];
     $when = "next $seminarDay";
