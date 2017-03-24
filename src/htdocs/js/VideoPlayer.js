@@ -95,7 +95,10 @@ var VideoPlayer = function (options) {
     track = _el.querySelector('track');
     if (track) {
       opts.tracks = [{
-        file: track.getAttribute('src')
+        default: track.hasAttribute('default'),
+        file: track.getAttribute('src'),
+        kind: track.getAttribute('kind'),
+        label: track.getAttribute('label')
       }];
     }
 
