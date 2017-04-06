@@ -24,17 +24,21 @@ class SeminarListView {
    */
   private function _getLiTag ($seminar) {
     $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
-    $livenow = '';
+    $live = '';
 
     // speaker field will be empty if there's no seminar ("no seminar" notices)
     if ($seminar->speaker) {
       $openTag = '<a href="' . $href . '">';
       $closeTag = '</a>';
 
-      // show "Live now" button
+      // show "Live" button
       if ($seminar->video === 'yes' && $seminar->status === 'live') {
-        $livenow = '<div class="livenow">
-            <button class="green">Live now</button>
+        $live = '<div class="live">
+            <button class="red">Live now</button>
+          </div>';
+      } else if ($seminar->video === 'yes' && $seminar->status === 'today') {
+        $live = '<div class="live">
+            <button class="green">Live today</button>
           </div>';
       }
     } else {
@@ -61,7 +65,7 @@ class SeminarListView {
       date('c', $seminar->timestamp),
       $seminar->dateShort,
       $seminar->time,
-      $livenow,
+      $live,
       $closeTag
     );
 
