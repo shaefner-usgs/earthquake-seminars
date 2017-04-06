@@ -147,12 +147,12 @@ class SeminarView {
       }
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<h3>This seminar will be webcast live today</h3>
-        <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
+          <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
       }
-      else if ($this->_model->status === 'live') { // live stream
+      else if ($this->_model->status === 'live') { // livestream
         $video = $this->_getVideoTag();
         $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
-        View on a mobile device</a></p>';
+          View on a mobile device</a></p>';
       }
     } else {
       $video = '<h3>No webcast</h3>
