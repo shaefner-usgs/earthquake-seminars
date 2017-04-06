@@ -88,7 +88,6 @@ class SeminarView {
 
       $seminarHtml = sprintf('
         <h2>%s</h2>
-        %s
         <div class="row %s %s">
           <div class="column two-of-three video">
             %s
@@ -104,9 +103,9 @@ class SeminarView {
             %s
           </div>
         </div>
+        %s
         %s',
         $this->_model->topic,
-        $summary,
         $this->_model->category,
         $this->_model->status,
         $video,
@@ -116,6 +115,7 @@ class SeminarView {
         $this->_model->location,
         $host,
         $flash,
+        $summary,
         $captions
       );
     }
