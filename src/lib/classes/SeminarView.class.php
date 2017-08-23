@@ -64,15 +64,17 @@ class SeminarView {
     } else {
       $captions = '';
       if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
-        $captions = '<p class="captions">Closed captions are usually available a
+        $captions = '<p class="captions">Closed captions are typically available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
           button on the video player. For older seminars that don&rsquo;t have
           closed captions, please <a href="mailto:shaefner@usgs.gov">email
           us</a>, and we will do our best to accommodate your request.</p>';
       }
+      $dayofweek = date('l', strtotime($this->_model->date));
       $host = '';
       if ($this->_model->host) {
-        $host = '<dt>Host:</dt><dd>' . $this->_model->host . '</dd>';
+        $host = '<dt class="host">Host:</dt>
+          <dd class="host">' . $this->_model->host . '</dd>';
       }
       $flash = '';
       if ($this->_model->video === 'yes' && $this->_model->status === 'live') {
@@ -87,14 +89,13 @@ class SeminarView {
 
       $seminarHtml = sprintf('
         <h2>%s</h2>
-        %s
         <div class="row %s %s">
           <div class="column two-of-three video">
             %s
           </div>
           <div class="column one-of-three details">
             <h4>%s</h4>
-            <p>%s <span class="time">at %s</p>
+            <p><span class="dayofweek">%s, </span>%s <span class="time">at %s</p>
             <dl>
               <dt class="location">Location:</dt>
               <dd class="location">%s</dd>
@@ -103,18 +104,20 @@ class SeminarView {
             %s
           </div>
         </div>
+        %s
         %s',
         $this->_model->topic,
-        $summary,
         $this->_model->category,
         $this->_model->status,
         $video,
         $this->_model->speaker,
+        $dayofweek,
         $this->_model->date,
         $this->_model->time,
         $this->_model->location,
         $host,
         $flash,
+        $summary,
         $captions
       );
     }
@@ -139,17 +142,17 @@ class SeminarView {
           $video = $this->_getPlaylist();
         } else { // no file found
           $video = '<h3>Video not found</h3>
-            <p>Please try back later. Videos are usually posted within a few hours.</p>';
+            <p>Please try back later. Videos are usually posted within 24 hours.</p>';
         }
       }
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<h3>This seminar will be webcast live today</h3>
-        <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
+          <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
       }
-      else if ($this->_model->status === 'live') { // live stream
+      else if ($this->_model->status === 'live') { // livestream
         $video = $this->_getVideoTag();
         $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
-        View on a mobile device</a></p>';
+          View on a mobile device</a></p>';
       }
     } else {
       $video = '<h3>No webcast</h3>

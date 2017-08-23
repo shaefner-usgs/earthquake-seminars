@@ -54,5 +54,5 @@ $view = new SeminarListView($seminarCollection);
 
 <?php
 
-print $feeds;
 $view->render();
+print $feeds;

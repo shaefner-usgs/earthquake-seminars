@@ -3,16 +3,17 @@
 
 /**
  * PURPOSE: script sends out email announcements of upcoming seminars
- *   called by crontab (shaefner) every 15 minutes
+ *   called by crontab (esc user) every 15 minutes
  */
 
-include_once '../conf/config.inc.php'; // app config
-include_once '../lib/_functions.inc.php'; // app functions
-include_once '../lib/classes/Db.class.php'; // db connector, queries
+$cwd = dirname(__FILE__);
 
-$committee = '';
+include_once "$cwd/../conf/config.inc.php"; // app config
+include_once "$cwd/../lib/classes/Db.class.php"; // db connector, queries
 
 $db = new Db;
+
+$committee = '';
 
 // 2.5 hour announcement
 $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+150 minutes'));
@@ -24,16 +25,26 @@ $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+2 days'));
 $rsSeminars = $db->querySeminars($datetime);
 prepare($rsSeminars);
 
+// 7 day announcement (sends to NASA only)
+$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+7 days'));
+$rsSeminars = $db->querySeminars($datetime);
+prepare($rsSeminars, $NASA_EMAIL);
+
+// $test = '2017-03-22 10:30:00';
+// $rsSeminars = $db->querySeminars($test);
+// prepare($rsSeminars, 'shaefner@usgs.gov');
 
 /**
  * Create email message
  *
  * @param $recordSet {Recordset}
+ * @param $to {String} email address
  *
  * @return {Array}
  */
-function createEmail ($recordSet) {
+function createEmail ($recordSet, $to) {
   global $committee;
+
   $row = $recordSet->fetch();
 
   // Assume -no seminar- if speaker is empty (committee likes to post no seminar msg on web page)
@@ -43,26 +54,48 @@ function createEmail ($recordSet) {
 
   if (!$committee) {
     $committee = getCommittee();
+    $committeeList = $committee['list'];
   }
 
+  $timestamp = strtotime($row['datetime']);
+
   $affiliation = $row['affiliation'];
-  $date = date('l, F j', strtotime($row['datetime']));
+  $date = date('l, F j', $timestamp);
   $location = $row['location'];
   $speaker = $row['speaker'];
-  $time = date('g:i A', strtotime($row['datetime']));
+  $time = date('g:i A', $timestamp);
   $topic = $row['topic'];
 
   $summary = '';
   if ($row['summary']) {
-    $summary = "\n" . $row['summary'];
+    $summary = "\n\n" . $row['summary'];
   }
 
+  // Set video blurb
   if ($row['video'] === 'yes') {
     $id = $row['ID'];
-    $video_msg = "Webcast (live and archive):\nhttps://earthquake.usgs.gov/contactus/menlo/seminars/$id";
+    $videoMsg = "Webcast (live and archive):\nhttps://earthquake.usgs.gov/contactus/menlo/seminars/$id";
   } else {
-    $video_msg = 'This seminar will not be webcast.';
+    $videoMsg = 'This seminar will not be webcast.';
   }
+
+  // Set relative time
+  $today = date('l, F j');
+  if ($date === $today) {
+    $when = "today at $time";
+  }
+  else {
+    $dayOfWeek = date('l', $timestamp);
+    $sixDays = 60 * 60 * 24 * 6;
+    $timestampNow = time();
+    if (($timestamp - $timestampNow) >= $sixDays) {
+      $when = "next $dayOfWeek";
+    } else {
+      $when = "this $dayOfWeek";
+    }
+  }
+
+  $subject = 'Earthquake Seminar ' . $when . ' - ' . $speaker;
 
   // Create email message
   $message = "Earthquake Science Center Seminars
@@ -79,19 +112,19 @@ $date at $time
 Where:
 $location
 
-$video_msg
+$videoMsg
 
 -------------------------------------------------------------------------------
 
 Please contact the Seminar co-Chairs for speaker suggestions or if you would
 like to meet with the speaker:
 
-{$committee['list']}";
+$committeeList";
 
   return [
-    'datetime' => $row['datetime'],
     'message' => $message,
-    'speaker' => $speaker
+    'subject' => $subject,
+    'to' => $to
   ];
 }
 
@@ -129,11 +162,16 @@ function getCommittee () {
  * Call methods to create email and then send it
  *
  * @param $recordSet {Recordset}
- *
+ * @param $to {String} email address
+ *     optional parameter to set an alernate email address for announcement
  */
-function prepare($recordSet) {
+function prepare($recordSet, $to=NULL) {
   if ($recordSet->rowCount() > 0) {
-    $email = createEmail($recordSet);
+    // If '$to' not set, use default USGS distribution list
+    if (!$to) {
+      $to = $GLOBALS['USGS_EMAIL'];
+    }
+    $email = createEmail($recordSet, $to);
     if ($email) {
       sendEmail($email);
     }
@@ -143,26 +181,15 @@ function prepare($recordSet) {
 /**
  * Send email
  *
- * @param $seminar {Array}
+ * @param $email {Array}
  */
-function sendEmail ($seminar) {
+function sendEmail ($email) {
   global $committee;
-
-  $seminarDay = date('l', strtotime($seminar['datetime']));
-  $today = date('l');
-  if ($seminarDay === $today) {
-    $when = "today at $time";
-  }
-  else {
-    $when = "this $seminarDay";
-  }
 
   $headers = sprintf("From: %s<%s>\r\n",
     $committee['poc']['name'],
     $committee['poc']['email']
   );
-  $to = 'GS-G-WR_EHZ_Seminars@usgs.gov';
-  $subject = 'Earthquake Seminar ' . $when . ' - ' . $seminar['speaker'];
 
-  mail ($to, $subject, $seminar['message'], $headers);
+  mail($email['to'], $email['subject'], $email['message'], $headers);
 }

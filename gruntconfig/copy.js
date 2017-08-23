@@ -48,8 +48,8 @@ var copy = {
   },
 
   jwplayer: {
-    cwd: 'src/lib/jwplayer-7.5.2',
-    dest: config.build + '/' + config.src + '/htdocs/lib/jwplayer-7.5.2',
+    cwd: 'src/lib/jwplayer-7.9.3',
+    dest: config.build + '/' + config.src + '/htdocs/lib/jwplayer',
     expand: true,
     src: [
       '**/*'

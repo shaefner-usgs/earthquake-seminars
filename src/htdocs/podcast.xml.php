@@ -119,6 +119,7 @@ function getHeader ($baseUri, $timestamp) {
       <itunes:image href="' . $baseUri . '/img/podcast.png?20160901" />
       <itunes:keywords>USGS, science, earthquake, seminar, seismology, hazards,
         prepare, tectonics, tsunami</itunes:keywords>
+      <itunes:new-feed-url>https://earthquake.usgs.gov/contactus/menlo/seminars/feed</itunes:new-feed-url>
       <itunes:owner>
       <itunes:name>USGS, Menlo Park (Scott Haefner)</itunes:name>
       <itunes:email>shaefner@usgs.gov</itunes:email>

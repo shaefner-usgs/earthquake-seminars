@@ -35,32 +35,18 @@ function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
  * @param $url {String}
  *    The remote URL to check
  *
- * @return $size {Int}
- *    The size of the remote file (returns 0 if not found)
+ * @return {Boolean}
+ *    returns true if found, otherwise nada
  */
 function remoteFileExists ($url) {
-  $size = 0;
+  $ch = curl_init($url);
 
-  $urlComponents = parse_url($url);
-  $host = $urlComponents['host'];
-  $fp = fsockopen('ssl://' . $host, 443, $errno, $errstr, 30);
+  curl_setopt($ch, CURLOPT_NOBODY, true);
+  curl_exec($ch);
+  $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
 
-  if ($fp) {
-    $out = "GET $url HTTP/1.1\r\n"; // HEAD vs GET ??
-    $out .= "Host: $host\r\n";
-    $out .= "Connection: Close\r\n\r\n";
-    fwrite($fp, $out);
-
-    $needle = 'Content-Length: ';
-    while (!feof($fp)) {
-      $headers = fgets ($fp, 128);
-      if (preg_match("/$needle/i", $headers)) {
-        $size = trim(substr($headers, strlen($needle)));
-        break;
-      }
-    }
-    fclose ($fp);
+  if ($retcode === 200) {
+    return true;
   }
-
-  return $size;
 }

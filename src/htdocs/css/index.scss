@@ -33,6 +33,9 @@ h2 {
         background: rgba(255, 255, 0, .10);
       }
     }
+    button {
+      padding: 6px 8px;
+    }
     h3 {
       color: #000;
       font-family: $font-sans;
@@ -58,14 +61,13 @@ h2 {
     time {
       flex: 0 0 auto;
       order: 1;
-      width: 8em;
+      width: 6.5em;
     }
 
-    .livenow {
+    .live {
       flex: 0 0 auto;
       order: 3;
       text-align: right;
-      width: 6em;
     }
     .topic {
       flex: 1 1 auto;

@@ -12,6 +12,8 @@ dl {
 }
 
 .archive {
+  .dayofweek,
+  .host,
   .location,
   .time {
     display: none;
@@ -21,7 +23,7 @@ dl {
 .captions {
   border-top: 1px solid #eee;
   margin-top: 2em;
-  padding: .5em 0;
+  padding-top: .5em;
 }
 
 .details {
@@ -50,6 +52,10 @@ dl {
   .video {
     display: none;
   }
+}
+
+.podcast {
+  margin-top: 2em;
 }
 
 .row {
