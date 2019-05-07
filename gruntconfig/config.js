@@ -34,7 +34,7 @@ config = {
 
   cssPath: [
     'src/htdocs/css',
-    '../hazdev-template/src/htdocs/css',
+    'node_modules/hazdev-template/src/htdocs/css',
     'node_modules/hazdev-webutils/src'
   ],
 
