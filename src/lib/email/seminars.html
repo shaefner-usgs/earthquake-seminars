@@ -1,0 +1,110 @@
+---
+subject: ESC Seminar
+---
+
+<container>
+
+  <row class="seminars-header">
+    <columns>
+      <center>
+        <img src="https://earthquake.usgs.gov/contactus/menlo/seminars/img/podcast.png"
+          alt="USGS Earthquake Seminar Series" height="300" width="300" />
+      </center>
+      <p class="text-center">
+        Please join us on
+        <strong>
+          {{{{raw}}}}{{date-time}}{{{{/raw}}}}
+        </strong>
+        for the Earthquake Science Center Seminar Series at USGS in Menlo Park.
+      </p>
+    </columns>
+  </row>
+
+  <row class="seminars-body">
+    <columns>
+      <h1 class="text-center">
+        {{{{raw}}}}{{title}}{{{{/raw}}}}
+      </h1>
+      <p>
+        {{{{raw}}}}{{summary}}{{{{/raw}}}}
+      </p>
+    </columns>
+  </row>
+
+  <row class="seminars-body">
+    <columns small="12" large="6">
+      <dl>
+        <dt>Speaker</dt>
+        <dd>
+          {{{{raw}}}}{{speaker}}{{{{/raw}}}}
+        </dd>
+      </dl>
+      <dl>
+        <dt>Date & Time</dt>
+        <dd>
+          {{{{raw}}}}{{date-time}}{{{{/raw}}}}
+        </dd>
+      </dl>
+    </columns>
+    <columns small="12" large="6">
+      <dl>
+        <dt>Location</dt>
+        <dd>
+          {{{{raw}}}}{{location}}{{{{/raw}}}}
+        </dd>
+      </dl>
+      <dl>
+        <dt>Host</dt>
+        <dd>
+          {{{{raw}}}}{{host}}{{{{/raw}}}}
+        </dd>
+      </dl>
+    </columns>
+  </row>
+
+  <row class="seminars-body">
+    <columns>
+      <center>
+        <button href="https://earthquake.usgs.gov/contactus/menlo/seminars/{{{{raw}}}}{{seminar-id}}{{{{/raw}}}}">
+          Watch Online
+        </button>
+      </center>
+      <p class="text-center watch">
+        Watch live or view the recorded talk after it&rsquo;s archived (usually
+        within a couple hours).
+      </p>
+    </columns>
+  </row>
+
+  <row class="seminars-footer">
+    <columns>
+      <p>
+        Please contact the Seminar co-Chairs for speaker suggestions or if you
+        would like to meet with the speaker:
+      </p>
+      <ul>
+        <li>
+          {{{{raw}}}}{{co-chair1}}{{{{/raw}}}}
+        </li>
+        <li>
+          {{{{raw}}}}{{co-chair2}}{{{{/raw}}}}
+        </li>
+      </ul>
+      <hr />
+      <center>
+        <menu class="small-vertical">
+          <item href="https://earthquake.usgs.gov/contactus/menlo/seminars">
+            Upcoming
+          </item>
+          <item href="https://earthquake.usgs.gov/contactus/menlo/seminars/achives/{{{{raw}}}}{{current-year}}{{{{/raw}}}}">
+            Archives
+          </item>
+          <item href="http://itunes.apple.com/us/podcast/usgs-earthquake-science-center/id413770595">
+            Subscribe in iTunes
+          </item>
+        </menu>
+      </center>
+    </columns>
+  </row>
+
+</container>

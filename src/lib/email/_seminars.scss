@@ -1,0 +1,86 @@
+body,
+html,
+.body {
+  background: #f3f3f3 !important;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.seminars-header {
+  background-color: #ffffff;
+
+  img {
+    max-width: 300px; /* override foundation default of auto on mobile breakpoint */
+    padding-top: 1em;
+  }
+  p {
+    color: #4e4d73;
+    margin-bottom: 0;
+    padding-top: 1em;
+  }
+}
+
+.seminars-body {
+  background-color: #333333;
+
+  dd {
+    color: $success-color;
+    margin: 0;
+  }
+  dl {
+    margin: 0;
+    padding: 0 0 1.5em 0;
+  }
+  dt {
+    color: #ffffff;
+    font-size: 15px;
+    padding-bottom: .25em;
+    text-transform: uppercase;
+  }
+  h1 {
+    color: #ffffff;
+    font-size: 22px;
+    padding-top: 1em;
+  }
+  p {
+    color: #cccccc;
+    padding: 1em 0;
+
+    &.watch {
+      font-size: 14px;
+    }
+  }
+  table.button {
+    margin: 1em 0 0;
+  }
+  th.columns {
+    padding-bottom: 0; /* override foundation defaults, which cause weird spacing on mobile breakpoint */
+  }
+}
+
+.seminars-footer {
+  background-color: #555555;
+
+  a:hover {
+    color: darken($primary-color, 10%) !important; /* built-in hover styles not being applied to menu links; set here */
+  }
+
+  hr {
+    border: 0;
+    background-color: #666666;
+    color: #666666;
+    height: 1px;
+  }
+  p, ul {
+    color: #dddddd;
+  }
+  p {
+    padding-top: 1em;
+  }
+
+  .menu table {
+    width: auto !important; /* override foundation defaults */
+  }
+}
