@@ -3,7 +3,7 @@
 include_once '../../conf/config.inc.php'; // app config
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'Live Webcast - Earthquake Science Center';
+  $TITLE = 'Live Webcast';
   $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '
