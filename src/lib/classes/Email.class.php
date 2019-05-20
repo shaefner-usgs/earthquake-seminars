@@ -18,10 +18,11 @@ class Email {
   public function __construct($options) {
     $this->_data = $options['data'];
     $this->_from = $options['from'];
-    $this->_message = $this->_getTemplate();
     $this->_template = $options['template'];
     $this->_subject = $options['subject'];
     $this->_to = $options['to'];
+
+    $this->_message = $this->_getTemplate();
 
     $this->_create(); // Create the message
   }
@@ -32,8 +33,8 @@ class Email {
   private function _create() {
     // Substitute seminar data for mustache placeholders
     foreach ($this->_data as $key => $value) {
-      $pattern = "/\{\{$key\}\}/";
-      $this->_message = preg_replace($pattern, $value, $template);
+      $pattern = '{{' . $key . '}}';
+      $this->_message = str_replace($pattern, $value, $this->_message);
     }
   }
 
@@ -56,6 +57,6 @@ class Email {
       'Content-type: text/html; charset=iso-8859-1'
     ];
 
-    mail($this->_to, $this->_subject, $this->_message, implode('\r\n', $headers));
+    mail($this->_to, $this->_subject, $this->_message, implode("\r\n", $headers));
   }
 }
