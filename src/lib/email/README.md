@@ -8,9 +8,9 @@ Note: Foundation's settings have auto-hyphenation turned on by default. To turn 
 
 ## Source files:
 
-announcement.html - HTML file for creating email template (uses custom HTML tags in Inky)
-_announcement.scss - Sass file for CSS styles
+* announcement.html - HTML file for creating email template (uses custom HTML tags in Inky)
+* _announcement.scss - Sass file for CSS styles
 
 ## Dist file:
 
-template.html - 'Compiled' responsive HTML template for Seminar email message
+* template.html - 'Compiled' responsive HTML template for Seminar email message
