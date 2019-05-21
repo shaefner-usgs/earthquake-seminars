@@ -84,7 +84,7 @@ function getData ($seminar, $committee) {
     'phone1' => $committee[0]['phone'],
     'phone2' => $committee[1]['phone'],
     'speaker' => getSpeaker($seminar),
-    'summary' => autop($seminar->summary),
+    'summary' => getSummary($seminar),
     'time' => $time,
     'title' => $seminar->topic,
     'video-text' => $videoText
@@ -149,6 +149,22 @@ function getSubject ($seminar) {
   }
 
   return 'Earthquake Seminar ' . $when . ' - ' . getSpeaker($seminar);
+}
+
+/**
+ * Use autop to add <p>/<br> tags to summary. All styles must be manually
+ *   "inlined" for compatibility (the template already has inlined styles
+ *   for content that doesn't require additional HTML tags).
+ *
+ * @param $seminar {Object}
+ *
+ * @return $summary {String}
+ */
+function getSummary ($seminar) {
+  $styles = 'color: #ccc; line-height: 1.5; Margin: 0; margin: 0; padding: 12px 0';
+  $summary = str_replace('<p>', '<p style="' . $styles . '">', autop($seminar->summary));
+
+  return $summary;
 }
 
 /**
