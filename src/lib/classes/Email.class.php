@@ -36,6 +36,9 @@ class Email {
       $pattern = '{{' . $key . '}}';
       $this->_message = str_replace($pattern, $value, $this->_message);
     }
+
+    // Insert line breaks to avoid mailservers' 990-character limit
+    $this->_message = wordwrap($this->_message, 80, "\n", false);
   }
 
   /**
