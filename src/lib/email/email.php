@@ -8,86 +8,139 @@
 
 $cwd = dirname(__FILE__);
 
-include_once "$cwd/../conf/config.inc.php"; // app config
-include_once "$cwd/../lib/classes/Db.class.php"; // db connector, queries
+include_once "$cwd/../../conf/config.inc.php"; // app config
+include_once "$cwd/../_autop.inc.php"; // utility function that creates <p>s and <br>s
+include_once "$cwd/../classes/Db.class.php"; // db connector, queries
+include_once "$cwd/../classes/Email.class.php"; // creates, sends email
 
 $db = new Db;
 
-$committee = '';
-
 // 2.5 hour announcement
-$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+150 minutes'));
-$rsSeminars = $db->querySeminars($datetime);
-prepare($rsSeminars);
+prepare('+150 minutes', $USGS_EMAIL);
 
 // 2 day announcement
-$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+2 days'));
-$rsSeminars = $db->querySeminars($datetime);
-prepare($rsSeminars);
+prepare('+2 days', $USGS_EMAIL);
 
 // 7 day announcement (sends to NASA only)
-$datetime = strftime('%Y-%m-%d %H:%M:00', strtotime('+7 days'));
-$rsSeminars = $db->querySeminars($datetime);
-prepare($rsSeminars, $NASA_EMAIL);
+prepare('+7 days', $NASA_EMAIL);
 
-// $test = '2017-03-22 10:30:00';
-// $rsSeminars = $db->querySeminars($test);
-// prepare($rsSeminars, 'shaefner@usgs.gov');
+// Test announcement
+// prepare('2019-05-22 10:30:00', 'shaefner@usgs.gov');
+
 
 /**
- * Create email message
- *
- * @param $recordSet {Recordset}
- * @param $to {String} email address
+ * Get seminar committee
  *
  * @return {Array}
  */
-function createEmail ($recordSet, $to) {
-  global $committee;
+function getCommittee () {
+  global $db;
 
-  $row = $recordSet->fetch();
+  $committee = [];
+  $rsCommittee = $db->queryCommittee();
 
-  // Assume -no seminar- if speaker is empty (committee likes to post no seminar msg on web page)
-  if (!$row['speaker'] || ($row['publish'] === 'no')) {
-    return;
+  while ($coChair = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
+    $committee[] = [
+      'email' => $coChair->email,
+      'name' => $coChair->name,
+      'phone' => $coChair->phone
+    ];
   }
 
-  if (!$committee) {
-    $committee = getCommittee();
-    $committeeList = $committee['list'];
+  return $committee;
+}
+
+/**
+ * Get key-value pairs used to populate mustache template with seminar details
+ *
+ * @param $seminar {Object}
+ * @param $committee {Array}
+ *
+ * @return {Array}
+ */
+function getData ($seminar, $committee) {
+  $timestamp = strtotime($seminar->datetime);
+  $date = getDateStr($timestamp);
+  $time = getTimeStr($timestamp);
+
+  $buttonText = 'Watch Online';
+  $videoText = 'Watch live or view the recorded talk after it&rsquo;s archived (usually within a couple hours).';
+  if ($seminar->video === 'no') {
+    $buttonText = 'View Seminar';
+    $videoText = 'This seminar will not be live-streamed.';
   }
 
-  $timestamp = strtotime($row['datetime']);
+  return [
+    'button-text' => $buttonText,
+    'current-year' => date('Y'),
+    'date-time' =>  "$date at $time",
+    'email1' => $committee[0]['email'],
+    'email2' => $committee[1]['email'],
+    'host' => $seminar->host,
+    'id' => $seminar->ID,
+    'location' => $seminar->location,
+    'name1' => $committee[0]['name'],
+    'name2' => $committee[1]['name'],
+    'phone1' => $committee[0]['phone'],
+    'phone2' => $committee[1]['phone'],
+    'speaker' => getSpeaker($seminar),
+    'summary' => autop($seminar->summary),
+    'time' => $time,
+    'title' => $seminar->topic,
+    'video-text' => $videoText
+  ];
+}
 
-  $affiliation = $row['affiliation'];
-  $date = date('l, F j', $timestamp);
-  $location = $row['location'];
-  $speaker = $row['speaker'];
-  $time = date('g:i A', $timestamp);
-  $topic = $row['topic'];
+/**
+ * Get formatted date string (e.g. 'Wednesday, January 1')
+ *
+ * @param $timestamp {Unix timestamp}
+ *
+ * @return {String}
+ */
+function getDateStr ($timestamp) {
+  return date('l, F j', $timestamp);
+}
 
-  $summary = '';
-  if ($row['summary']) {
-    $summary = "\n\n" . $row['summary'];
+/**
+ * Get speaker name including affiliation, if available
+ *
+ * @param $seminar {Object}
+ *
+ * @return $speaker {String}
+ */
+function getSpeaker ($seminar) {
+  $speaker = $seminar->speaker;
+  if ($seminar->affiliation) {
+    $speaker .= ', ' . $seminar->affiliation;
   }
 
-  // Set video blurb
-  if ($row['video'] === 'yes') {
-    $id = $row['ID'];
-    $videoMsg = "Webcast (live and archive):\nhttps://earthquake.usgs.gov/contactus/menlo/seminars/$id";
-  } else {
-    $videoMsg = 'This seminar will not be webcast.';
-  }
+  return $speaker;
+}
 
-  // Set relative time
-  $today = date('l, F j');
-  if ($date === $today) {
-    $when = "today at $time";
+/**
+ * Get email subject
+ *
+ * @param $seminar {Object}
+ *
+ * @return {String}
+ */
+function getSubject ($seminar) {
+  $timestamp = strtotime($seminar->datetime);
+  $seminarDate = getDateStr($timestamp);
+  $seminarTime = getTimeStr($timestamp);
+
+  $timestampNow = time();
+  $todaysDate = getDateStr($timestampNow);
+
+  // Get relative time
+  if ($seminarDate === $todaysDate) {
+    $when = "today at $seminarTime";
   }
   else {
     $dayOfWeek = date('l', $timestamp);
     $sixDays = 60 * 60 * 24 * 6;
-    $timestampNow = time();
+
     if (($timestamp - $timestampNow) >= $sixDays) {
       $when = "next $dayOfWeek";
     } else {
@@ -95,101 +148,59 @@ function createEmail ($recordSet, $to) {
     }
   }
 
-  $subject = 'Earthquake Seminar ' . $when . ' - ' . $speaker;
-
-  // Create email message
-  $message = "Earthquake Science Center Seminars
-
-Who:
-$speaker, $affiliation
-
-What:
-$topic$summary
-
-When:
-$date at $time
-
-Where:
-$location
-
-$videoMsg
-
--------------------------------------------------------------------------------
-
-Please contact the Seminar co-Chairs for speaker suggestions or if you would
-like to meet with the speaker:
-
-$committeeList";
-
-  return [
-    'message' => $message,
-    'subject' => $subject,
-    'to' => $to
-  ];
+  return 'Earthquake Seminar ' . $when . ' - ' . getSpeaker($seminar);
 }
 
 /**
- * Get committee members
+ * Get formatted time string (e.g. '10:30 AM')
  *
- * @return $r {Array}
+ * @param $timestamp {Unix timestamp}
+ *
+ * @return {String}
  */
-function getCommittee () {
-  global $db;
+function getTimeStr ($timestamp) {
+  return date('g:i A', $timestamp);
+}
 
-  $firstPass = true;
-  $r = [
-    'list' => ''
-  ];
-  $rsCommittee = $db->queryCommittee();
+/**
+ * First, check if email needs to be sent, and if so, assemble data and send it
+ *
+ * @param $textualTime {String}
+ *     English textual datetime description
+ * @param $to {String}
+ *     email address(es, comma-separated)
+ */
+function prepare ($textualTime, $to) {
+  global $cwd, $db;
 
-  while ($row = $rsCommittee->fetch(PDO::FETCH_ASSOC)) {
-    if ($firstPass) {
-      // Store 1st committee member as POC for email announcement
-      $r['poc'] = $row;
+  $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime($textualTime));
+  $rsSeminars = $db->querySeminars($datetime);
+
+  if ($rsSeminars->rowCount() > 0) {
+    $seminar = $rsSeminars->fetch(PDO::FETCH_OBJ);
+
+    // Assume -no seminar- if speaker is empty (committee posts "no seminar" msg on web page)
+    if (!$seminar->speaker || ($seminar->publish === 'no')) {
+      return;
     }
-    $r['list'] .= sprintf (" * %s (%s), %s\r\n",
-      $row['name'],
-      $row['email'],
-      $row['phone']
+
+    $committee = getCommittee();
+    $from = sprintf('%s <%s>',
+      $committee[0]['name'],
+      $committee[0]['email']
     );
-    $firstPass = false;
+
+    $template = "$cwd/template.html";
+
+    $options = [
+      'data' => getData($seminar, $committee),
+      'from' => $from,
+      'template' => $template,
+      'subject' => getSubject($seminar),
+      'to' => $to
+    ];
+
+    $email = new Email($options);
+    $email->send();
   }
-
-  return $r;
-}
-
-/**
- * Call methods to create email and then send it
- *
- * @param $recordSet {Recordset}
- * @param $to {String} email address
- *     optional parameter to set an alernate email address for announcement
- */
-function prepare($recordSet, $to=NULL) {
-  if ($recordSet->rowCount() > 0) {
-    // If '$to' not set, use default USGS distribution list
-    if (!$to) {
-      $to = $GLOBALS['USGS_EMAIL'];
-    }
-    $email = createEmail($recordSet, $to);
-    if ($email) {
-      sendEmail($email);
-    }
-  }
-}
-
-/**
- * Send email
- *
- * @param $email {Array}
- */
-function sendEmail ($email) {
-  global $committee;
-
-  $headers = sprintf("From: %s<%s>\r\n",
-    $committee['poc']['name'],
-    $committee['poc']['email']
-  );
-
-  mail($email['to'], $email['subject'], $email['message'], $headers);
 }
