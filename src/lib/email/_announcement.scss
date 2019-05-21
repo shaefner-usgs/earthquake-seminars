@@ -63,8 +63,12 @@ p {
 .seminars-footer {
   background-color: #555555;
 
-  a:hover {
-    color: darken($primary-color, 10%) !important; /* built-in hover styles not being applied to menu links; set here */
+  a {
+    color: $primary-color; /* Set color explicitly to ensure it gets applied */
+
+    &:hover {
+      color: lighten($primary-color, 10%) !important; /* built-in hover styles not being applied to menu links; set here */
+    }
   }
 
   hr {
