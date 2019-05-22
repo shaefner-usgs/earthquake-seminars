@@ -73,7 +73,7 @@ class SeminarView {
       $dayofweek = date('l', strtotime($this->_model->date));
       $host = '';
       if ($this->_model->host) {
-        $host = '<dt class="host">Host:</dt>
+        $host = '<dt class="host">Host</dt>
           <dd class="host">' . $this->_model->host . '</dd>';
       }
       $flash = '';
@@ -97,7 +97,7 @@ class SeminarView {
             <h4>%s</h4>
             <p><span class="dayofweek">%s, </span>%s <span class="time">at %s</p>
             <dl>
-              <dt class="location">Location:</dt>
+              <dt class="location">Location</dt>
               <dd class="location">%s</dd>
               %s
             </dl>
@@ -141,17 +141,21 @@ class SeminarView {
         else if (remoteFileExists($this->_model->videoPlaylist)) { // xml file
           $video = $this->_getPlaylist();
         } else { // no file found
-          $video = '<h3>Video not found</h3>
-            <p>Please try back later. Videos are usually posted within 24 hours.</p>';
+          $video = '<div class="alert info">
+              <h3>Video not found</h3>
+              <p>Please check back later. Videos are usually posted within 24 hours.</p>
+            </div>';
         }
       }
       else if ($this->_model->status === 'today') { // seminar later today
-        $video = '<h3>This seminar will be webcast live today</h3>
-          <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>';
+        $video = '<div class="alert info">
+            <h3>This seminar will be webcast live today</h3>
+            <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>
+          </div>';
       }
       else if ($this->_model->status === 'live') { // livestream
         $video = $this->_getVideoTag();
-        $video .= '<p><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
+        $video .= '<p class="mobile"><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
           View on a mobile device</a></p>';
       }
     } else {

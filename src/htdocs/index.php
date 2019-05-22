@@ -43,8 +43,8 @@ $view = new SeminarListView($seminarCollection);
 
 ?>
 
-<p>Seminars typically take place at <strong>10:30 AM Wednesdays</strong> in
-  the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS
+<p>Seminars typically take place at <strong>10:30 AM</strong> on <strong>Wednesdays</strong>
+  in the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS
   Campus is located at <a href="/contactus/menlo/menloloc.php" title="Campus
   Map and Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
 
@@ -55,4 +55,5 @@ $view = new SeminarListView($seminarCollection);
 <?php
 
 $view->render();
+
 print $feeds;

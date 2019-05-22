@@ -1,4 +1,21 @@
-td {
+@import '_feeds.scss';
+
+table {
+  font-size: 1em;
+}
+
+td, th {
+  background: none;
   border: 0;
-  padding: 0 1em .25em 0;
+  padding: .15em .5em .15em 0;
+}
+
+th {
+  font-weight: 300;
+}
+
+.podcast {
+  border-top: 1px solid #eee;
+  margin-top: 1.5em;
+  padding-top: 1.5em;
 }

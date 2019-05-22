@@ -6,9 +6,17 @@ dl {
     margin: 0;
   }
   > dt {
+    color: #666;
     font-weight: normal;
     margin-top: 1em;
+    text-transform: uppercase;
   }
+}
+
+h2 {
+  font: 500 1.3em $font-sans;
+  line-height: 1.4;
+  margin-top: 1em;
 }
 
 .archive {
@@ -18,20 +26,28 @@ dl {
   .time {
     display: none;
   }
+
+  .details {
+    margin-bottom: 0;
+  }
 }
 
 .captions {
   border-top: 1px solid #eee;
-  margin-top: 2em;
-  padding-top: .5em;
+  color: #666;
+  margin-top: 1.5em;
+  padding-top: 1.5em;
 }
 
 .details {
   margin-bottom: 1em;
 
   h4 {
-    font: normal 1.2em $font-sans;
+    font: 500 1.2em $font-sans;
     margin: 0;
+  }
+  h4 + p {
+    margin-top: .25em;
   }
 }
 
@@ -47,6 +63,7 @@ dl {
 
 .future {
   .details {
+    margin-bottom: 0;
     width: 100%;
   }
   .video {
@@ -54,18 +71,26 @@ dl {
   }
 }
 
+.mobile {
+  margin-bottom: 0;
+}
+
 .podcast {
   margin-top: 2em;
 }
 
 .row {
-  margin-top: 2em;
+  margin-top: 1.5em;
 }
 
 .video {
   margin-bottom: 1em;
 
   h3 {
+    margin-top: 0;
+  }
+
+  .alert {
     margin-top: 0;
   }
 }

@@ -3,6 +3,8 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+include_once '_feeds.inc.php'; // sets $feeds
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Committee';
   $NAVIGATION = true;
@@ -47,7 +49,7 @@ while ($row = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
 
       // Start a new row
       $committee = [];
-      $tableHtml .= "\n<tr><td>$year</td><td>";
+      $tableHtml .= "\n<tr><th>$year</th><td>";
     }
     array_push($committee, $row->name);
 
@@ -70,4 +72,7 @@ $tableHtml .= '</td></tr></table>';
 
 <h2>Past Seminar Committees</h2>
 
-<?php print $tableHtml; ?>
+<?php
+
+print $tableHtml;
+print $feeds;
