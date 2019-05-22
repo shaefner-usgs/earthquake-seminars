@@ -64,9 +64,9 @@ function getData ($seminar, $committee) {
   $time = getTimeStr($timestamp);
 
   $buttonText = 'Watch Online';
-  $videoText = 'Watch live or view the recorded talk after it&rsquo;s archived (usually within a couple hours).';
+  $videoText = 'Live stream or watch the recorded talk after it&rsquo;s archived.';
   if ($seminar->video === 'no') {
-    $buttonText = 'View Seminar';
+    $buttonText = 'Seminar Web Page';
     $videoText = 'This seminar will not be live-streamed.';
   }
 
