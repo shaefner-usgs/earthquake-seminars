@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+  <channel>
+    <atom:link href="{{base-uri}}/feed" rel="self"
+      type="application/rss+xml" />
+    <title>USGS Earthquake Science Center Seminars</title>
+    <link>{{base-uri}}</link>
+    <description>Open dialogue about important issues in earthquake science
+      presented by Center scientists, visitors, and invitees.</description>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <language>en-us</language>
+    <pubDate>{{pub-date-rfc}}</pubDate>
+    <lastBuildDate>{{build-date-rfc}}</lastBuildDate>
+    <itunes:author>USGS</itunes:author>
+    <itunes:category text="Science &amp; Medicine">
+      <itunes:category text="Natural Sciences" />
+    </itunes:category>
+    <itunes:category text="Education" />
+    <itunes:category text="Government &amp; Organizations" />
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:image href="{{base-uri}}/img/podcast.png?20160901" />
+    <itunes:keywords>USGS, science, earthquake, seminar, seismology, hazards,
+      prepare, tectonics, tsunami</itunes:keywords>
+    <itunes:new-feed-url>{{base-uri}}/feed</itunes:new-feed-url>
+    <itunes:owner>
+    <itunes:name>USGS, Menlo Park (Scott Haefner)</itunes:name>
+    <itunes:email>shaefner@usgs.gov</itunes:email>
+    </itunes:owner>
+    <itunes:subtitle>Earthquake Science Center</itunes:subtitle>
+    <itunes:summary>Open dialogue about important issues in earthquake science
+      presented by Center scientists, visitors, and invitees.</itunes:summary>
+    {{items}}
+  </channel>
+</rss>
