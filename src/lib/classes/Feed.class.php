@@ -3,6 +3,8 @@
 include_once __DIR__ . '/../_functions.inc.php'; // app functions
 
 /**
+ * Create RSS (Podcast) Feed
+ *
  * @param $options {Array}
  *   [
  *      'baseUri': {String} // seminar web page URL
@@ -43,7 +45,11 @@ class Feed {
   /**
    * Create feed <item>
    *
-   * @return {String}
+   * @param $seminar {Object}
+   * @param $firstItem {Boolean}
+   *     whether this seminar is first in the list (i.e. the 'latest' seminar)
+   *
+   * @return $item {String}
    */
   private function _createItem ($seminar, $firstItem = false) {
     $filesize = remoteFileExists($seminar->videoSrc);
