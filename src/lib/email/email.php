@@ -206,15 +206,13 @@ function prepare ($textualTime, $to) {
       $committee[0]['email']
     );
 
-    $options = [
+    $email = new Email([
       'data' => getData($seminar, $committee),
       'from' => $from,
       'template' => "$cwd/template.html",
       'subject' => getSubject($seminar),
       'to' => $to
-    ];
-
-    $email = new Email($options);
+    ]);
     $email->send();
   }
 }
