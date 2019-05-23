@@ -42,7 +42,7 @@ class Email {
   }
 
   /**
-   *  Read email template into a string and return it
+   * Read email template into a string and return it
    *
    * @return {String}
    */
