@@ -45,4 +45,4 @@ if ($rsSeminar->rowCount() === 1) {
 $view = new SeminarView($seminarModel);
 $view->render();
 
-print $feeds;
+print $feedHtml;

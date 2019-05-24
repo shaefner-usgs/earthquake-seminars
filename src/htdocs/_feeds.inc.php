@@ -2,7 +2,7 @@
 
 include_once '../conf/config.inc.php'; // app config
 
-$feeds = '
+$feedHtml = '
 <h3 class="podcast">Video Podcast</h3>
 <ul class="feeds no-style">
   <li class="itunes">

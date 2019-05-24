@@ -75,4 +75,4 @@ $tableHtml .= '</td></tr></table>';
 <?php
 
 print $tableHtml;
-print $feeds;
+print $feedHtml;

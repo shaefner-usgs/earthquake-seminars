@@ -56,4 +56,4 @@ if (!$year) { ?>
 
 $view->render();
 
-print $feeds;
+print $feedHtml;
