@@ -20,11 +20,11 @@ foreach($seminars as $seminar) {
   $seminarCollection->add($seminar);
 }
 
-header('Content-Type: application/xml');
-
 $feed = new Feed([
   'baseUri' => 'https://earthquake.usgs.gov/contactus/menlo/seminars',
   'collection' => $seminarCollection,
   'template' => "$APP_DIR/htdocs/feed/template.xml"
 ]);
+
+header('Content-Type: application/xml');
 $feed->render();
