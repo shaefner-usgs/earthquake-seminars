@@ -10,7 +10,7 @@ include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarListView.class.php'; // view
 include_once '../lib/classes/SeminarCollection.class.php'; // collection
 
-$year = safeParam('year');
+$year = safeParam('year'); // gets set if user viewing archives
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
@@ -41,7 +41,7 @@ foreach($seminars as $seminar) {
 
 $view = new SeminarListView($seminarCollection);
 
-?>
+if (!$year) { ?>
 
 <p>Seminars typically take place at <strong>10:30 AM</strong> on <strong>Wednesdays</strong>
   in the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS
@@ -52,7 +52,7 @@ $view = new SeminarListView($seminarCollection);
   <a href="<?php print $MOUNT_PATH; ?>/archives/<?php print $currentYear; ?>">check
   the archives</a> to view a past seminar.</p>
 
-<?php
+<?php }
 
 $view->render();
 
