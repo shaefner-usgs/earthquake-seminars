@@ -179,8 +179,8 @@ class SeminarView {
       $src = $this->_model->videoSrc;
     }
     if ($this->_model->status === 'past') {
-      $videoTag = '<video src="' . $src . '" width="100%"
-        crossorigin="anonymous" controls="controls">';
+      $videoTag = '<video src="' . $src . '" width="100%" controls="controls"
+        crossorigin="anonymous" poster="img/poster.png">';
 
       if (remoteFileExists($this->_model->videoTrack)) { // vtt file
         $videoTag .= '<track label="English" kind="captions"
