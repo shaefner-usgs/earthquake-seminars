@@ -24,13 +24,13 @@ class Email {
 
     $this->_message = $this->_getTemplate();
 
-    $this->_create(); // Create the message
+    $this->_createEmail(); // Create the message
   }
 
   /**
    * Create email message body
    */
-  private function _create() {
+  private function _createEmail() {
     // Substitute seminar data for mustache placeholders
     foreach ($this->_data as $key => $value) {
       $pattern = '{{' . $key . '}}';
