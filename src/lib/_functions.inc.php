@@ -1,7 +1,7 @@
 <?php
 
-include_once('_autop.inc.php');
-include_once('_getEntities.inc.php');
+include_once __DIR__ . '/_autop.inc.php';
+include_once __DIR__ . '/_getEntities.inc.php';
 
 /**
  * Get a request parameter from $_GET or $_POST

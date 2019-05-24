@@ -1,6 +1,6 @@
 <?php
 
-include_once '../lib/_functions.inc.php'; // app functions
+include_once __DIR__ . '/../_functions.inc.php'; // app functions
 
 /**
  * Seminar view

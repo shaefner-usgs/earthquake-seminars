@@ -1,10 +1,9 @@
 <?php
 
-include_once '../conf/config.inc.php'; // app config
+include_once __DIR__ . '/../../conf/config.inc.php'; // app config
 
 /**
- * Seminars list view
- * - creates the HTML for index.php
+ * Seminars list view - creates the HTML for seminar index page
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
