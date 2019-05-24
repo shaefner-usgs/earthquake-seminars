@@ -2,6 +2,7 @@
 
 include_once '../../conf/config.inc.php'; // app config
 include_once '../../lib/classes/Db.class.php'; // db connector, queries
+
 include_once '../../lib/classes/Seminar.class.php'; // model
 include_once '../../lib/classes/SeminarCollection.class.php'; // collection
 include_once "../../lib/classes/Feed.class.php"; // creates feed

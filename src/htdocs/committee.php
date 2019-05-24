@@ -3,7 +3,7 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-include_once '_feeds.inc.php'; // sets $feeds
+include_once '_feeds.inc.php'; // sets $feedHtml
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Committee';
