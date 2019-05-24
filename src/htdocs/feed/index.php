@@ -25,6 +25,6 @@ header('Content-Type: application/xml');
 $feed = new Feed([
   'baseUri' => 'https://earthquake.usgs.gov/contactus/menlo/seminars',
   'collection' => $seminarCollection,
-  'template' => "$APP_DIR/htdocs/feed/template.xml",
+  'template' => "$APP_DIR/htdocs/feed/template.xml"
 ]);
 $feed->render();
