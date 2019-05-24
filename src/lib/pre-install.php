@@ -61,6 +61,8 @@ file_put_contents($HTTPD_CONF, '
 
   # Prevent apache from adding trailing slash on "real" directories by explicitly requesting index.php
   RewriteRule ^' . $MOUNT_PATH . '$ ' . $MOUNT_PATH . '/index.php [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/feed$ ' .
+    $MOUNT_PATH . '/feed/index.php [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/live$ ' .
     $MOUNT_PATH . '/live/index.php [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/live/monitor$ ' .
@@ -71,8 +73,6 @@ file_put_contents($HTTPD_CONF, '
     $MOUNT_PATH . '/index.php?year=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([0-9]+)$ ' .
     $MOUNT_PATH . '/seminar.php?id=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/feed$ ' .
-    $MOUNT_PATH . '/podcast.xml.php [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny

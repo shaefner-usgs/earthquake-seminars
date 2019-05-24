@@ -52,10 +52,6 @@ var connect = {
       to: '/seminar.php?id=$1'
     },
     {
-      from: '^' + MOUNT_PATH + '/feed$',
-      to: '/podcast.xml.php'
-    },
-    {
       from: '^' + MOUNT_PATH + '/?(.*)$',
       to: '/$1'
     }
