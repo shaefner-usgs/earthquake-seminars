@@ -8,7 +8,7 @@ include_once __DIR__ . '/../_functions.inc.php'; // app functions
  * @param $options {Array}
  *   [
  *      'baseUri': {String} // seminar web page URL
- *      'collection': {Object} // seminar details from database
+ *      'collection': {Object} // seminars
  *      'template': {String} // full path to RSS template file
  *   ]
  */
@@ -20,6 +20,7 @@ class Feed {
     $this->_collection = $options['collection'];
     $this->_template = $options['template'];
 
+    // Key-value pairs for populating feed template
     $this->_data = [
       'base-uri' => $this->_baseUri,
       'items' => implode("\n", $this->_getItems()), // string of feed <item>s
@@ -88,7 +89,7 @@ class Feed {
       $this->_baseUri
     );
 
-    // Set <lastBuildDate> for feed to latest seminar's <pubDate>
+    // Set <lastBuildDate> for channel to latest seminar's <pubDate>
     if ($firstItem) {
       $this->_buildDate = $pubDate;
     }
