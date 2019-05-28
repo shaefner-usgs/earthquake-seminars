@@ -65,6 +65,8 @@ file_put_contents($HTTPD_CONF, '
     $MOUNT_PATH . '/feed/index.php [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/live$ ' .
     $MOUNT_PATH . '/live/index.php [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/live/int$ ' .
+    $MOUNT_PATH . '/live/int/index.php [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/live/monitor$ ' .
     $MOUNT_PATH . '/live/monitor/index.php [L,PT]
 
