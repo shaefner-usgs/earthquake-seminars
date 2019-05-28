@@ -7,8 +7,8 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '
-    <script src="lib/jwplayer/jwplayer.js"></script>
-    <script src="js/seminar.js"></script>
+    <script src="../lib/jwplayer/jwplayer.js"></script>
+    <script src="../js/seminar.js"></script>
   ';
 
   include 'template.inc.php';
