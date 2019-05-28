@@ -10,6 +10,8 @@ $cwd = dirname(__FILE__);
 
 include_once "$cwd/../../conf/config.inc.php"; // app config
 include_once "$cwd/../_autop.inc.php"; // utility function that creates <p>s and <br>s
+
+include_once "$cwd/../classes/Seminar.class.php"; // model
 include_once "$cwd/../classes/Db.class.php"; // db connector, queries
 include_once "$cwd/../classes/Email.class.php"; // creates, sends email
 
@@ -193,7 +195,8 @@ function prepare ($textualTime, $to) {
   $rsSeminars = $db->querySeminars($datetime);
 
   if ($rsSeminars->rowCount() > 0) {
-    $seminar = $rsSeminars->fetch(PDO::FETCH_OBJ);
+    $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
+    $seminar = $rsSeminars->fetch();
 
     // Assume -no seminar- if speaker is empty (committee posts "no seminar" msg on web page)
     if (!$seminar->speaker || ($seminar->publish === 'no')) {
