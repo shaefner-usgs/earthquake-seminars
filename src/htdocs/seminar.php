@@ -31,18 +31,17 @@ if (!isset($TEMPLATE)) {
 }
 
 $db = new Db();
-$seminarModel = new Seminar();
 
 // Db query result: details for selected seminar
 $rsSeminar = $db->querySeminar($id);
 
 // Create seminar model from selected seminar
-if ($rsSeminar->rowCount() === 1) {
+if ($rsSeminar->rowCount() > 0) {
   $rsSeminar->setFetchMode(PDO::FETCH_CLASS, Seminar);
-  $seminarModel = $rsSeminar->fetch();
+  $seminar = $rsSeminar->fetch();
 }
 
-$view = new SeminarView($seminarModel);
+$view = new SeminarView($seminar);
 $view->render();
 
 print $feedHtml;
