@@ -14,7 +14,7 @@ $seminarCollection = new seminarCollection();
 $rsSeminars = $db->queryPodcastVideos();
 
 // Create seminar collection
-$rsSeminars->setFetchMode(PDO::FETCH_CLASS, Seminar);
+$rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
 $seminars = $rsSeminars->fetchAll();
 foreach($seminars as $seminar) {
   $seminarCollection->add($seminar);

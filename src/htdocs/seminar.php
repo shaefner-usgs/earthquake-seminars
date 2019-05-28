@@ -37,7 +37,7 @@ $rsSeminar = $db->querySeminar($id);
 
 // Create seminar model from selected seminar
 if ($rsSeminar->rowCount() > 0) {
-  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, Seminar);
+  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
   $seminar = $rsSeminar->fetch();
 }
 
