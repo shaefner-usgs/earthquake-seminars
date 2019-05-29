@@ -4,7 +4,7 @@ Seminar announcement emails are created and sent automatically by email.php (via
 
 The message's responsive HTML template was created using [Foundation for Emails](https://foundation.zurb.com/emails/docs/) (Sass version).
 
-Note: Foundation's settings have auto-hyphenation turned on by default. To turn it off, edit normalize.scss is in node-modules > foundation-emails > scss > components, removing the relevant CSS.
+Note: Foundation's settings have auto-hyphenation turned on by default. To turn it off, edit normalize.scss in node-modules > foundation-emails > scss > components, removing the relevant CSS.
 
 ## Source files:
 
