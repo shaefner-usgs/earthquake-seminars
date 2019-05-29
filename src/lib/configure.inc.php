@@ -39,6 +39,11 @@ $PROMPTS = array(
     'default' => '',
     'secure' => true
   ),
+  'ADMIN_EMAIL' => array(
+    'prompt' => 'Administrator Email address for testing seminar announcements',
+    'default' => '',
+    'secure' => false
+  ),
   'NASA_EMAIL' => array(
     'prompt' => 'NASA Email address(es) to receive seminar announcements',
     'default' => '',
