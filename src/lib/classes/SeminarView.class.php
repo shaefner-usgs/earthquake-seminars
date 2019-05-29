@@ -149,7 +149,7 @@ class SeminarView {
       }
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<div class="alert info">
-            <h3>This seminar will be webcast live today</h3>
+            <h3>This seminar will be live-streamed today</h3>
             <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>
           </div>';
       }

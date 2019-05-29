@@ -19,6 +19,12 @@ h2 {
   margin-top: 1em;
 }
 
+.alert {
+  h3 {
+    font: normal 1.25em $font-sans;
+  }
+}
+
 .archive {
   .dayofweek,
   .host,
