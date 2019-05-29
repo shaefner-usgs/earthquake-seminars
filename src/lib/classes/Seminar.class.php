@@ -27,6 +27,9 @@ class Seminar {
   }
 
   public function __set ($name, $value) {
+    if (preg_match('/^\d+$/', $value)) {
+      $value = intVal($value);
+    }
     $this->_data[$name] = $value;
   }
 
@@ -34,10 +37,8 @@ class Seminar {
    * Add affiliation to speaker field
    */
   private function _addAffiliation () {
-    $speaker = $this->_data['speaker'];
     if ($this->_data['affiliation']) {
-      $speaker .= ', ' . $this->_data['affiliation'];
-      $this->_data['speaker'] = $speaker;
+      $this->_data['speaker'] .= ', ' . $this->_data['affiliation'];
     }
   }
 
@@ -57,8 +58,9 @@ class Seminar {
 
     $this->_data['category'] = $this->_getCategory();
     $this->_data['date'] = date('F j, Y', $timestamp);
-    $this->_data['dateShort'] = date('D, M j', $timestamp);
     $this->_data['day'] = date('l', $timestamp);
+    $this->_data['dayDate'] = date('l, F j', $timestamp);
+    $this->_data['dayDateShort'] = date('D, M j', $timestamp);
     $this->_data['month'] = date('F', $timestamp);
     $this->_data['status'] = $this->_getStatus($timestamp);
     $this->_data['time'] = date('g:i A', $timestamp);
@@ -84,7 +86,7 @@ class Seminar {
   }
 
   /**
-   * Get seminar status for video player
+   * Get seminar status (relative time: past, future, etc) for video player
    *
    * @param $timestamp {Int}
    *
@@ -96,7 +98,7 @@ class Seminar {
       if (time() < $timestamp) {
         $status = 'today';
       }
-      if ($this->_isLive($timestamp)) { // 'live' trumps 'today' due to buffer
+      if ($this->_isLive($timestamp)) {
         $status = 'live';
       }
     } else if ($this->_seminarDate > $this->_todaysDate) {

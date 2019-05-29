@@ -41,7 +41,7 @@ foreach($seminars as $seminar) {
 
 $view = new SeminarListView($seminarCollection);
 
-if (!$year) { ?>
+if (!$year) { // show on Upcoming tab only ?>
 
 <p>Seminars typically take place at <strong>10:30 AM</strong> on <strong>Wednesdays</strong>
   in the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS

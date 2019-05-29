@@ -62,7 +62,7 @@ class SeminarListView {
       $seminar->topic,
       $seminar->speaker,
       date('c', $seminar->timestamp),
-      $seminar->dateShort,
+      $seminar->dayDateShort,
       $seminar->time,
       $live,
       $closeTag
@@ -86,7 +86,7 @@ class SeminarListView {
       foreach ($this->_collection->seminars as $seminar) {
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
-          $seminar->dateShort = "<mark>$seminar->dateShort</mark>";
+          $seminar->dayDateShort = "<mark>$seminar->dayDateShort</mark>";
         }
         if ($seminar->category === 'upcoming' && $seminar->time !== '10:30 AM') {
           $seminar->time = "<mark>$seminar->time</mark>";

@@ -55,7 +55,7 @@ class Feed {
   private function _createItem ($seminar, $firstItem = false) {
     $filesize = remoteFileExists($seminar->videoSrc);
     $link = $this->_baseUri . '/' . $seminar->ID;
-    $pubDate = date('D, j M Y H:i:s T', strtotime($seminar->datetime));
+    $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speaker);
     $summary = xmlEntities($seminar->summary);
     $topic = xmlEntities($seminar->topic);

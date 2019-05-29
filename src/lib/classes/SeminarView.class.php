@@ -70,7 +70,6 @@ class SeminarView {
           closed captions, please <a href="mailto:shaefner@usgs.gov">email
           us</a>, and we will do our best to accommodate your request.</p>';
       }
-      $dayofweek = date('l', strtotime($this->_model->date));
       $host = '';
       if ($this->_model->host) {
         $host = '<dt class="host">Host</dt>
@@ -111,7 +110,7 @@ class SeminarView {
         $this->_model->status,
         $video,
         $this->_model->speaker,
-        $dayofweek,
+        $this->_model->day,
         $this->_model->date,
         $this->_model->time,
         $this->_model->location,

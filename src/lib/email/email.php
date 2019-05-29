@@ -61,10 +61,6 @@ function getCommittee () {
  * @return {Array}
  */
 function getData ($seminar, $committee) {
-  $timestamp = strtotime($seminar->datetime);
-  $date = getDateStr($timestamp);
-  $time = getTimeStr($timestamp);
-
   $buttonText = 'Watch Online';
   $videoText = 'Live stream or watch the recorded talk after it&rsquo;s archived.';
   if ($seminar->video === 'no') {
@@ -75,7 +71,7 @@ function getData ($seminar, $committee) {
   return [
     'button-text' => $buttonText,
     'current-year' => date('Y'),
-    'date-time' =>  "$date at $time",
+    'date-time' =>  "$seminar->dayDate at $seminar->time",
     'email1' => $committee[0]['email'],
     'email2' => $committee[1]['email'],
     'host' => $seminar->host,
@@ -85,39 +81,11 @@ function getData ($seminar, $committee) {
     'name2' => $committee[1]['name'],
     'phone1' => $committee[0]['phone'],
     'phone2' => $committee[1]['phone'],
-    'speaker' => getSpeaker($seminar),
+    'speaker' => $seminar->speaker,
     'summary' => getSummary($seminar),
-    'time' => $time,
     'title' => $seminar->topic,
     'video-text' => $videoText
   ];
-}
-
-/**
- * Get formatted date string (e.g. 'Wednesday, January 1')
- *
- * @param $timestamp {Unix timestamp}
- *
- * @return {String}
- */
-function getDateStr ($timestamp) {
-  return date('l, F j', $timestamp);
-}
-
-/**
- * Get speaker name including affiliation, if available
- *
- * @param $seminar {Object}
- *
- * @return $speaker {String}
- */
-function getSpeaker ($seminar) {
-  $speaker = $seminar->speaker;
-  if ($seminar->affiliation) {
-    $speaker .= ', ' . $seminar->affiliation;
-  }
-
-  return $speaker;
 }
 
 /**
@@ -128,29 +96,24 @@ function getSpeaker ($seminar) {
  * @return {String}
  */
 function getSubject ($seminar) {
-  $timestamp = strtotime($seminar->datetime);
-  $seminarDate = getDateStr($timestamp);
-  $seminarTime = getTimeStr($timestamp);
-
   $timestampNow = time();
-  $todaysDate = getDateStr($timestampNow);
+  $todaysDate = date('F j, Y', $timestampNow);
 
   // Get relative time
-  if ($seminarDate === $todaysDate) {
-    $when = "today at $seminarTime";
+  if ($seminar->date === $todaysDate) {
+    $when = "today at $seminar->time";
   }
   else {
-    $dayOfWeek = date('l', $timestamp);
     $sixDays = 60 * 60 * 24 * 6;
 
-    if (($timestamp - $timestampNow) >= $sixDays) {
-      $when = "next $dayOfWeek";
+    if (($seminar->timestamp - $timestampNow) >= $sixDays) {
+      $when = "next $seminar->day";
     } else {
-      $when = "this $dayOfWeek";
+      $when = "this $seminar->day";
     }
   }
 
-  return 'Earthquake Seminar ' . $when . ' - ' . getSpeaker($seminar);
+  return "Earthquake Seminar $when - $seminar->speaker";
 }
 
 /**
@@ -167,17 +130,6 @@ function getSummary ($seminar) {
   $summary = str_replace('<p>', '<p style="' . $styles . '">', autop($seminar->summary));
 
   return $summary;
-}
-
-/**
- * Get formatted time string (e.g. '10:30 AM')
- *
- * @param $timestamp {Unix timestamp}
- *
- * @return {String}
- */
-function getTimeStr ($timestamp) {
-  return date('g:i A', $timestamp);
 }
 
 /**
