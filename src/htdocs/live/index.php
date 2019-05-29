@@ -3,7 +3,7 @@
 include_once '../../conf/config.inc.php'; // app config
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'Live Webcast';
+  $TITLE = 'USGS, Menlo Park Live Webcast';
   $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '

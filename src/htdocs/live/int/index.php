@@ -1,9 +1,9 @@
 <?php
 
-include_once '../../conf/config.inc.php'; // app config
+include_once '../../../conf/config.inc.php'; // app config
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'Live Internal Webcast';
+  $TITLE = 'Internal Live Webcast';
   $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '
