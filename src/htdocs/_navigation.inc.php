@@ -3,13 +3,17 @@
 $section = $MOUNT_PATH;
 $url = $_SERVER['REQUEST_URI'];
 
-// Set up page match for index page
-$matches = false;
-if (preg_match("@^$section/?$@", $url)) {
-  $matches = true;
+// Set up page match for highlighting selected item in navbar
+$matchesArchives = false;
+$matchesUpcoming = false;
+if ($seminar->category === 'upcoming' || preg_match("@^$section/?$@", $url)) {
+  $matchesUpcoming = true;
+}
+if ($seminar->category === 'archives') {
+  $matchesArchives = true;
 }
 
-// Concatenate navItems for each year of past seminars
+// Create navItems for each year of seminar archives
 $navItems = '';
 $beginYear = 2000;
 $currentYear = date('Y');
@@ -17,16 +21,16 @@ for ($year = $currentYear; $year >= $beginYear; $year --) {
   $navItems .= navItem("$section/archives/$year", $year);
 }
 
-// Only expand navGroup if viewing past seminars
+// Only expand navGroup if viewing archives
 if (preg_match("@^$section/archives/\d{4}$@", $url)) {
   $pastNav = navGroup('Archives', $navItems);
 } else {
-  $pastNav = navItem("$section/archives/$currentYear", 'Archives');
+  $pastNav = navItem("$section/archives/$currentYear", 'Archives', $matchesArchives);
 }
 
 $NAVIGATION =
   navGroup('Earthquake Seminars',
-    navItem("$section", 'Upcoming', $matches) .
+    navItem("$section", 'Upcoming', $matchesUpcoming) .
     $pastNav .
     navItem("$section/committee.php", 'Committee')
   );
