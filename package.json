@@ -35,7 +35,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "3.0.0",
     "grunt-postcss": "^0.7.0",
-    "hazdev-template": "^1.2.0",
+    "hazdev-template": "usgs/hazdev-template",
     "hazdev-webutils": "~0.1.8",
     "ini": "^1.2.1",
     "mocha": "^2.1.0",
