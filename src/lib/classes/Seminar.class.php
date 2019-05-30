@@ -72,12 +72,12 @@ class Seminar {
   }
 
   /**
-   * Get seminar category (either 'archive' or 'upcoming')
+   * Get seminar category (either 'archives' or 'upcoming')
    *
    * @return $category {String}
    */
   private function _getCategory () {
-    $category = 'archive'; // default value
+    $category = 'archives'; // default value
     if ($this->_seminarDate >= $this->_todaysDate) {
       $category = 'upcoming';
     }
