@@ -11,8 +11,20 @@ include_once '../lib/classes/SeminarView.class.php'; // view
 
 $id = safeParam('id', '1056');
 
+$db = new Db();
+
+// Db query result: details for selected seminar
+$rsSeminar = $db->querySeminar($id);
+
+// Create seminar model from selected seminar
+if ($rsSeminar->rowCount() > 0) {
+  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
+  $seminar = $rsSeminar->fetch();
+}
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
+  $TITLETAG = "$seminar->topic | Earthquake Science Center Seminars";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="lib/jwplayer/skins/five.css" />
@@ -28,17 +40,6 @@ if (!isset($TEMPLATE)) {
   header("Expires: $expires");
 
   include 'template.inc.php';
-}
-
-$db = new Db();
-
-// Db query result: details for selected seminar
-$rsSeminar = $db->querySeminar($id);
-
-// Create seminar model from selected seminar
-if ($rsSeminar->rowCount() > 0) {
-  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
-  $seminar = $rsSeminar->fetch();
 }
 
 $view = new SeminarView($seminar);
