@@ -29,7 +29,7 @@ if ($row->affiliation) {
 $nextSeminar['seminar'] = [
   'timestamp' => strtotime($row->datetime),
   'speaker' => $speaker,
-  'topic' => $row->topic
+  'title' => $row->title
 ];
 
 

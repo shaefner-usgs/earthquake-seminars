@@ -58,7 +58,7 @@ class Feed {
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speaker);
     $summary = xmlEntities($seminar->summary);
-    $topic = xmlEntities($seminar->topic);
+    $title = xmlEntities($seminar->title);
 
     $item = sprintf('<item>
         <title>%s</title>
@@ -77,13 +77,13 @@ class Feed {
       </item>',
       $speaker,
       $link,
-      $topic,
+      $title,
       $seminar->videoSrc,
       $pubDate,
       $seminar->videoSrc,
       $filesize,
       $speaker,
-      $topic,
+      $title,
       $summary,
       $this->_baseUri,
       $this->_baseUri

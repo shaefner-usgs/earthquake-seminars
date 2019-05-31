@@ -105,7 +105,7 @@ class Db {
     $datetime = date('Y-m-d H:i:s', strtotime('-90 mins'));
 
     $sql = "SELECT * FROM seminars_list
-      WHERE `publish` = 'yes' AND `video` = 'yes' AND `datetime` < '$datetime'
+      WHERE `publish` = '1' AND `video` = '1' AND `datetime` < '$datetime'
       ORDER BY `datetime` DESC
       LIMIT 12";
 
@@ -139,7 +139,7 @@ class Db {
    */
   public function querySeminars ($filter=NULL) {
     $today = date('Y-m-d');
-    $where = '`publish` = "yes"';
+    $where = "`publish` = '1'";
 
     $params = [
       'today' => $today

@@ -24,7 +24,7 @@ if ($rsSeminar->rowCount() > 0) {
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
-  $TITLETAG = "$seminar->topic | Earthquake Science Center Seminars";
+  $TITLETAG = "$seminar->title | Earthquake Science Center Seminars";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="lib/jwplayer/skins/five.css" />

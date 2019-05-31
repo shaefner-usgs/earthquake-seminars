@@ -63,7 +63,7 @@ function getCommittee () {
 function getData ($seminar, $committee) {
   $buttonText = 'Watch Online';
   $videoText = 'Live stream or watch the recorded talk after it&rsquo;s archived.';
-  if ($seminar->video === 'no') {
+  if (!$seminar->video) {
     $buttonText = 'Seminar Web Page';
     $videoText = 'This seminar will not be live-streamed.';
   }
@@ -83,7 +83,7 @@ function getData ($seminar, $committee) {
     'phone2' => $committee[1]['phone'],
     'speaker' => $seminar->speaker,
     'summary' => getSummary($seminar),
-    'title' => $seminar->topic,
+    'title' => $seminar->title,
     'video-text' => $videoText
   ];
 }
@@ -151,7 +151,7 @@ function prepare ($textualTime, $to) {
     $seminar = $rsSeminars->fetch();
 
     // Assume -no seminar- if speaker is empty (committee posts "no seminar" msg on web page)
-    if (!$seminar->speaker || ($seminar->publish === 'no')) {
+    if (!$seminar->speaker || (!$seminar->publish)) {
       return;
     }
 

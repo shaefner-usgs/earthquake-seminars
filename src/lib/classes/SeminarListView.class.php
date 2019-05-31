@@ -31,11 +31,11 @@ class SeminarListView {
       $closeTag = '</a>';
 
       // show "Live" button
-      if ($seminar->video === 'yes' && $seminar->status === 'live') {
+      if ($seminar->video && $seminar->status === 'live') {
         $live = '<div class="live">
             <button class="red">Live now</button>
           </div>';
-      } else if ($seminar->video === 'yes' && $seminar->status === 'today') {
+      } else if ($seminar->video && $seminar->status === 'today') {
         $live = '<div class="live">
             <button class="green">Live today</button>
           </div>';
@@ -47,7 +47,7 @@ class SeminarListView {
 
     $liTag .= sprintf('<li class="%s">
         %s
-          <div class="topic">
+          <div class="title">
             <h3>%s</h3>
             <p>%s</p>
           </div>
@@ -59,7 +59,7 @@ class SeminarListView {
       </li>',
       $seminar->status,
       $openTag,
-      $seminar->topic,
+      $seminar->title,
       $seminar->speaker,
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,

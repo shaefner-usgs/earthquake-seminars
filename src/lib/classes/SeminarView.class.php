@@ -63,7 +63,7 @@ class SeminarView {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
       $captions = '';
-      if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
+      if ($this->_model->video && $this->_model->status !== 'future') {
         $captions = '<p class="captions">Closed captions are typically available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
           button on the video player. For older seminars that don&rsquo;t have
@@ -76,7 +76,7 @@ class SeminarView {
           <dd class="host">' . $this->_model->host . '</dd>';
       }
       $flash = '';
-      if ($this->_model->video === 'yes' && $this->_model->status === 'live') {
+      if ($this->_model->video && $this->_model->status === 'live') {
         $flash = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
           Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
       }
@@ -105,7 +105,7 @@ class SeminarView {
         </div>
         %s
         %s',
-        $this->_model->topic,
+        $this->_model->title,
         $this->_model->category,
         $this->_model->status,
         $video,
@@ -132,7 +132,7 @@ class SeminarView {
   private function _getVideo () {
     $video = '';
 
-    if ($this->_model->video === 'yes') {
+    if ($this->_model->video) {
       if ($this->_model->status === 'past') { // recorded video
         if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
           $video = $this->_getVideoTag();
