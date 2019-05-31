@@ -158,8 +158,10 @@ class SeminarView {
           View on a mobile device</a></p>';
       }
     } else {
-      $video = '<h3>No webcast</h3>
-        <p>This seminar is not available to view online.</p>';
+      $video = '<div class="alert info">
+          <h3>No webcast</h3>
+          <p>This seminar is not available to view online.</p>
+        </div>';
     }
 
     return $video;
