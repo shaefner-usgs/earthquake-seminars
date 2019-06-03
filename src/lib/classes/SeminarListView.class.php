@@ -84,6 +84,10 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
+        // Skip 'No Seminar' placeholders for archives list
+        if ($seminar->noseminar && $seminar->category === 'archives') {
+          continue;
+        }
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
           $seminar->dayDateShort = "<mark>$seminar->dayDateShort</mark>";
