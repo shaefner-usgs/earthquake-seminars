@@ -12,6 +12,25 @@ h2 {
   display: none;
 }
 
+.details {
+  align-items: center;
+  background: #f7f6f2;
+  margin-left: 0;
+
+  img {
+    display: inline-block;
+    padding: 8px;
+  }
+  p {
+    padding-right: 1em;
+  }
+
+  .one-of-five {
+    line-height: 0;
+    padding-left: 0;
+  }
+}
+
 .seminars {
   margin: 0 0 3.5em;
 

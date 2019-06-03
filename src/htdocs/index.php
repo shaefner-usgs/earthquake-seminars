@@ -43,14 +43,20 @@ $view = new SeminarListView($seminarCollection);
 
 if (!$year) { // show on Upcoming tab only ?>
 
-<p>Seminars typically take place at <strong>10:30 AM</strong> on <strong>Wednesdays</strong>
-  in the <strong>Rambo Auditorium</strong> (main USGS Conference Room). The USGS
-  Campus is located at <a href="/contactus/menlo/menloloc.php" title="Campus
-  Map and Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
+<div class="row details">
+  <div class="column one-of-five"><img src="seminars/img/podcast-small.png" alt="podcast icon" /></div>
+  <div class="column four-of-five">
+    <p>Seminars typically take place at <strong>10:30 AM</strong> on
+      <strong>Wednesdays</strong> in the <strong>Rambo Auditorium</strong> (main
+      USGS Conference Room). The USGS Campus is located at
+      <a href="/contactus/menlo/menloloc.php" title="Campus Map and
+      Directions">345 Middlefield Road, Menlo Park, CA</a>.</p>
 
-<p>We record most seminars. You can watch live or
-  <a href="<?php print $MOUNT_PATH; ?>/archives/<?php print $currentYear; ?>">check
-  the archives</a> to view a past seminar.</p>
+    <p>We record most seminars. You can watch live or
+      <a href="<?php print $MOUNT_PATH; ?>/archives/<?php print $currentYear; ?>">check
+      the archives</a> to view a past seminar.</p>
+  </div>
+</div>
 
 <?php }
 
