@@ -192,7 +192,7 @@ class SeminarView {
     }
     else if ($this->_model->status === 'live') {
       $videoTag = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
-        width="100%" controls="controls"></video>';
+        width="100%" controls="controls" poster="img/poster.png"></video>';
     }
 
     return $videoTag;
