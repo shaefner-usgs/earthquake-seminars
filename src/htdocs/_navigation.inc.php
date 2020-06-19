@@ -32,7 +32,8 @@ $NAVIGATION =
   navGroup('Earthquake Seminars',
     navItem("$section", 'Upcoming', $matchesUpcoming) .
     $pastNav .
-    navItem("$section/committee.php", 'Committee')
+    navItem("$section/committee.php", 'Committee') .
+    navItem("$section/email-list.php", 'Email List')
   );
 
 $NAVIGATION .=
