@@ -44,13 +44,18 @@ $PROMPTS = array(
     'default' => '',
     'secure' => false
   ),
+  'LIST_EMAIL' => array(
+    'prompt' => 'List admin email address(es) that receive add/remove requests',
+    'default' => '',
+    'secure' => false
+  ),
   'NASA_EMAIL' => array(
-    'prompt' => 'NASA Email address(es) to receive seminar announcements',
+    'prompt' => 'NASA Email address(es) that receive seminar announcements',
     'default' => '',
     'secure' => false
   ),
   'USGS_EMAIL' => array(
-    'prompt' => 'USGS Email address(es) to receive seminar announcements',
+    'prompt' => 'USGS Email address(es) that receive seminar announcements',
     'default' => '',
     'secure' => false
   )
