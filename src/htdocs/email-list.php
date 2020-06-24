@@ -22,13 +22,6 @@ if (!isset($TEMPLATE)) {
 
 if (isSet($_POST['submitbutton'])) {
 
-?>
-
-<p class="success">Your request was received. Please allow a few days for
-  processing.</p>
-
-<?php
-
 $action = 'Add User';
 if ($_POST['option'] === 'unsubscribe') {
   $action = 'Remove User';
@@ -44,20 +37,28 @@ $message = sprintf('
     <dd>%s</dd>
     <dt>Email</dt>
     <dd>%s</dd>
-  </dl>
-', $_POST['name'], $_POST['email']);
+  </dl>',
+  $_POST['name'],
+  $_POST['email']
+);
 $subject = 'Seminar Email List: ' . $action;
 $to = $LIST_EMAIL;
-//$to = 'shaefner@usgs.gov';
 
 mail($to, $subject, $message, implode("\r\n", $headers));
+
+?>
+
+<p class="success">Your request was received. Please allow a few days for
+  processing.</p>
+
+<?php
 
 } else {
 
 ?>
 
 <section class="form">
-  <form action="email-list.php" method="POST">
+  <form action="./email-list.php" method="POST">
     <div class="group">
       <div class="control radio pretty p-default p-pulse p-round">
         <input id="subscribe" name="option" type="radio" value="subscribe" tabindex="1" checked="checked">
