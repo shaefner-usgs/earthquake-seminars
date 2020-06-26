@@ -58,6 +58,11 @@ $PROMPTS = array(
     'prompt' => 'USGS Email address(es) that receive seminar announcements',
     'default' => '',
     'secure' => false
+  ),
+  'TEAMS_LINK' => array(
+    'prompt' => 'MS Teams URL for live stream',
+    'default' => '',
+    'secure' => false
   )
 
 );
