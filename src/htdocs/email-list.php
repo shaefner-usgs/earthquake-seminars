@@ -1,9 +1,11 @@
 <?php
 
 include_once '../conf/config.inc.php'; // app config
+include_once '_feeds.inc.php'; // sets $feedHtml
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Email List';
+  $TITLETAG = $TITLE . ' | Earthquake Science Center Seminars';
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="'. $MOUNT_PATH . '/css/email-list.css" />';
   $FOOT = '';
@@ -13,7 +15,7 @@ if (!isset($TEMPLATE)) {
 
 ?>
 
-<p>Subscribe (or unsubscribe) to our seminar announcement email list.</p>
+<p>Subscribe to (or unsubscribe from) our seminar announcement email list.</p>
 
 <p>Two email reminders are sent for each seminar: one 2 days before and one
   2.5 hours before the seminar begins.</p>
@@ -86,4 +88,10 @@ mail($to, $subject, $message, implode("\r\n", $headers));
   <p class="required"><span>*</span> = required field</p>
 </section>
 
-<?php } ?>
+<?php
+
+}
+
+print $feedHtml;
+
+?>
