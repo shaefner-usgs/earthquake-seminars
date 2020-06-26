@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__ . '/../../conf/config.inc.php'; // app config
 include_once __DIR__ . '/../_functions.inc.php'; // app functions
 
 /**
@@ -63,7 +64,7 @@ class SeminarView {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
       $captions = '';
-      if ($this->_model->video && $this->_model->status !== 'future') {
+      if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
         $captions = '<p class="captions">Closed captions are typically available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
           button on the video player. For older seminars that don&rsquo;t have
@@ -74,11 +75,6 @@ class SeminarView {
       if ($this->_model->host) {
         $host = '<dt class="host">Host</dt>
           <dd class="host">' . $this->_model->host . '</dd>';
-      }
-      $flash = '';
-      if ($this->_model->video && $this->_model->status === 'live') {
-        $flash = '<p class="flash"><a href="http://get.adobe.com/flashplayer/">Adobe
-          Flash Player</a> is <strong>required</strong> to view live webcasts.</p>';
       }
       $summary = '';
       if ($this->_model->summary) {
@@ -100,12 +96,11 @@ class SeminarView {
               <dd class="location">%s</dd>
               %s
             </dl>
-            %s
           </div>
         </div>
         %s
         %s',
-        $this->_model->title,
+        $this->_model->topic,
         $this->_model->category,
         $this->_model->status,
         $video,
@@ -115,7 +110,6 @@ class SeminarView {
         $this->_model->time,
         $this->_model->location,
         $host,
-        $flash,
         $summary,
         $captions
       );
@@ -125,14 +119,16 @@ class SeminarView {
   }
 
   /**
-   * Create HTML for video player section based on user's view
+   * Create HTML for video player section based on current time relative to
+   *   seminar time
    *
-   * @return $video {String}
+   * @return $video {HTML}
    */
   private function _getVideo () {
     $video = '';
+    $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
 
-    if ($this->_model->video) {
+    if ($this->_model->video === 'yes') {
       if ($this->_model->status === 'past') { // recorded video
         if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
           $video = $this->_getVideoTag();
@@ -149,13 +145,17 @@ class SeminarView {
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<div class="alert info">
             <h3>This seminar will be live-streamed today</h3>
-            <p>Please reload this page at ' . $this->_model->time . ' Pacific.</p>
+            <p><a href="' . $GLOBALS['TEAMS_LINK'] . '">View the live-stream</a>
+              starting at ' . $this->_model->time . ' Pacific (requires ' .
+              $downloadLink . ').</p>
           </div>';
       }
-      else if ($this->_model->status === 'live') { // livestream
-        $video = $this->_getVideoTag();
-        $video .= '<p class="mobile"><a href="http://video2.wr.usgs.gov:1935/live/mplive/playlist.m3u8">
-          View on a mobile device</a></p>';
+      else if ($this->_model->status === 'live') { // live now
+        $video = '<div class="alert info">
+            <h3>Live now</h3>
+            <p><a href="' . $GLOBALS['TEAMS_LINK'] . '">View the live-stream</a>
+              (requires ' . $downloadLink . ').</p>
+          </div>';
       }
     } else {
       $video = '<div class="alert info">
@@ -179,21 +179,15 @@ class SeminarView {
     if (!$src) {
       $src = $this->_model->videoSrc;
     }
-    if ($this->_model->status === 'past') {
-      $videoTag = '<video src="' . $src . '" width="100%" controls="controls"
-        crossorigin="anonymous" poster="img/poster.png">';
+    $videoTag = '<video src="' . $src . '" width="100%" controls="controls"
+      crossorigin="anonymous" poster="img/poster.png">';
 
-      if (remoteFileExists($this->_model->videoTrack)) { // vtt file
-        $videoTag .= '<track label="English" kind="captions"
-          src="' . $this->_model->videoTrack . '" default="default" />';
-      }
+    if (remoteFileExists($this->_model->videoTrack)) { // vtt file
+      $videoTag .= '<track label="English" kind="captions"
+        src="' . $this->_model->videoTrack . '" default="default" />';
+    }
 
-      $videoTag .= '</video>';
-    }
-    else if ($this->_model->status === 'live') {
-      $videoTag = '<video src="mplive?streamer=rtmp://video2.wr.usgs.gov/live"
-        width="100%" controls="controls" poster="img/poster.png"></video>';
-    }
+    $videoTag .= '</video>';
 
     return $videoTag;
   }
