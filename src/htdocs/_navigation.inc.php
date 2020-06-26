@@ -1,7 +1,7 @@
 <?php
 
 $section = $MOUNT_PATH;
-$url = $_SERVER['REQUEST_URI'];
+$url = strtok($_SERVER['REQUEST_URI'], '?'); // strip querystring
 
 // Set up page match for highlighting selected item in navbar
 $matchesArchives = false;
