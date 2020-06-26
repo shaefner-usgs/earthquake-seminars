@@ -45,7 +45,8 @@ class SeminarListView {
       $closeTag = '</div>';
     }
 
-    $liTag .= sprintf('<li class="%s">
+    $liTag .= sprintf('
+      <li class="%s">
         %s
           <div class="title">
             <h3>%s</h3>
@@ -59,7 +60,7 @@ class SeminarListView {
       </li>',
       $seminar->status,
       $openTag,
-      $seminar->title,
+      $seminar->topic,
       $seminar->speaker,
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,
