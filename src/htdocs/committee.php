@@ -7,6 +7,7 @@ include_once '_feeds.inc.php'; // sets $feedHtml
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Committee';
+  $TITLETAG = $TITLE . ' | Earthquake Science Center Seminars';
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="'. $MOUNT_PATH . '/css/committee.css" />';
   $FOOT = '';
