@@ -62,6 +62,7 @@ class Seminar {
     $this->_data['dayDate'] = date('l, F j', $timestamp);
     $this->_data['dayDateShort'] = date('D, M j', $timestamp);
     $this->_data['month'] = date('F', $timestamp);
+    $this->_data['noSeminar'] = $this->_getNoSeminar();
     $this->_data['status'] = $this->_getStatus($timestamp);
     $this->_data['time'] = date('g:i A', $timestamp);
     $this->_data['timestamp'] = $timestamp;
@@ -83,6 +84,21 @@ class Seminar {
     }
 
     return $category;
+  }
+
+  /**
+   * Get flag to filter out 'no seminar' postings from archives
+   *
+   * @return $noSeminar {Boolean}
+   */
+  private function _getNoSeminar () {
+    $noSeminar = false;
+
+    if (!$this->_data['speaker']) {
+      $noSeminar = true;
+    }
+
+    return $noSeminar;
   }
 
   /**

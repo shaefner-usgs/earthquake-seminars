@@ -25,8 +25,7 @@ class SeminarListView {
     $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
     $live = '';
 
-    // speaker field will be empty if there's no seminar ("no seminar" notices)
-    if ($seminar->speaker) {
+    if (!$seminar->noSeminar) {
       $openTag = '<a href="' . $href . '">';
       $closeTag = '</a>';
 
@@ -85,9 +84,8 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
-        // Skip 'No Seminar' placeholders for archives list
-        if ($seminar->noseminar && $seminar->category === 'archives') {
-          continue;
+        if ($seminar->noSeminar && $seminar->category === 'archives') {
+          continue; // skip 'No Seminar' entries in archives list
         }
         // Flag upcoming seminars that aren't on the "regular" day/time
         if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
