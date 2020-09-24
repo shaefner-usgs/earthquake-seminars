@@ -71,7 +71,7 @@ function getData ($seminar, $committee) {
   return [
     'button-text' => $buttonText,
     'current-year' => date('Y'),
-    'date-time' =>  "$seminar->dayDate at $seminar->time",
+    'date-time' =>  "$seminar->dayDate at $seminar->time Pacific",
     'email1' => $committee[0]['email'],
     'email2' => $committee[1]['email'],
     'host' => $seminar->host,
