@@ -104,7 +104,7 @@ class SeminarView {
         $this->_model->category,
         $this->_model->status,
         $video,
-        $this->_model->speaker,
+        $this->_model->speakerWithAffiliation,
         $this->_model->day,
         $this->_model->date,
         $this->_model->time,

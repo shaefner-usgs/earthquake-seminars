@@ -60,7 +60,7 @@ class SeminarListView {
       $seminar->status,
       $openTag,
       $seminar->topic,
-      $seminar->speaker,
+      $seminar->speakerWithAffiliation,
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,
       $seminar->time,

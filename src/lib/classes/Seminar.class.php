@@ -17,7 +17,6 @@ class Seminar {
       $this->_seminarDate = date('Y-m-d', strtotime($datetime));
       $this->_todaysDate = date('Y-m-d');
 
-      $this->_addAffiliation();
       $this->_addFields($datetime);
     }
   }
@@ -34,11 +33,13 @@ class Seminar {
   }
 
   /**
-   * Add affiliation to speaker field
+   * Add affiliation to speaker name in a new field
    */
   private function _addAffiliation () {
+    $this->_data['speakerWithAffiliation'] = $this->_data['speaker'];
+
     if ($this->_data['affiliation']) {
-      $this->_data['speaker'] .= ', ' . $this->_data['affiliation'];
+      $this->_data['speakerWithAffiliation'] .= ', ' . $this->_data['affiliation'];
     }
   }
 
@@ -70,6 +71,8 @@ class Seminar {
     $this->_data['videoSrc'] = $videoSrc;
     $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $videoSrc);
     $this->_data['year'] = $year;
+
+    $this->_addAffiliation();
   }
 
   /**

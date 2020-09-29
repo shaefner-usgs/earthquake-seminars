@@ -56,7 +56,7 @@ class Feed {
     $filesize = remoteFileExists($seminar->videoSrc);
     $link = $this->_baseUri . '/' . $seminar->ID;
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
-    $speaker = xmlEntities($seminar->speaker);
+    $speaker = xmlEntities($seminar->speakerWithAffiliation);
     $summary = xmlEntities($seminar->summary);
     $title = xmlEntities($seminar->title);
 
