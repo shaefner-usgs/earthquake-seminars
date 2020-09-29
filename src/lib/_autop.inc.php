@@ -1,8 +1,11 @@
 <?php
 
 /* ----------------------------------------------------------------------------
+  Stand-alone autop with a slight modification: a 3rd, optional parameter ($css)
+  lets you pass inline CSS styles that get embedded into all returned <p> tags.
+
   The following functions were lifted from WordPress, including autop and
-  its supporting functions
+  its supporting functions.
  */
 
 /**
@@ -15,11 +18,13 @@
  * @since 0.71
  *
  * @param string $pee The text which has to be formatted.
- * @param bool   $br  Optional. If set, this will convert all remaining line-breaks
- *                    after paragraphing. Default true.
+ * @param bool   $br  Optional. If set, this will convert all remaining
+ *                    line-breaks after paragraphing. Default true.
+ * @param string $css Optional. If set, this text will be injected into a
+ *                    'style' attribute on all returned <p> tags. Defatul ''.
  * @return string Text which has been converted into correct paragraph tags.
  */
-function autop( $pee, $br = true ) {
+function autop( $pee, $br = true, $css = '' ) {
   $pre_tags = array();
 
   if ( trim($pee) === '' )
@@ -164,6 +169,12 @@ function autop( $pee, $br = true ) {
   // Restore newlines in all elements.
   if ( false !== strpos( $pee, '<!-- wpnl -->' ) ) {
     $pee = str_replace( array( ' <!-- wpnl --> ', '<!-- wpnl -->' ), "\n", $pee );
+  }
+
+  // Attach inline css
+  if ($css) {
+    //$pee = preg_replace('/<p([^>]*)>/g', '<p style="' . $css . '"${1}>', $pee);
+    $pee = str_replace('<p>', '<p style="' . $css . '">', $pee);
   }
 
   return $pee;
