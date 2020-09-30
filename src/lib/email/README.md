@@ -1,16 +1,23 @@
-# Reminder emails
+# Seminar emails
 
-Seminar announcement emails are created and sent automatically by email.php (via crontab).
+Automated seminar announcement emails are created and sent by executing
+email.php (via crontab).
 
-The message's responsive HTML template was created using [Foundation for Emails](https://foundation.zurb.com/emails/docs/) (Sass version).
+The message's responsive HTML template was created using [Foundation for
+Emails](https://get.foundation/emails/docs/sass-guide.html) (Sass version).
 
-Note: Foundation's settings have auto-hyphenation turned on by default. To turn it off, edit normalize.scss in node-modules > foundation-emails > scss > components, removing the relevant CSS.
+## Auto-hyphenation
+
+Foundation's settings have auto-hyphenation turned on by default. To turn it
+off (recommended), edit normalize.scss in node-modules > foundation-emails >
+scss > components, and remove the relevant CSS.
 
 ## Source files:
 
-* announcement.html - HTML file for creating email template (uses custom HTML tags in Inky)
-* _announcement.scss - Sass file for CSS styles
+* announcement.html - HTML file for email message with custom HTML tags in Inky
+* _announcement.scss - Sass file for styling email message
 
 ## Dist file:
 
-* template.html - 'Compiled' responsive HTML template for Seminar email message
+* template.html - 'Compiled' responsive HTML template (including inline CSS)
+with mustache tags for filling in selected seminar's details

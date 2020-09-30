@@ -9,15 +9,18 @@ subject: ESC Seminar
   <row class="seminars-header">
     <columns>
       <center>
-        <img src="https://earthquake.usgs.gov/contactus/menlo/seminars/img/podcast-small.png"
-          alt="USGS Earthquake Seminar Series" height="300" width="300" />
+        <a href="https://earthquake.usgs.gov/contactus/menlo/seminars" border="0">
+          <img src="https://earthquake.usgs.gov/contactus/menlo/seminars/img/podcast-small.png"
+            alt="USGS Earthquake Seminar Series" height="300" width="300" />
+        </a>
       </center>
       <p class="text-center">
         Please join us on
         <strong>
-          {{{{raw}}}}{{date-time}}{{{{/raw}}}}
+          {{{{raw}}}}{{date}}{{{{/raw}}}} at
+          {{{{raw}}}}{{time}}{{{{/raw}}}}
         </strong>
-        for the Earthquake Science Center Seminar Series at USGS in Menlo Park.
+        for the Earthquake Science Center Seminar Series at USGS.
       </p>
     </columns>
   </row>
@@ -25,13 +28,12 @@ subject: ESC Seminar
   <row class="seminars-body">
     <columns>
       <h1 class="text-center">
-        {{{{raw}}}}{{title}}{{{{/raw}}}}
+        {{{{raw}}}}{{topic}}{{{{/raw}}}}
       </h1>
       {{{{raw}}}}{{summary}}{{{{/raw}}}}
+      <spacer size="15"></spacer>
     </columns>
   </row>
-
-  <spacer size="20" class="seminars-body"></spacer>
 
   <row class="seminars-body">
     <columns small="12" large="6">
@@ -39,12 +41,14 @@ subject: ESC Seminar
         <dt>Speaker</dt>
         <dd>
           {{{{raw}}}}{{speaker}}{{{{/raw}}}}
+          <span>{{{{raw}}}}{{affiliation}}{{{{/raw}}}}</span>
         </dd>
       </dl>
       <dl>
         <dt>Date & Time</dt>
         <dd>
-          {{{{raw}}}}{{date-time}}{{{{/raw}}}}
+          {{{{raw}}}}{{date}}{{{{/raw}}}}
+          <span>{{{{raw}}}}{{time}}{{{{/raw}}}}</span>
         </dd>
       </dl>
     </columns>
@@ -55,7 +59,7 @@ subject: ESC Seminar
           {{{{raw}}}}{{location}}{{{{/raw}}}}
         </dd>
       </dl>
-      <dl>
+      <dl style="display: {{{{raw}}}}{{display-host}}{{{{/raw}}}}">
         <dt>Host</dt>
         <dd>
           {{{{raw}}}}{{host}}{{{{/raw}}}}
@@ -67,8 +71,8 @@ subject: ESC Seminar
   <row class="seminars-body">
     <columns>
       <center>
-        <button href="https://earthquake.usgs.gov/contactus/menlo/seminars/{{{{raw}}}}{{id}}{{{{/raw}}}}">
-          {{{{raw}}}}{{button-text}}{{{{/raw}}}}
+        <button style="display: {{{{raw}}}}{{display-button}}{{{{/raw}}}}" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTg2ZTMwMTMtNWJlOS00YzNkLTk3YmEtOGI1NGMzMWMyZDVh%40thread.v2/0?context=%7b%22Tid%22%3a%220693b5ba-4b18-4d7b-9341-f32f400a5494%22%2c%22Oid%22%3a%22283f3691-255e-414c-928e-7673fac67f71%22%7d">
+          Watch Live
         </button>
       </center>
       <p class="text-center watch">
@@ -99,7 +103,7 @@ subject: ESC Seminar
       <center>
         <menu class="small-vertical">
           <item href="https://earthquake.usgs.gov/contactus/menlo/seminars">
-            Upcoming
+            Upcoming Seminars
           </item>
           <item href="https://earthquake.usgs.gov/contactus/menlo/seminars/archives/{{{{raw}}}}{{current-year}}{{{{/raw}}}}">
             Archives

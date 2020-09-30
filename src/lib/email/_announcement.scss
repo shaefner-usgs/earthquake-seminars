@@ -1,32 +1,41 @@
+$bg-body-color: #fff;
+$bg-footer-color: #eee;
+
+$text-color: #333;
+$text-color-darker: #000;
+$text-color-alt: #4e4d73;
+
 body,
 html,
 .body {
-  background: #f3f3f3 !important;
+  background: #f3f3f3;
 }
 
 p {
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .seminars-header {
-  background-color: #ffffff;
+  background-color: $bg-body-color;
 
   img {
-    max-width: 300px; /* override foundation default of auto on mobile breakpoint */
+    display: block;
+    margin: 0 auto;
+    max-width: 300px; /* override Foundation setting of auto on mobile breakpoint */
     padding-top: 1em;
   }
   p {
-    color: #4e4d73;
+    color: $text-color-alt;
     margin-bottom: 0;
     padding-top: 1em;
   }
 }
 
 .seminars-body {
-  background-color: #333333;
+  background-color: $bg-body-color;
 
   dd {
-    color: $success-color;
+    color: $text-color-darker;
     margin: 0;
   }
   dl {
@@ -34,57 +43,73 @@ p {
     padding: 0 0 1.5em 0;
   }
   dt {
-    color: #ffffff;
-    font-size: 15px;
+    color: $text-color-alt;
+    font-size: 16px;
     padding-bottom: .25em;
     text-transform: uppercase;
   }
   h1 {
-    color: #ffffff;
+    color: $text-color-darker;
     font-size: 22px;
-    padding-top: 1em;
+    padding-bottom: .25em; /* declare padding values separately, otherwise Foundation screws it up */
+    padding-top: .5em
   }
   p {
-    color: #cccccc;
-    padding: 1em 0;
+    color: $text-color;
+    padding: 1em 0 !important;
 
     &.watch {
       font-size: 14px;
     }
   }
+  span {
+    color: #333;
+    display: block;
+    font-size: .95em;
+    line-height: 1.5;
+  }
   table.button {
     margin: 1em 0 0;
+
+    td {
+      td {
+        transition: all .25s ease 0s;
+      }
+    }
   }
   th.columns {
-    padding-bottom: 0; /* override foundation defaults, which cause weird spacing on mobile breakpoint */
+    padding-bottom: 0; /* override foundation setting, which causes weird spacing on mobile breakpoint */
   }
 }
 
 .seminars-footer {
-  background-color: #555555;
+  background-color: $bg-footer-color;
 
   a {
-    color: lighten($primary-color, 15%) !important;
+    color: $primary-color;
+    transition: color .25s ease 0s;
 
     &:hover {
-      color: $primary-color !important;
+      color: darken($primary-color, 15%);
     }
   }
-
   hr {
     border: 0;
-    background-color: #666666;
-    color: #666666;
+    background-color: #ccc;
+    color: #ccc;
     height: 1px;
   }
   p, ul {
-    color: #cccccc;
+    color: $text-color;
   }
   p {
     padding-top: 1em;
   }
 
   .menu table {
-    width: auto !important; /* override foundation defaults */
+    width: auto !important; /* override Foundation setting */
+  }
+  .menu-item {
+    padding: 10px 15px 0 !important; /* override Foundation setting */
   }
 }

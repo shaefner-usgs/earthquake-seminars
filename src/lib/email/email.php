@@ -2,8 +2,8 @@
 <?php
 
 /**
- * PURPOSE: script sends out email announcements of upcoming seminars
- *   called by crontab (esc user) every 15 minutes
+ * PURPOSE: script sends out email announcements of upcoming seminars. Called
+ *   by crontab (esc user) every 15 minutes
  */
 
 $cwd = dirname(__FILE__);
@@ -27,7 +27,7 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
-// prepare('2019-05-22 10:30:00', $ADMIN_EMAIL);
+// prepare('2020-09-23 10:30:00', $ADMIN_EMAIL);
 
 
 /**
@@ -61,17 +61,24 @@ function getCommittee () {
  * @return {Array}
  */
 function getData ($seminar, $committee) {
-  $buttonText = 'Watch Online';
-  $videoText = 'Live stream or watch the recorded talk after it&rsquo;s archived.';
+  $displayButton = 'block';
+  $displayHost = 'block';
+  $videoText = 'You can also watch the recorded talk later in the archives.';
+
+  if (!$seminar->host) {
+    $displayHost = 'none';
+  }
   if (!$seminar->video) {
-    $buttonText = 'Seminar Web Page';
+    $displayButton = 'none';
     $videoText = 'This seminar will not be live-streamed.';
   }
 
   return [
-    'button-text' => $buttonText,
+    'affiliation' => $seminar->affiliation,
     'current-year' => date('Y'),
-    'date-time' =>  "$seminar->dayDate at $seminar->time Pacific",
+    'date' =>  $seminar->dayDate,
+    'display-button' => $displayButton,
+    'display-host' => $displayHost,
     'email1' => $committee[0]['email'],
     'email2' => $committee[1]['email'],
     'host' => $seminar->host,
@@ -82,8 +89,10 @@ function getData ($seminar, $committee) {
     'phone1' => $committee[0]['phone'],
     'phone2' => $committee[1]['phone'],
     'speaker' => $seminar->speaker,
+    'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
     'summary' => getSummary($seminar),
-    'title' => $seminar->title,
+    'time' => "$seminar->time Pacific",
+    'topic' => $seminar->topic,
     'video-text' => $videoText
   ];
 }
@@ -113,23 +122,24 @@ function getSubject ($seminar) {
     }
   }
 
-  return "Earthquake Seminar $when - $seminar->speaker";
+  return "Earthquake Seminar $when - $seminar->speakerWithAffiliation";
 }
 
 /**
- * Use autop to add <p>/<br> tags to summary. All styles must be manually
- *   "inlined" for compatibility (the template already has inlined styles
- *   for content that doesn't require additional HTML tags).
+ * Use autop to add <p>/<br> tags to summary.
+ *
+ * $styles (css styles) will be set inline using a modified version of autop
  *
  * @param $seminar {Object}
  *
  * @return $summary {String}
  */
 function getSummary ($seminar) {
-  $styles = 'color: #ccc; line-height: 1.5; Margin: 0; margin: 0; padding: 12px 0';
-  $summary = str_replace('<p>', '<p style="' . $styles . '">', autop($seminar->summary));
+  $styles = 'color: #333; line-height: 1.4; Margin:0; Margin-bottom:10px; ' .
+    'margin:0; margin-bottom:1em; margin-top:1em; padding-bottom:0; ' .
+    'padding-left:0; padding-right:0; padding-top:0;';
 
-  return $summary;
+  return autop($seminar->summary, true, $styles);
 }
 
 /**
