@@ -60,7 +60,7 @@ class Seminar {
     $this->_data['category'] = $this->_getCategory();
     $this->_data['date'] = date('F j, Y', $timestamp);
     $this->_data['day'] = date('l', $timestamp);
-    $this->_data['dayDate'] = date('l, F j', $timestamp);
+    $this->_data['dayDate'] = date('l, F jS', $timestamp);
     $this->_data['dayDateShort'] = date('D, M j', $timestamp);
     $this->_data['month'] = date('F', $timestamp);
     $this->_data['noSeminar'] = $this->_getNoSeminar();
