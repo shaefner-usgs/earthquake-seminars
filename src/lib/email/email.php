@@ -53,7 +53,7 @@ function getCommittee () {
 }
 
 /**
- * Get key-value pairs used to populate mustache template with seminar details
+ * Get key-value pairs used to populate email template with seminar details
  *
  * @param $seminar {Object}
  * @param $committee {Array}
@@ -61,6 +61,8 @@ function getCommittee () {
  * @return {Array}
  */
 function getData ($seminar, $committee) {
+  global $TEAMS_LINK;
+
   $displayButton = 'block';
   $displayHost = 'block';
   $videoText = 'You can also watch the recorded talk later in the archives.';
@@ -91,6 +93,7 @@ function getData ($seminar, $committee) {
     'speaker' => $seminar->speaker,
     'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
     'summary' => getSummary($seminar),
+    'teams-link' => $TEAMS_LINK,
     'time' => "$seminar->time Pacific",
     'topic' => $seminar->topic,
     'video-text' => $videoText
