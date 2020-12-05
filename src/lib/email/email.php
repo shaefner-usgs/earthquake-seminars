@@ -65,7 +65,8 @@ function getData ($seminar, $committee) {
 
   $displayButton = 'block';
   $displayHost = 'block';
-  $videoText = 'You can also watch the recorded talk later in the archives.';
+  $url = 'https://earthquake.usgs.gov/contactus/menlo/seminars/' . $seminar->ID;
+  $videoText = 'You can also watch the <a href="' . $url . '">recorded talk</a> later in the archives.';
 
   if (!$seminar->host) {
     $displayHost = 'none';
