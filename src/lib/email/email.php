@@ -27,7 +27,7 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
-// prepare('2020-09-23 10:30:00', $ADMIN_EMAIL);
+// prepare('2020-10-21 10:30:00', $ADMIN_EMAIL);
 
 
 /**
@@ -76,7 +76,7 @@ function getData ($seminar, $committee) {
   }
 
   return [
-    'affiliation' => $seminar->affiliation,
+    'affiliation' => replaceChars($seminar->affiliation),
     'current-year' => date('Y'),
     'date' =>  $seminar->dayDate,
     'display-button' => $displayButton,
@@ -91,11 +91,11 @@ function getData ($seminar, $committee) {
     'phone1' => $committee[0]['phone'],
     'phone2' => $committee[1]['phone'],
     'speaker' => $seminar->speaker,
-    'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
+    'speakerWithAffiliation' => replaceChars($seminar->speakerWithAffiliation),
     'summary' => getSummary($seminar),
     'teams-link' => $TEAMS_LINK,
     'time' => "$seminar->time Pacific",
-    'topic' => $seminar->topic,
+    'topic' => replaceChars($seminar->topic),
     'video-text' => $videoText
   ];
 }
@@ -142,7 +142,7 @@ function getSummary ($seminar) {
     'margin:0; margin-bottom:1em; margin-top:1em; padding-bottom:0; ' .
     'padding-left:0; padding-right:0; padding-top:0;';
 
-  return autop($seminar->summary, true, $styles);
+  return autop(replaceChars($seminar->summary), true, $styles);
 }
 
 /**
@@ -183,4 +183,28 @@ function prepare ($textualTime, $to) {
     ]);
     $email->send();
   }
+}
+
+/**
+ * Replace special chars. with HTML entities
+ *
+ * @param str {String}
+ *
+ * @return {String}
+ */
+function replaceChars ($str) {
+  $specialChars = [
+    '‘',
+    '’',
+    '“',
+    '”'
+  ];
+  $entities = [
+    '&lsquo;',
+    '&rsquo;',
+    '&ldquo;',
+    '&rdquo;'
+  ];
+
+  return str_replace($specialChars, $entities, $str);
 }
