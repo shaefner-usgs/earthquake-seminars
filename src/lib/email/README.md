@@ -14,8 +14,8 @@ scss > components, and remove the relevant CSS.
 
 ## Source files:
 
-* announcement.html - HTML file for email message with custom HTML tags in Inky
-* _announcement.scss - Sass file for styling email message
+* template-src.html - HTML file for email message with custom Inky tags 
+* template-src.scss - Sass file for styling email message
 
 ## Dist file:
 
