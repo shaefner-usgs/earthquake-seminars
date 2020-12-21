@@ -189,7 +189,7 @@ function prepare ($textualTime, $to) {
 /**
  * Replace special chars. with HTML entities
  *
- * @param str {String}
+ * @param $str {String}
  *
  * @return {String}
  */
