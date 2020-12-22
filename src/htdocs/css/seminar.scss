@@ -6,6 +6,15 @@ dl {
 
   > dd {
     margin: 0;
+
+    &.captions a {
+      background: #999;
+      border-radius: 6px;
+      color: #fff;
+      font-size: .8em;
+      padding: 1px 6px;
+      text-decoration: none;
+    }
   }
   > dt {
     color: #666;

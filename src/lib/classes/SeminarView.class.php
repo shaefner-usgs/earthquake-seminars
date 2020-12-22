@@ -50,16 +50,19 @@ class SeminarView {
         $media = $item->xpath('media:subtitle[1]');
         $vtt = $media[0]['url'];
       }
+      if ($vtt) {
+        $captions = sprintf('<dd class="captions"><a href="%s">CC</a></dd>', $vtt);
+      }
 
       $dl .= sprintf('<dt>
           <a href="%s">%s</a>
         </dt>
         <dd class="description">%s</dd>
-        <dd class="captions"><a href="%s">CC</a></dd>',
+        %s',
         $mp4,
         $title,
         $description,
-        $vtt
+        $captions
       );
     }
 
