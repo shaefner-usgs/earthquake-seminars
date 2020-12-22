@@ -21,6 +21,13 @@ h2 {
   margin-top: 1em;
 }
 
+p.captions {
+  border-top: 1px solid #eee;
+  color: #666;
+  margin-top: 1.5em;
+  padding-top: 1.5em;
+}
+
 .alert {
   h3 {
     font: normal 1.25em $font-sans;
@@ -38,13 +45,6 @@ h2 {
   .details {
     margin-bottom: 0;
   }
-}
-
-.captions {
-  border-top: 1px solid #eee;
-  color: #666;
-  margin-top: 1.5em;
-  padding-top: 1.5em;
 }
 
 .details {
