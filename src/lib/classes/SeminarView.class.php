@@ -27,28 +27,44 @@ class SeminarView {
 
     $dl = '<dl class="playlist">';
     foreach($playlist->channel->item as $item) {
-      $title = $item->title;
+      $captions = '';
       $description = $item->description;
+      $mp4 = '';
+      $title = $item->title;
+      $vtt = '';
 
-      // jwplayer supports both JWPlayer RSS and  Media RSS namespaces
-      $url = '';
+      // Get .mp4 file (jwplayer supports both JWPlayer RSS and Media RSS namespaces)
       if (is_array($item->xpath('jwplayer:source[1]'))) {
         $media = $item->xpath('jwplayer:source[1]');
-        $url = $media[0]['file'];
+        $mp4 = $media[0]['file'];
       } else if (is_array($item->xpath('media:content[1]'))) {
         $media = $item->xpath('media:content[1]');
-        $url = $media[0]['url'];
+        $mp4 = $media[0]['url'];
       }
-      $dl .= sprintf('<dt><a href="%s">%s</a></dt>
-        <dd class="description">%s</dd>',
-        $url,
+
+      // Get .vtt file
+      if (is_array($item->xpath('jwplayer:track[1]'))) {
+        $media = $item->xpath('jwplayer:track[1]');
+        $vtt = $media[0]['file'];
+      } else if (is_array($item->xpath('media:subtitle[1]'))) {
+        $media = $item->xpath('media:subtitle[1]');
+        $vtt = $media[0]['url'];
+      }
+
+      $dl .= sprintf('<dt>
+          <a href="%s">%s</a>
+        </dt>
+        <dd class="description">%s</dd>
+        <dd class="captions"><a href="%s">CC</a></dd>',
+        $mp4,
         $title,
-        $description
+        $description,
+        $vtt
       );
     }
-    $dl .= '</dl>';
 
-    $video = $this->_getVideoTag($url);
+    $dl .= '</dl>';
+    $video = $this->_getVideoTag($mp4);
     $video .= $dl;
 
     return $video;
@@ -129,13 +145,13 @@ class SeminarView {
     $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
 
     if ($this->_model->video === 'yes') {
-      if ($this->_model->status === 'past') { // recorded video
+      if ($this->_model->status === 'past') { // look for recorded video
         if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
           $video = $this->_getVideoTag();
         }
-        else if (remoteFileExists($this->_model->videoPlaylist)) { // xml file
+        else if (remoteFileExists($this->_model->videoPlaylist)) { // xml (playlist) file
           $video = $this->_getPlaylist();
-        } else { // no file found
+        } else { // no video file
           $video = '<div class="alert info">
               <h3>Video not found</h3>
               <p>Please check back later. Videos are usually posted within 24 hours.</p>

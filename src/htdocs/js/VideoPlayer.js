@@ -10,7 +10,7 @@ var _COUNT,
 
 _COUNT = 0;
 _DEFAULTS = {
-  key: 'zBOH983t+dtdhriK4drdRPIStHMX02RUk0paAg=='
+  key: 'zBOH983t+dtdhriK4drdRPIStHMX02RUk0paAg==' // jwplayer
 };
 
 
