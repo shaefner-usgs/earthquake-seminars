@@ -26,7 +26,7 @@ $PROMPTS = array(
   ),
   'DB_DSN' => array(
     'prompt' => 'Database connection DSN string',
-    'default' => 'mysql:host=127.0.0.1;port=3306;dbname=web',
+    'default' => 'mysql:host=127.0.0.1;port=3306;dbname=web;charset=utf8',
     'secure' => false
   ),
   'DB_USER' => array(
