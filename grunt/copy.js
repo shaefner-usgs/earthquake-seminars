@@ -35,22 +35,12 @@ var copy = {
   },
 
   jwplayer: {
-//     cwd: 'node_modules/leaflet/dist',
-//     dest: config.build + '/' + config.src + '/htdocs/lib/leaflet',
-//     expand: true,
-//     filter: 'isFile',
-//     rename: function (dest, src) {
-//       // grab 'src' version of Leaflet to make debugging easier (uglified for dist)
-//       var newName = src.replace(/leaflet-src\.js$/, 'leaflet.js');
-//
-//       return dest + '/' + newName;
-//     },
-//     src: [
-//       'images/**/*',
-//       'leaflet-src.js',
-//       'leaflet-src.js.map',
-//       'leaflet.css'
-//     ]
+    cwd: config.src + '/lib/jwplayer-7.9.3',
+    dest: config.build + '/' + config.src + '/htdocs/lib/jwplayer',
+    expand: true,
+    src: [
+      '**/*'
+    ]
   }
 };
 
