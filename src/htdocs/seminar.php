@@ -31,7 +31,7 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="css/seminar.css" />';
   $FOOT = '
     <script src="lib/jwplayer/jwplayer.js"></script>
-    <script src="js/seminar.js"></script>
+    <script src="js/index.js"></script>
   ';
 
   // Don't cache
