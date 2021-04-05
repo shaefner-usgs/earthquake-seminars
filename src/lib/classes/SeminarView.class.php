@@ -1,8 +1,5 @@
 <?php
 
-include_once __DIR__ . '/../../conf/config.inc.php'; // app config
-include_once __DIR__ . '/../_functions.inc.php'; // app functions
-
 /**
  * Seminar view
  * - creates the HTML for seminar.php
@@ -103,7 +100,7 @@ class SeminarView {
 
       $seminarHtml = sprintf('
         <h2>%s</h2>
-        <div class="row %s %s">
+        <div class="row %s">
           <div class="column two-of-three video">
             %s
           </div>
@@ -120,7 +117,6 @@ class SeminarView {
         %s
         %s',
         $this->_model->topic,
-        $this->_model->category,
         $this->_model->status,
         $video,
         $this->_model->speakerWithAffiliation,

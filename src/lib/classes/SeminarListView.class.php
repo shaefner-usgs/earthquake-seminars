@@ -1,7 +1,5 @@
 <?php
 
-include_once __DIR__ . '/../../conf/config.inc.php'; // app config
-
 /**
  * Seminars list view - creates the HTML for seminar index page
  *
@@ -84,14 +82,14 @@ class SeminarListView {
       $seminarListHtml = '';
 
       foreach ($this->_collection->seminars as $seminar) {
-        if ($seminar->noSeminar && $seminar->category === 'archives') {
+        if ($seminar->noSeminar && $seminar->status === 'past') {
           continue; // skip 'No Seminar' entries in archives list
         }
-        // Flag upcoming seminars that aren't on the "regular" day/time
-        if ($seminar->category === 'upcoming' && $seminar->day !== 'Wednesday') {
+        // Flag future seminars that aren't on the "regular" day/time
+        if ($seminar->status === 'future' && $seminar->day !== 'Wednesday') {
           $seminar->dayDateShort = "<mark>$seminar->dayDateShort</mark>";
         }
-        if ($seminar->category === 'upcoming' && $seminar->time !== '10:30 AM') {
+        if ($seminar->status === 'future' && $seminar->time !== '10:30 AM') {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 
@@ -101,7 +99,7 @@ class SeminarListView {
             $seminarListHtml .= '</ul>';
           }
           $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
-          $seminarListHtml .= '<ul class="' . $seminar->category . ' seminars no-style">';
+          $seminarListHtml .= '<ul class="list no-style">';
         }
         $prevMonth = $seminar->month;
 

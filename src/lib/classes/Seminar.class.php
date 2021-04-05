@@ -44,7 +44,7 @@ class Seminar {
   }
 
   /**
-   * Add non-db fields to model
+   * Add additional fields (not in seminars_list table) to model
    *
    * @param $datetime {String}
    */
@@ -57,7 +57,6 @@ class Seminar {
     $videoPath = "/content/contactus/menlo/seminars/$year";
     $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
 
-    $this->_data['category'] = $this->_getCategory();
     $this->_data['date'] = date('F j, Y', $timestamp);
     $this->_data['day'] = date('l', $timestamp);
     $this->_data['dayDate'] = date('l, F jS', $timestamp);
@@ -76,20 +75,6 @@ class Seminar {
   }
 
   /**
-   * Get seminar category (either 'archives' or 'upcoming')
-   *
-   * @return $category {String}
-   */
-  private function _getCategory () {
-    $category = 'archives'; // default value
-    if ($this->_seminarDate >= $this->_todaysDate) {
-      $category = 'upcoming';
-    }
-
-    return $category;
-  }
-
-  /**
    * Get flag to filter out 'no seminar' postings from archives
    *
    * @return $noSeminar {Boolean}
@@ -105,7 +90,7 @@ class Seminar {
   }
 
   /**
-   * Get seminar status (relative time: past, future, etc) for video player
+   * Get seminar status: past, today, live, or future
    *
    * @param $timestamp {Int}
    *
@@ -113,6 +98,7 @@ class Seminar {
    */
   private function _getStatus ($timestamp) {
     $status = 'past'; // default value
+
     if ($this->_seminarDate === $this->_todaysDate) {
       if (time() < $timestamp) {
         $status = 'today';

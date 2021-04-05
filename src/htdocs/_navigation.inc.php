@@ -6,10 +6,9 @@ $url = strtok($_SERVER['REQUEST_URI'], '?'); // strip querystring
 // Set up page match for highlighting selected item in navbar
 $matchesArchives = false;
 $matchesUpcoming = false;
-if ($seminar->category === 'upcoming' || preg_match("@^$section/?$@", $url)) {
+if (preg_match('/future|live|today/', $seminar->status) || preg_match("@^$section/?$@", $url)) {
   $matchesUpcoming = true;
-}
-if ($seminar->category === 'archives') {
+} else if ($seminar->status === 'past' || preg_match('/archives/', $url)) {
   $matchesArchives = true;
 }
 
