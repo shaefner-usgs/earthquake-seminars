@@ -37,10 +37,7 @@ $NAVIGATION =
 
 $NAVIGATION .=
   navGroup('Related Seminars',
-    navItem('http://online.wr.usgs.gov/calendar/', 'USGS Evening Public Lecture') .
-    navItem('http://wwwrcamnl.wr.usgs.gov/prc/', 'USGS Western Region Colloquium') .
-    navItem('http://volcanoes.usgs.gov/seminar.html', 'USGS Volcano Hazards') .
-    navItem('http://wwwrcamnl.wr.usgs.gov/wrdseminar/', 'USGS Water Resources') .
+    navItem('https://www.usgs.gov/science-support/communications-and-publishing/public-lecture-series', 'USGS Public Lecture Series') .
     navItem('https://earth.stanford.edu/geophysics/events', 'Stanford Geophysics')
   );
 
