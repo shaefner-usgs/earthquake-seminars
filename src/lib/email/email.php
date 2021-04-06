@@ -187,25 +187,15 @@ function prepare ($textualTime, $to) {
 }
 
 /**
- * Replace special chars. with HTML entities
+ * Replace special chars. with HTML entities while preserving HTML tags
  *
  * @param $str {String}
  *
  * @return {String}
  */
 function replaceChars ($str) {
-  $specialChars = [
-    '‘',
-    '’',
-    '“',
-    '”'
-  ];
-  $entities = [
-    '&lsquo;',
-    '&rsquo;',
-    '&ldquo;',
-    '&rdquo;'
-  ];
-
-  return str_replace($specialChars, $entities, $str);
+  return htmlspecialchars_decode(
+    htmlentities($str, ENT_NOQUOTES, 'UTF-8', false),
+    ENT_NOQUOTES
+  );
 }
