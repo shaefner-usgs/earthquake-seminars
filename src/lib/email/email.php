@@ -56,13 +56,13 @@ function getCommittee () {
  * Get key-value pairs used to populate email template with seminar details
  *
  * @param $seminar {Object}
- * @param $committee {Array}
  *
  * @return {Array}
  */
-function getData ($seminar, $committee) {
+function getData ($seminar) {
   global $TEAMS_LINK;
 
+  $committee = getCommittee();
   $displayButton = 'block';
   $displayHost = 'block';
   $url = 'https://earthquake.usgs.gov/contactus/menlo/seminars/' . $seminar->ID;
@@ -169,17 +169,17 @@ function prepare ($textualTime, $to) {
       return;
     }
 
-    $committee = getCommittee();
+    $data = getData($seminar);
     $from = sprintf('%s <%s>',
-      $committee[0]['name'],
-      $committee[0]['email']
+      $data['name1'],
+      $data['email1']
     );
 
     $email = new Email([
-      'data' => getData($seminar, $committee),
+      'data' => $data,
       'from' => $from,
-      'template' => "$cwd/template.html",
       'subject' => getSubject($seminar),
+      'template' => "$cwd/template.html",
       'to' => $to
     ]);
     $email->send();
