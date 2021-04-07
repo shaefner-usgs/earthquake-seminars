@@ -27,7 +27,7 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
-// prepare('2020-10-21 10:30:00', $ADMIN_EMAIL);
+// prepare('2020-01-22 10:30:00', $ADMIN_EMAIL);
 
 
 /**
@@ -86,6 +86,7 @@ function getData ($seminar) {
     'email2' => $committee[1]['email'],
     'host' => $seminar->host,
     'id' => $seminar->ID,
+    'image' => getImage($seminar),
     'location' => $seminar->location,
     'name1' => $committee[0]['name'],
     'name2' => $committee[1]['name'],
@@ -99,6 +100,26 @@ function getData ($seminar) {
     'topic' => replaceChars($seminar->topic),
     'video-text' => $videoText
   ];
+}
+
+/**
+ * Get HTML for uploaded image if it exists
+ *
+ * $return $img {String}
+ */
+function getImage ($seminar) {
+  $img = '';
+  $style = 'border: none; display: block; float: left; margin: 10px 10px 10px 0; outline: 0;';
+
+  if ($seminar->imageType === 'upload') {
+    $img = sprintf('<img src="%s" alt="speaker" style="%s" width="%d" />',
+      $seminar->imageUrl,
+      $style,
+      $seminar->imageWidth * .75 // reduce slightly
+    );
+  }
+
+  return $img;
 }
 
 /**

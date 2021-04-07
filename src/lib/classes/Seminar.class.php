@@ -52,6 +52,7 @@ class Seminar {
     $timestamp = strtotime($datetime);
     $year = date('Y', $timestamp);
 
+    $image = $this->_getImage();
     $videoDomain = 'https://escweb.wr.usgs.gov';
     $videoFile = str_replace('-', '', substr($datetime, 0, 10)) . '.mp4';
     $videoPath = "/content/contactus/menlo/seminars/$year";
@@ -61,6 +62,10 @@ class Seminar {
     $this->_data['day'] = date('l', $timestamp);
     $this->_data['dayDate'] = date('l, F jS', $timestamp);
     $this->_data['dayDateShort'] = date('D, M j', $timestamp);
+    $this->_data['imageType'] = $image['type'];
+    $this->_data['imageUri'] = $image['uri'];
+    $this->_data['imageUrl'] = $image['url'];
+    $this->_data['imageWidth'] = $image['width'];
     $this->_data['month'] = date('F', $timestamp);
     $this->_data['noSeminar'] = $this->_getNoSeminar();
     $this->_data['status'] = $this->_getStatus($timestamp);
@@ -72,6 +77,37 @@ class Seminar {
     $this->_data['year'] = $year;
 
     $this->_addAffiliation();
+  }
+
+  /**
+   * Get attributes of uploaded image (or 'default' podcast image if none)
+   *
+   * @return $image {Array}
+   */
+  private function _getImage () {
+    $image = [
+      'width' => 300 // default
+    ];
+    $path = $GLOBALS['DATA_DIR'] . '/images/' . $this->_data['image'];
+
+    list($width, $height) = getimagesize($path);
+
+    if ($this->_data['image'] && is_file($path)) {
+      $image['type'] = 'upload';
+      $image['uri'] = $GLOBALS['MOUNT_PATH'] . '/data/images/' . $this->_data['image'];
+
+      // Set width of image so it displays at 300px in max dimension
+      if ($height > $width) {
+        $image['width'] = 300 * $width / $height;
+      }
+    } else {
+      $image['type'] = 'default';
+      $image['uri'] = $GLOBALS['MOUNT_PATH'] . '/img/podcast-small.png';
+    }
+
+    $image['url'] = 'https://earthquake.usgs.gov' . $image['uri'];
+
+    return $image;
   }
 
   /**

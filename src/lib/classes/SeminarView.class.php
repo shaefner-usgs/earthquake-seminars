@@ -81,7 +81,9 @@ class SeminarView {
     } else {
       $captions = '';
       $host = '';
+      $img = '';
       $summary = '';
+      $video = $this->_getVideo();
 
       if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
         $captions = '<p class="captions">Closed captions are typically available a
@@ -96,10 +98,16 @@ class SeminarView {
           <dd class="host">' . $this->_model->host . '</dd>';
       }
 
+      if ($this->_model->imageType === 'upload') {
+        $img = sprintf('<img src="%s" alt="speaker" class="image" width="%d" />',
+          $this->_model->imageUri,
+          $this->_model->imageWidth
+        );
+      }
+
       if ($this->_model->summary) {
         $summary = autop($this->_model->summary); // add <p> tag(s) to summary
       }
-      $video = $this->_getVideo();
 
       $seminarHtml = sprintf('
         <h2>%s</h2>
@@ -118,6 +126,7 @@ class SeminarView {
           </div>
         </div>
         %s
+        %s
         %s',
         $this->_model->topic,
         $this->_model->status,
@@ -128,6 +137,7 @@ class SeminarView {
         $this->_model->time,
         $this->_model->location,
         $host,
+        $img,
         $summary,
         $captions
       );

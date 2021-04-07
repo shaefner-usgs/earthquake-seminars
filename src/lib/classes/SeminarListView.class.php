@@ -52,6 +52,7 @@ class SeminarListView {
           <time datetime="%s">
             %s <span class="time">%s</span>
           </time>
+          <img src="%s" alt="icon" />
           %s
         %s
       </li>',
@@ -62,6 +63,7 @@ class SeminarListView {
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,
       $seminar->time,
+      $seminar->imageUri,
       $status,
       $closeTag
     );
