@@ -8,10 +8,6 @@ h2 {
   padding: 0 0 .5em;
 }
 
-.archives .time {
-  display: none;
-}
-
 .details {
   align-items: center;
   background: #fcfbfa;
@@ -22,6 +18,7 @@ h2 {
     display: inline-block;
     padding: 6px;
   }
+
   p {
     padding-right: 1em;
   }
@@ -32,16 +29,17 @@ h2 {
   }
 }
 
-.seminars {
+.list {
   margin: 0 0 3.5em;
 
   > li {
     border-bottom: 1px solid #eee;
 
     > a, > div {
+      align-items: center;
       display: flex;
       font-weight: 300;
-      padding: 1.25em 3px;
+      padding: 1em 5px;
     }
     > a {
       background: #fff;
@@ -53,23 +51,28 @@ h2 {
         background: rgba(255, 255, 0, .10);
       }
     }
+
     button {
       padding: 6px 8px;
     }
+
     h3 {
       color: #000;
       font-family: $font-sans;
       font-weight: normal;
       margin: 0;
     }
+
     mark {
       background: none;
       color: #c00;
       padding: 0;
     }
+
     p {
       margin: .25em 0 0;
     }
+
     span {
       color: #999;
       display: block;
@@ -78,21 +81,27 @@ h2 {
         color: rgba(204, 0, 0, .5);
       }
     }
+
     time {
-      flex: 0 0 auto;
+      flex: none;
       order: 1;
       width: 6.5em;
     }
 
-    .live {
-      flex: 0 0 auto;
+    .status {
+      flex: none;
       order: 3;
-      padding-left: .5em;
+      margin-left: .25em;
       text-align: right;
     }
+
     .title {
-      flex: 1 1 auto;
+      flex: auto;
       order: 2;
+    }
+
+    &.past .time {
+      display: none;
     }
   }
 }
