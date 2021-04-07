@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Seminars list view - creates the HTML for seminar index page
+ * Create the HTML for a list of seminars
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
@@ -13,7 +13,7 @@ class SeminarListView {
   }
 
   /**
-   * Create <li> tag for each seminar in list
+   * Get <li> for a seminar
    *
    * @param $seminar {Object}
    *
@@ -21,19 +21,19 @@ class SeminarListView {
    */
   private function _getLiTag ($seminar) {
     $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
-    $live = '';
+    $status = '';
 
     if (!$seminar->noSeminar) {
       $openTag = '<a href="' . $href . '">';
       $closeTag = '</a>';
 
-      // show "Live" button
+      // Show "Live" button if seminar is today
       if ($seminar->video && $seminar->status === 'live') {
-        $live = '<div class="live">
+        $status = '<div class="status">
             <button class="red">Live now</button>
           </div>';
       } else if ($seminar->video && $seminar->status === 'today') {
-        $live = '<div class="live">
+        $status = '<div class="status">
             <button class="green">Live today</button>
           </div>';
       }
@@ -62,7 +62,7 @@ class SeminarListView {
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,
       $seminar->time,
-      $live,
+      $status,
       $closeTag
     );
 
@@ -70,16 +70,16 @@ class SeminarListView {
   }
 
   /**
-   * Create HTML for seminars list
+   * Get HTML for seminars list
    *
-   * @return $seminarListHtml {String}
+   * @return $html {String}
    */
-  private function _getSeminarList () {
+  private function _getList () {
     if (!$this->_collection->seminars) {
-      $seminarListHtml = '<p class="alert info">No Seminars Found</p>';
+      $html = '<p class="alert info">No Seminars Found</p>';
     } else {
       $prevMonth = NULL;
-      $seminarListHtml = '';
+      $html = '';
 
       foreach ($this->_collection->seminars as $seminar) {
         if ($seminar->noSeminar && $seminar->status === 'past') {
@@ -96,23 +96,23 @@ class SeminarListView {
         // Show month & year headers; open/close <ul>'s
         if ($seminar->month !== $prevMonth) {
           if ($prevMonth) {
-            $seminarListHtml .= '</ul>';
+            $html .= '</ul>';
           }
-          $seminarListHtml .= "<h2>$seminar->month $seminar->year</h2>";
-          $seminarListHtml .= '<ul class="list no-style">';
+          $html .= "<h2>$seminar->month $seminar->year</h2>";
+          $html .= '<ul class="list no-style">';
         }
         $prevMonth = $seminar->month;
 
         // Get <li> with seminar details
-        $seminarListHtml .= $this->_getLiTag($seminar);
+        $html .= $this->_getLiTag($seminar);
       }
-      $seminarListHtml .= '</ul>';
+      $html .= '</ul>';
     }
 
-    return $seminarListHtml;
+    return $html;
   }
 
   public function render () {
-    print $this->_getSeminarList();
+    print $this->_getList();
   }
 }
