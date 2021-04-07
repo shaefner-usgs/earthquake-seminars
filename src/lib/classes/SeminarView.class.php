@@ -80,6 +80,9 @@ class SeminarView {
       $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
     } else {
       $captions = '';
+      $host = '';
+      $summary = '';
+
       if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
         $captions = '<p class="captions">Closed captions are typically available a
           few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
@@ -87,12 +90,12 @@ class SeminarView {
           closed captions, please <a href="mailto:shaefner@usgs.gov">email
           us</a>, and we will do our best to accommodate your request.</p>';
       }
-      $host = '';
+
       if ($this->_model->host) {
         $host = '<dt class="host">Host</dt>
           <dd class="host">' . $this->_model->host . '</dd>';
       }
-      $summary = '';
+
       if ($this->_model->summary) {
         $summary = autop($this->_model->summary); // add <p> tag(s) to summary
       }
@@ -134,10 +137,10 @@ class SeminarView {
   }
 
   /**
-   * Create HTML for video player section based on current time relative to
+   * Get HTML for video player section based on current time relative to
    *   seminar time
    *
-   * @return $video {HTML}
+   * @return $video {String}
    */
   private function _getVideo () {
     $video = '';
@@ -183,7 +186,7 @@ class SeminarView {
   }
 
   /**
-   * Create <video> tag
+   * Get <video> tag
    *
    * @param $src {String} default is NULL
    *     use provided $src or obtain from the model
