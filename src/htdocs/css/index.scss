@@ -109,8 +109,8 @@ h2 {
       order: 2;
     }
 
-    &.live .image,
-    &.today .image,
+    &.live img,
+    &.today:not(.after) img,
     &.past .time {
       display: none;
     }
