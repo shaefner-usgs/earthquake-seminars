@@ -153,6 +153,8 @@ class SeminarView {
    * @return $video {String}
    */
   private function _getVideo () {
+    global $TEAMS_LINK;
+
     $video = '';
     $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
 
@@ -173,7 +175,7 @@ class SeminarView {
       else if ($this->_model->status === 'today') { // seminar later today
         $video = '<div class="alert info">
             <h3>This seminar will be live-streamed today</h3>
-            <p><a href="' . $GLOBALS['TEAMS_LINK'] . '">View the live-stream</a>
+            <p><a href="' . $TEAMS_LINK . '">View the live-stream</a>
               starting at ' . $this->_model->time . ' Pacific (requires ' .
               $downloadLink . ').</p>
           </div>';
@@ -181,7 +183,7 @@ class SeminarView {
       else if ($this->_model->status === 'live') { // live now
         $video = '<div class="alert info">
             <h3>Live now</h3>
-            <p><a href="' . $GLOBALS['TEAMS_LINK'] . '">View the live-stream</a>
+            <p><a href="' . $TEAMS_LINK . '">View the live-stream</a>
               (requires ' . $downloadLink . ').</p>
           </div>';
       }

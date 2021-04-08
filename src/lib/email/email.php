@@ -60,12 +60,12 @@ function getCommittee () {
  * @return {Array}
  */
 function getData ($seminar) {
-  global $TEAMS_LINK;
+  global $TEAMS_LINK, $MOUNT_PATH;
 
   $committee = getCommittee();
   $displayButton = 'block';
   $displayHost = 'block';
-  $url = 'https://earthquake.usgs.gov/contactus/menlo/seminars/' . $seminar->ID;
+  $url = "https://earthquake.usgs.gov$MOUNT_PATH/" . $seminar->ID;
   $videoText = 'You can also watch the <a href="' . $url . '">recorded talk</a> later in the archives.';
 
   if (!$seminar->host) {

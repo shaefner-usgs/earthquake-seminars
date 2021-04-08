@@ -49,13 +49,15 @@ class Seminar {
    * @param $datetime {String}
    */
   private function _addFields ($datetime) {
+    global $MOUNT_PATH;
+
     $timestamp = strtotime($datetime);
     $year = date('Y', $timestamp);
 
     $image = $this->_getImage();
     $videoDomain = 'https://escweb.wr.usgs.gov';
     $videoFile = str_replace('-', '', substr($datetime, 0, 10)) . '.mp4';
-    $videoPath = "/content/contactus/menlo/seminars/$year";
+    $videoPath = "/content$MOUNT_PATH/$year";
     $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
 
     $this->_data['date'] = date('F j, Y', $timestamp);
@@ -85,16 +87,18 @@ class Seminar {
    * @return $image {Array}
    */
   private function _getImage () {
+    global $DATA_DIR, $MOUNT_PATH;
+
     $image = [
       'width' => 300 // default
     ];
-    $path = $GLOBALS['DATA_DIR'] . '/images/' . $this->_data['image'];
+    $path = "$DATA_DIR/images/" . $this->_data['image'];
 
     list($width, $height) = getimagesize($path);
 
     if ($this->_data['image'] && is_file($path)) {
       $image['type'] = 'upload';
-      $image['uri'] = $GLOBALS['MOUNT_PATH'] . '/data/images/' . $this->_data['image'];
+      $image['uri'] = "$MOUNT_PATH/data/images/" . $this->_data['image'];
 
       // Set width of image so it displays at 300px in max dimension
       if ($height > $width) {
@@ -102,7 +106,7 @@ class Seminar {
       }
     } else {
       $image['type'] = 'default';
-      $image['uri'] = $GLOBALS['MOUNT_PATH'] . '/img/podcast-small.png';
+      $image['uri'] = "$MOUNT_PATH/img/podcast-small.png";
     }
 
     $image['url'] = 'https://earthquake.usgs.gov' . $image['uri'];

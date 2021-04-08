@@ -21,7 +21,7 @@ foreach($seminars as $seminar) {
 }
 
 $feed = new Feed([
-  'baseUri' => 'https://earthquake.usgs.gov/contactus/menlo/seminars',
+  'baseUri' => "https://earthquake.usgs.gov$MOUNT_PATH",
   'collection' => $seminarCollection,
   'template' => "$APP_DIR/htdocs/feed/template.xml"
 ]);

@@ -11,7 +11,7 @@ $feedHtml = '
     </a>
   </li>
   <li class="xml">
-    <a href="' . $GLOBALS['MOUNT_PATH'] . '/feed">
+    <a href="' . $MOUNT_PATH . '/feed">
       RSS Feed
     </a>
   </li>

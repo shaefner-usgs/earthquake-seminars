@@ -9,8 +9,10 @@ class Db {
   private static $db;
 
   public function __construct() {
+    global $DB_DSN, $DB_PASS, $DB_USER;
+
     try {
-      $this->db = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASS']);
+      $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASS);
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
       print '<p class="alert error">ERROR 1: ' . $e->getMessage() . '</p>';

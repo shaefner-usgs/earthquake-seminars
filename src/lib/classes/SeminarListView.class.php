@@ -20,7 +20,9 @@ class SeminarListView {
    * @return $liTag {String}
    */
   private function _getLiTag ($seminar) {
-    $href = $GLOBALS['MOUNT_PATH'] . '/' . $seminar->ID;
+    global $MOUNT_PATH;
+
+    $href = "$MOUNT_PATH/" . $seminar->ID;
     $status = '';
 
     if (!$seminar->noSeminar) {
