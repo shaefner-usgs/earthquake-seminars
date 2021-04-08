@@ -90,10 +90,12 @@ class SeminarListView {
           continue; // skip 'No Seminar' entries in archives list
         }
         // Flag future seminars that aren't on the "regular" day/time
-        if ($seminar->status === 'future' && $seminar->day !== 'Wednesday') {
+        if ($seminar->day !== 'Wednesday' && $seminar->status === 'future') {
           $seminar->dayDateShort = "<mark>$seminar->dayDateShort</mark>";
         }
-        if ($seminar->status === 'future' && $seminar->time !== '10:30 AM') {
+        if ($seminar->time !== '10:30 AM' &&
+          ($seminar->status === 'today' || $seminar->status === 'future')
+        ) {
           $seminar->time = "<mark>$seminar->time</mark>";
         }
 

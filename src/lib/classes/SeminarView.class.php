@@ -159,7 +159,9 @@ class SeminarView {
     $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
 
     if ($this->_model->video === 'yes') {
-      if ($this->_model->status === 'past') { // look for recorded video
+      if ($this->_model->status === 'past' ||
+        preg_match('/after/', $this->_model->status)
+      ) { // look for recorded video(s)
         if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
           $video = $this->_getVideoTag();
         }

@@ -6,18 +6,24 @@
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Seminar {
-  private $_data = [];
-  private $_seminarDate;
-  private $_todaysDate;
+  private $_buffer,
+    $_data = [],
+    $_endTime,
+    $_now,
+    $_seminarDate,
+    $_startTime,
+    $_todaysDate;
 
   public function __construct () {
     if ($this->_data['datetime']) {
-      $datetime = $this->_data['datetime'];
-
-      $this->_seminarDate = date('Y-m-d', strtotime($datetime));
+      $this->_startTime = strtotime($this->_data['datetime']);
+      $this->_buffer = 5 * 60; // 5 mins
+      $this->_endTime = $this->_startTime + (60 * 60); // add 60 mins
+      $this->_now = time();
+      $this->_seminarDate = date('Y-m-d', $this->_startTime);
       $this->_todaysDate = date('Y-m-d');
 
-      $this->_addFields($datetime);
+      $this->_addFields();
     }
   }
 
@@ -45,34 +51,30 @@ class Seminar {
 
   /**
    * Add additional fields (not in seminars_list table) to model
-   *
-   * @param $datetime {String}
    */
-  private function _addFields ($datetime) {
+  private function _addFields () {
     global $MOUNT_PATH;
 
-    $timestamp = strtotime($datetime);
-    $year = date('Y', $timestamp);
-
+    $year = date('Y', $this->_startTime);
     $image = $this->_getImage();
     $videoDomain = 'https://escweb.wr.usgs.gov';
-    $videoFile = str_replace('-', '', substr($datetime, 0, 10)) . '.mp4';
+    $videoFile = str_replace('-', '', $this->_seminarDate) . '.mp4';
     $videoPath = "/content$MOUNT_PATH/$year";
     $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
 
-    $this->_data['date'] = date('F j, Y', $timestamp);
-    $this->_data['day'] = date('l', $timestamp);
-    $this->_data['dayDate'] = date('l, F jS', $timestamp);
-    $this->_data['dayDateShort'] = date('D, M j', $timestamp);
+    $this->_data['date'] = date('F j, Y', $this->_startTime);
+    $this->_data['day'] = date('l', $this->_startTime);
+    $this->_data['dayDate'] = date('l, F jS', $this->_startTime);
+    $this->_data['dayDateShort'] = date('D, M j', $this->_startTime);
     $this->_data['imageType'] = $image['type'];
     $this->_data['imageUri'] = $image['uri'];
     $this->_data['imageUrl'] = $image['url'];
     $this->_data['imageWidth'] = $image['width'];
-    $this->_data['month'] = date('F', $timestamp);
+    $this->_data['month'] = date('F', $this->_startTime);
     $this->_data['noSeminar'] = $this->_getNoSeminar();
-    $this->_data['status'] = $this->_getStatus($timestamp);
-    $this->_data['time'] = date('g:i A', $timestamp);
-    $this->_data['timestamp'] = $timestamp;
+    $this->_data['status'] = $this->_getStatus($this->_startTime);
+    $this->_data['time'] = date('g:i A', $this->_startTime);
+    $this->_data['timestamp'] = $this->_startTime;
     $this->_data['videoPlaylist'] = str_replace('mp4', 'xml', $videoSrc);
     $this->_data['videoSrc'] = $videoSrc;
     $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $videoSrc);
@@ -130,20 +132,19 @@ class Seminar {
   }
 
   /**
-   * Get seminar status: past, today, live, or future
-   *
-   * @param $timestamp {Int}
+   * Get seminar status: past, today( after), live, or future
    *
    * @return $status {String}
    */
-  private function _getStatus ($timestamp) {
-    $status = 'past'; // default value
+  private function _getStatus () {
+    $status = 'past'; // default
 
     if ($this->_seminarDate === $this->_todaysDate) {
-      if (time() < $timestamp) {
-        $status = 'today';
-      }
-      if ($this->_isLive($timestamp)) {
+      $status = 'today';
+
+      if ($this->_isAfter()) {
+        $status .= ' after'; // signal that seminar is over
+      } else if ($this->_isLive()) {
         $status = 'live';
       }
     } else if ($this->_seminarDate > $this->_todaysDate) {
@@ -154,20 +155,31 @@ class Seminar {
   }
 
   /**
-   * Check if seminar is live now
+   * Check if seminar is over
    *
-   * @param $seminarStart {Int}
-   *     timestamp of seminar begin time
+   * @return $isAfter {Boolean}
+   */
+  private function _isAfter () {
+    $isAfter = false;
+
+    if ($this->_now > $this->_endTime + $this->_buffer) {
+      $isAfter = true;
+    }
+
+    return $isAfter;
+  }
+
+  /**
+   * Check if seminar is live now
    *
    * @return $isLive {Boolean}
    */
-  private function _isLive ($seminarStart) {
-    $buffer = 5 * 60; // 5 mins
-    $isLive = false; // default value
-    $now = time();
-    $seminarEnd = $seminarStart + (60 * 60); // seminars last 60 mins
+  private function _isLive () {
+    $isLive = false;
 
-    if ($now >= $seminarStart - $buffer && $now <= $seminarEnd + $buffer) {
+    if ($this->_now >= $this->_startTime - $this->_buffer &&
+      $this->_now <= $this->_endTime + $this->_buffer
+    ) {
       $isLive = true;
     }
 
