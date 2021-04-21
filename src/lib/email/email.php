@@ -27,7 +27,7 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
-// prepare('2020-01-22 10:30:00', $ADMIN_EMAIL);
+ prepare('2021-04-28 10:30:00', $ADMIN_EMAIL);
 
 
 /**
@@ -84,16 +84,16 @@ function getData ($seminar) {
     'display-host' => $displayHost,
     'email1' => $committee[0]['email'],
     'email2' => $committee[1]['email'],
-    'host' => $seminar->host,
+    'host' => replaceChars($seminar->host),
     'id' => $seminar->ID,
     'image' => getImage($seminar),
     'location' => $seminar->location,
-    'name1' => $committee[0]['name'],
-    'name2' => $committee[1]['name'],
+    'name1' => replaceChars($committee[0]['name']),
+    'name2' => replaceChars($committee[1]['name']),
     'phone1' => $committee[0]['phone'],
     'phone2' => $committee[1]['phone'],
-    'speaker' => $seminar->speaker,
-    'speakerWithAffiliation' => replaceChars($seminar->speakerWithAffiliation),
+    'speaker' => replaceChars($seminar->speaker),
+    'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
     'summary' => getSummary($seminar),
     'teams-link' => $TEAMS_LINK,
     'time' => "$seminar->time Pacific",
