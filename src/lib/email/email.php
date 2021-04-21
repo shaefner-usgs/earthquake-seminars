@@ -27,7 +27,7 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
- prepare('2021-04-28 10:30:00', $ADMIN_EMAIL);
+// prepare('2021-04-28 10:30:00', $ADMIN_EMAIL);
 
 
 /**
