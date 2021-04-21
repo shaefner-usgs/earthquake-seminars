@@ -57,7 +57,7 @@ class Email {
     $headers = [
       'From: ' . $this->_from,
       'MIME-Version: 1.0',
-      'Content-type: text/html; charset=iso-8859-1'
+      'Content-type: text/html; charset=UTF-8'
     ];
 
     mail($this->_to, $this->_subject, $this->_message, implode("\r\n", $headers));
