@@ -2,7 +2,6 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/classes/Db.class.php'; // db connector, queries
-
 include_once '_feeds.inc.php'; // sets $feedHtml
 
 if (!isset($TEMPLATE)) {
@@ -16,31 +15,30 @@ if (!isset($TEMPLATE)) {
 }
 
 $db = new Db();
-
-// Db query result: seminar committee members
-$rsCommittee = $db->queryCommittee('all');
-
-$prevYear = NULL;
 $listHtml = '<ul>';
+$prevYear = NULL;
+$rsCommittee = $db->queryCommittee('all');
 $tableHtml = '<table>';
+
 while ($row = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
-  // Get year from role column
+  $year = 'Current';
   if (preg_match("/committee-(\d{4})/", $row->role, $matches)) {
-    $year = $matches[1];
-  } else {
-    $year = 'Current';
+    $year = $matches[1]; // get year from role column
+  }
+
+  $phone = '';
+  if ($row->phone) {
+    $phone = ", $row->phone";
   }
 
   // Current committee is listed separately from past members
   if ($year === 'Current') {
-    $listHtml .= sprintf('<li><a href="mailto:%s">%s</a>, %s</li>',
+    $listHtml .= sprintf('<li><a href="mailto:%s">%s</a>%s</li>',
       $row->email,
       $row->name,
-      $row->phone
+      $phone
     );
-  }
-  // Past committee members
-  else {
+  } else { // past committee members
     if ($year !== $prevYear) {
       // Add committee members and close tags on previous row
       if (isset($prevYear)) {
@@ -52,6 +50,7 @@ while ($row = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
       $committee = [];
       $tableHtml .= "\n<tr><th>$year</th><td>";
     }
+
     array_push($committee, $row->name);
 
     $prevYear = $year;
