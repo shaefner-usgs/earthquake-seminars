@@ -192,8 +192,8 @@ function prepare ($textualTime, $to) {
 
     $data = getData($seminar);
     $from = sprintf('%s <%s>',
-      $data['name1'],
-      $data['email1']
+      $data['name2'],
+      $data['email2']
     );
 
     $email = new Email([
