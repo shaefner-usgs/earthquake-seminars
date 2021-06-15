@@ -38,6 +38,7 @@ $NAVIGATION =
 $NAVIGATION .=
   navGroup('Related Seminars',
     navItem('https://www.usgs.gov/science-support/communications-and-publishing/public-lecture-series', 'USGS Public Lecture Series') .
+    navItem('https://www.usgs.gov/centers/pcmsc/science/science-seminar-series?qt-science_center_objects=0#qt-science_center_objects', 'Pacific Coastal and Marine Science Center') .
     navItem('https://earth.stanford.edu/geophysics/events', 'Stanford Geophysics')
   );
 
