@@ -81,7 +81,7 @@ class SeminarListView {
    */
   private function _getList () {
     if (!$this->_collection->seminars) {
-      $html = '<p class="alert info">No Seminars Found</p>';
+      $html = '<p class="alert info">No Upcoming Seminars</p>';
     } else {
       $prevMonth = NULL;
       $html = '';
