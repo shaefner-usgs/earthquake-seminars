@@ -6,7 +6,7 @@
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Db {
-  private static $db;
+  private $db;
 
   public function __construct() {
     global $DB_DSN, $DB_PASS, $DB_USER;
