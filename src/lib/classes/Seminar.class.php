@@ -96,13 +96,12 @@ class Seminar {
     ];
     $path = "$DATA_DIR/images/" . $this->_data['image'];
 
-    list($width, $height) = getimagesize($path);
-
     if ($this->_data['image'] && is_file($path)) {
       $image['type'] = 'upload';
       $image['uri'] = "$MOUNT_PATH/data/images/" . $this->_data['image'];
 
       // Set width of image so it displays at 300px in max dimension
+      list($width, $height) = getimagesize($path);
       if ($height > $width) {
         $image['width'] = 300 * $width / $height;
       }

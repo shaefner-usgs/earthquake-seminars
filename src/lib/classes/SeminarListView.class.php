@@ -23,6 +23,7 @@ class SeminarListView {
     global $MOUNT_PATH;
 
     $href = "$MOUNT_PATH/" . $seminar->ID;
+    $liTag = '';
     $status = '';
 
     if (!$seminar->noSeminar) {
