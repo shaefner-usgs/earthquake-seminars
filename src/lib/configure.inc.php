@@ -24,13 +24,18 @@ $PROMPTS = array(
     'default' => str_replace('/apps/', '/data/', $APP_DIR),
     'secure' => false
   ),
+  'DATA_HOST' => array(
+    'prompt' => 'Host where application data is stored',
+    'default' => 'earthquake.usgs.gov',
+    'secure' => false
+  ),
   'DB_DSN' => array(
     'prompt' => 'Database connection DSN string',
     'default' => 'mysql:host=127.0.0.1;port=3306;dbname=web;charset=utf8',
     'secure' => false
   ),
   'DB_USER' => array(
-    'prompt' => 'Read-only username for database connections',
+    'prompt' => 'Username for read-only database connections',
     'default' => 'web',
     'secure' => false
   ),
