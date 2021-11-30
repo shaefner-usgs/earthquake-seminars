@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__ . '/../../conf/config.inc.php'; // app config
 include_once __DIR__ . '/../_functions.inc.php'; // app functions
 
 /**
@@ -53,12 +54,15 @@ class Feed {
    * @return $item {String}
    */
   private function _createItem ($seminar, $firstItem = false) {
+    global $DATA_HOST;
+
     $filesize = 0;
     $link = $this->_baseUri . '/' . $seminar->ID;
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
     $summary = xmlEntities($seminar->summary);
     $topic = xmlEntities($seminar->topic);
+    $url = "https://$DATA_HOST" . $seminar->videoSrc;
 
     $item = sprintf('<item>
         <title>%s</title>
@@ -78,9 +82,9 @@ class Feed {
       $speaker,
       $link,
       $topic,
-      $seminar->videoSrc,
+      $url,
       $pubDate,
-      $seminar->videoSrc,
+      $url,
       $filesize,
       $speaker,
       $topic,
