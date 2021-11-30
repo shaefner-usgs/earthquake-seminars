@@ -53,7 +53,7 @@ class Feed {
    * @return $item {String}
    */
   private function _createItem ($seminar, $firstItem = false) {
-    $filesize = remoteFileExists($seminar->videoSrc);
+    $filesize = 0;
     $link = $this->_baseUri . '/' . $seminar->ID;
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
@@ -103,16 +103,23 @@ class Feed {
    * @return $items {Array}
    */
   private function _getItems () {
+    global $DATA_DIR;
+
     $count = 0;
     $items = [];
 
     foreach ($this->_collection->seminars as $seminar) {
       $firstItem = false;
+      $videoPath = sprintf('%s/%s/%s',
+        $DATA_DIR,
+        $seminar->year,
+        $seminar->videoFile
+      );
 
       // Don't incl. more than 10 (loop thru more b/c we skip seminars w/o videos)
       if ($count === 10) break;
 
-      if (remoteFileExists($seminar->videoSrc)) {
+      if (file_exists($videoPath)) {
         $count ++;
         if ($count === 1) {
           $firstItem = true;

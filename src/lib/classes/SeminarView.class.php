@@ -148,24 +148,30 @@ class SeminarView {
 
   /**
    * Get HTML for video player section based on current time relative to
-   *   seminar time
+   * seminar time
    *
    * @return $video {String}
    */
   private function _getVideo () {
-    global $TEAMS_LINK;
+    global $DATA_DIR, $TEAMS_LINK;
 
-    $video = '';
     $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
+    $video = '';
+    $videoPath = sprintf('%s/%s/%s',
+      $DATA_DIR,
+      $this->_model->year,
+      $this->_model->videoFile
+    );
+    $playlistPath = str_replace('mp4', 'xml', $videoPath);
 
     if ($this->_model->video === 'yes') {
-      if ($this->_model->status === 'past' ||
+      if (
+        $this->_model->status === 'past' ||
         preg_match('/after/', $this->_model->status)
       ) { // look for recorded video(s)
-        if (remoteFileExists($this->_model->videoSrc)) { // mp4 file
+        if (file_exists($videoPath)) { // mp4 file
           $video = $this->_getVideoTag();
-        }
-        else if (remoteFileExists($this->_model->videoPlaylist)) { // xml (playlist) file
+        } else if (file_exists($playlistPath)) { // xml (playlist) file
           $video = $this->_getPlaylist();
         } else { // no video file
           $video = '<div class="alert info">
@@ -208,13 +214,21 @@ class SeminarView {
    * @return $videoTag {String}
    */
   private function _getVideoTag ($src=NULL) {
+    global $DATA_DIR;
+
     if (!$src) {
       $src = $this->_model->videoSrc;
     }
+
+    $trackPath = sprintf('%s/%s/%s',
+      $DATA_DIR,
+      $this->_model->year,
+      str_replace('mp4', 'vtt', $this->_model->videoFile)
+    );
     $videoTag = '<video src="' . $src . '" width="100%" controls="controls"
       crossorigin="anonymous" poster="img/poster.png">';
 
-    if (remoteFileExists($this->_model->videoTrack)) { // vtt file
+    if (file_exists($trackPath)) { // vtt file
       $videoTag .= '<track label="English" kind="captions"
         src="' . $this->_model->videoTrack . '" default="default" />';
     }

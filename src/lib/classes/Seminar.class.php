@@ -57,10 +57,8 @@ class Seminar {
 
     $year = date('Y', $this->_startTime);
     $image = $this->_getImage();
-    $videoDomain = 'https://escweb.wr.usgs.gov';
     $videoFile = str_replace('-', '', $this->_seminarDate) . '.mp4';
-    $videoPath = "/content$MOUNT_PATH/$year";
-    $videoSrc = $videoDomain . $videoPath . '/' . $videoFile;
+    $videoSrc = "$MOUNT_PATH/data/$year/$videoFile";
 
     $this->_data['date'] = date('F j, Y', $this->_startTime);
     $this->_data['day'] = date('l', $this->_startTime);
@@ -75,6 +73,7 @@ class Seminar {
     $this->_data['status'] = $this->_getStatus($this->_startTime);
     $this->_data['time'] = date('g:i A', $this->_startTime);
     $this->_data['timestamp'] = $this->_startTime;
+    $this->_data['videoFile'] = $videoFile;
     $this->_data['videoPlaylist'] = str_replace('mp4', 'xml', $videoSrc);
     $this->_data['videoSrc'] = $videoSrc;
     $this->_data['videoTrack'] = str_replace('mp4', 'vtt', $videoSrc);
