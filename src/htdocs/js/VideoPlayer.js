@@ -2,9 +2,6 @@
 'use strict';
 
 
-var Util = require('hazdev-webutils/src/util/Util');
-
-
 var _COUNT,
     _DEFAULTS;
 
@@ -32,7 +29,7 @@ var VideoPlayer = function (options) {
   _initialize = function (options) {
     var jwplayerOpts;
 
-    options = Util.extend({}, _DEFAULTS, options);
+    options = Object.assign({}, _DEFAULTS, options);
     _el = options.el || document.createElement('video');
     _elPlaylist = options.elPlaylist; // optional, ok if not set
 
@@ -242,7 +239,7 @@ var VideoPlayer = function (options) {
     };
 
     // merge passed opts with fixed opts
-    opts = Util.extend({}, fixedOpts, opts);
+    opts = Object.assign({}, fixedOpts, opts);
 
     // instantiate player
     jwplayer(opts.id).setup(opts);
