@@ -2,7 +2,7 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/classes/Db.class.php'; // db connector, queries
-include_once '_feeds.inc.php'; // sets $feedHtml
+include_once '_feeds.inc.php'; // sets $feedsHtml
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Committee';
@@ -75,4 +75,4 @@ $tableHtml .= '</td></tr></table>';
 <?php
 
 print $tableHtml;
-print $feedHtml;
+print $feedsHtml;

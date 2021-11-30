@@ -1,7 +1,7 @@
 <?php
 
 include_once '../conf/config.inc.php'; // app config
-include_once '_feeds.inc.php'; // sets $feedHtml
+include_once '_feeds.inc.php'; // sets $feedsHtml
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Seminar Email List';
@@ -92,6 +92,6 @@ mail($to, $subject, $message, implode("\r\n", $headers));
 
 }
 
-print $feedHtml;
+print $feedsHtml;
 
 ?>

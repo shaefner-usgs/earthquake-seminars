@@ -4,7 +4,7 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-include_once '_feeds.inc.php'; // sets $feedHtml
+include_once '_feeds.inc.php'; // sets $feedsHtml
 
 include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarView.class.php'; // view
@@ -45,4 +45,4 @@ if (!isset($TEMPLATE)) {
 $view = new SeminarView($seminar);
 $view->render();
 
-print $feedHtml;
+print $feedsHtml;
