@@ -48,15 +48,16 @@ class Feed {
    * Create feed <item>
    *
    * @param $seminar {Object}
+   * @param $videoPath {String}
    * @param $firstItem {Boolean}
    *     whether this seminar is first in the list (i.e. the 'latest' seminar)
    *
    * @return $item {String}
    */
-  private function _createItem ($seminar, $firstItem = false) {
+  private function _createItem ($seminar, $videoPath, $firstItem = false) {
     global $DATA_HOST;
 
-    $filesize = 0;
+    $filesize = filesize($videoPath);
     $link = $this->_baseUri . '/' . $seminar->ID;
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
@@ -128,7 +129,7 @@ class Feed {
         if ($count === 1) {
           $firstItem = true;
         }
-        $items[] = $this->_createItem($seminar, $firstItem);
+        $items[] = $this->_createItem($seminar, $videoPath, $firstItem);
       }
     }
 
