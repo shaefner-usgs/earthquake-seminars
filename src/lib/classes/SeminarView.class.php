@@ -100,7 +100,7 @@ class SeminarView {
 
       if ($this->_model->imageType === 'upload') {
         $img = sprintf('<img src="%s" alt="speaker" class="image" width="%d" />',
-          $this->_model->imageUri,
+          $this->_model->imageSrc,
           $this->_model->imageWidth
         );
       }

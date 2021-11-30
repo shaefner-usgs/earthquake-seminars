@@ -64,8 +64,8 @@ class Seminar {
     $this->_data['day'] = date('l', $this->_startTime);
     $this->_data['dayDate'] = date('l, F jS', $this->_startTime);
     $this->_data['dayDateShort'] = date('D, M j', $this->_startTime);
+    $this->_data['imageSrc'] = $image['src'];
     $this->_data['imageType'] = $image['type'];
-    $this->_data['imageUri'] = $image['uri'];
     $this->_data['imageUrl'] = $image['url'];
     $this->_data['imageWidth'] = $image['width'];
     $this->_data['month'] = date('F', $this->_startTime);
@@ -96,8 +96,8 @@ class Seminar {
     $path = "$DATA_DIR/images/" . $this->_data['image'];
 
     if ($this->_data['image'] && is_file($path)) {
+      $image['src'] = "$MOUNT_PATH/data/images/" . $this->_data['image'];
       $image['type'] = 'upload';
-      $image['uri'] = "$MOUNT_PATH/data/images/" . $this->_data['image'];
 
       // Set width of image so it displays at 300px in max dimension
       list($width, $height) = getimagesize($path);
@@ -105,11 +105,11 @@ class Seminar {
         $image['width'] = 300 * $width / $height;
       }
     } else {
+      $image['src'] = "$MOUNT_PATH/img/podcast-small.png";
       $image['type'] = 'default';
-      $image['uri'] = "$MOUNT_PATH/img/podcast-small.png";
     }
 
-    $image['url'] = 'https://earthquake.usgs.gov' . $image['uri'];
+    $image['url'] = 'https://earthquake.usgs.gov' . $image['src'];
 
     return $image;
   }

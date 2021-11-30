@@ -66,7 +66,7 @@ class SeminarListView {
       date('c', $seminar->timestamp),
       $seminar->dayDateShort,
       $seminar->time,
-      $seminar->imageUri,
+      $seminar->imageSrc,
       $status,
       $closeTag
     );
