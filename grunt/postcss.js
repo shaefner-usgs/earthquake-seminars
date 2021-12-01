@@ -8,6 +8,7 @@ var autoprefixer = require('autoprefixer'),
 var postcss = {
   build: {
     options: {
+      map: true,
       processors: [
         autoprefixer()
       ]
