@@ -58,6 +58,7 @@ class Feed {
     global $DATA_HOST;
 
     $filesize = filesize($videoPath);
+    $guid = $seminar->year . '/' . $seminar->videoFile;
     $link = $this->_baseUri . '/' . $seminar->ID;
     $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
@@ -83,7 +84,7 @@ class Feed {
       $speaker,
       $link,
       $topic,
-      $url,
+      $guid,
       $pubDate,
       $url,
       $filesize,
