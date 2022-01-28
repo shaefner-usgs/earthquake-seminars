@@ -17,10 +17,12 @@ class SeminarView {
    * Parse playlist XML file to create HTML that VideoPlayer.js uses to
    * populate jwplayer's playlist option
    *
+   * @param $path {String}
+   *
    * @return $video {String}
    */
-  private function _getPlaylist () {
-    $playlist = simplexml_load_file($this->_model->videoPlaylist);
+  private function _getPlaylist ($path) {
+    $playlist = simplexml_load_file($path);
 
     $dl = '<dl class="playlist">';
     foreach($playlist->channel->item as $item) {
@@ -172,7 +174,7 @@ class SeminarView {
         if (file_exists($videoPath)) { // mp4 file
           $video = $this->_getVideoTag();
         } else if (file_exists($playlistPath)) { // xml (playlist) file
-          $video = $this->_getPlaylist();
+          $video = $this->_getPlaylist($playlistPath);
         } else { // no video file
           $video = '<div class="alert info">
               <h3>Video not found</h3>
