@@ -44,8 +44,7 @@ function getCommittee () {
   while ($coChair = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
     $committee[] = [
       'email' => $coChair->email,
-      'name' => $coChair->name,
-      'phone' => $coChair->phone
+      'name' => $coChair->name
     ];
   }
 
@@ -90,8 +89,6 @@ function getData ($seminar) {
     'location' => $seminar->location,
     'name1' => replaceChars($committee[0]['name']),
     'name2' => replaceChars($committee[1]['name']),
-    'phone1' => $committee[0]['phone'],
-    'phone2' => $committee[1]['phone'],
     'speaker' => replaceChars($seminar->speaker),
     'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
     'summary' => getSummary($seminar),
