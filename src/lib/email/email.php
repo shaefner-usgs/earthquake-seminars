@@ -147,7 +147,7 @@ function getSubject ($seminar) {
     }
   }
 
-  return "Earthquake Seminar $when - $seminar->speakerWithAffiliation";
+  return "ESC Seminar $when - $seminar->speakerWithAffiliation";
 }
 
 /**
