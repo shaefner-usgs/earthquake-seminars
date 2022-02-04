@@ -20,45 +20,46 @@ $prevYear = NULL;
 $rsCommittee = $db->queryCommittee('all');
 $tableHtml = '<table>';
 
-while ($row = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
+while ($member = $rsCommittee->fetch(PDO::FETCH_OBJ)) {
+  $phone = '';
   $year = 'Current';
-  if (preg_match("/committee-(\d{4})/", $row->role, $matches)) {
+
+  if (preg_match("/committee-(\d{4})/", $member->role, $matches)) {
     $year = $matches[1]; // get year from role column
   }
 
-  $phone = '';
-  if ($row->phone) {
-    $phone = ", $row->phone";
+  if ($member->phone) {
+    $phone = ", $member->phone";
   }
 
   // Current committee is listed separately from past members
   if ($year === 'Current') {
     $listHtml .= sprintf('<li><a href="mailto:%s">%s</a>%s</li>',
-      $row->email,
-      $row->name,
+      $member->email,
+      $member->name,
       $phone
     );
   } else { // past committee members
     if ($year !== $prevYear) {
       // Add committee members and close tags on previous row
       if (isset($prevYear)) {
-        $tableHtml .= implode(', ', $committee);
+        $tableHtml .= implode(', ', $members);
         $tableHtml .= '</td></tr>';
       }
 
       // Start a new row
-      $committee = [];
+      $members = [];
       $tableHtml .= "\n<tr><th>$year</th><td>";
     }
 
-    array_push($committee, $row->name);
+    array_push($members, $member->name);
 
     $prevYear = $year;
   }
 }
 
 // Finish final row
-$tableHtml .= implode(', ', $committee);
+$tableHtml .= implode(', ', $members);
 
 // Close tags
 $listHtml .= '</ul>';
