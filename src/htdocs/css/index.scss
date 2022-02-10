@@ -110,8 +110,8 @@ h2 {
     }
 
     &.live img,
-    &.today:not(.after) img,
-    &.past .time {
+    &.today:not(.past) img,
+    &.past:not(.today) .time {
       display: none;
     }
   }

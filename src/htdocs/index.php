@@ -2,13 +2,9 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
-include_once '../lib/classes/Db.class.php'; // db connector, queries
-
-include_once '_feeds.inc.php'; // sets $feedsHtml
-
-include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarListView.class.php'; // view
 include_once '../lib/classes/SeminarCollection.class.php'; // collection
+include_once '_feeds.inc.php'; // sets $feedsHtml
 
 $year = safeParam('year'); // gets set if user viewing archives
 
@@ -29,17 +25,12 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
-$db = new Db();
 $seminarCollection = new seminarCollection();
 
-// Db query result: seminars in a given year, or future seminars if $year=NULL
-$rsSeminars = $db->querySeminars($year);
-
-// Create seminar collection
-$rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
-$seminars = $rsSeminars->fetchAll();
-foreach($seminars as $seminar) {
-  $seminarCollection->add($seminar);
+if ($year) {
+  $seminarCollection->addYear($year);
+} else {
+  $seminarCollection->addUpcoming();
 }
 
 $view = new SeminarListView($seminarCollection);

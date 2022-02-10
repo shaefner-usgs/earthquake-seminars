@@ -1,21 +1,16 @@
 <?php
 
 include_once '../conf/config.inc.php'; // app config
-include_once '../lib/classes/Db.class.php'; // db connector, queries
-include_once '../lib/classes/Seminar.class.php'; // model
+include_once '../lib/classes/SeminarCollection.class.php'; // collection
 
 // Don't cache
 $now = date(DATE_RFC2822);
 header("Expires: $now");
 header('Content-Type: application/json');
 
-$db = new Db();
+$seminarCollection = new seminarCollection();
+$seminarCollection->addUpcoming();
 
-$rsSeminars = $db->querySeminars();
-$rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
-$seminars = $rsSeminars->fetchAll();
-
-// Create array for seminar data
 $nextSeminar = [
   'metadata' => [
     'requested' => $now
@@ -23,17 +18,11 @@ $nextSeminar = [
   'seminar' => 'No upcoming seminars' // default
 ];
 
-foreach($seminars as $seminar) {
-  $speaker = $seminar->speaker;
-
-  if ($speaker) { // assume "no seminar" record if speaker is NULL
-    if ($seminar->affiliation) {
-      $speaker .= ', ' . $seminar->affiliation;
-    }
-
+foreach($seminarCollection->seminars as $seminar) {
+  if ($seminar->speaker) { // assume "no seminar" entry if speaker is NULL
     $nextSeminar['seminar'] = [
-      'timestamp' => strtotime($seminar->datetime),
-      'speaker' => $speaker,
+      'timestamp' => $seminar->timestamp,
+      'speaker' => $seminar->speakerWithAffiliation,
       'title' => $seminar->topic
     ];
 
@@ -43,5 +32,3 @@ foreach($seminars as $seminar) {
 
 $json = json_encode($nextSeminar);
 print $json;
-
-?>

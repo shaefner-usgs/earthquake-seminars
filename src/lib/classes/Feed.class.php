@@ -1,72 +1,84 @@
 <?php
 
-include_once __DIR__ . '/../../conf/config.inc.php'; // app config
 include_once __DIR__ . '/../_functions.inc.php'; // app functions
 
 /**
- * Create RSS (Podcast) Feed
+ * Create the RSS (podcast) feed.
+ *
+ * @author Scott Haefner <shaefner@usgs.gov>
  *
  * @param $options {Array}
  *   [
- *      'baseUri': {String} // seminar web page URL
  *      'collection': {Object} // seminars
  *      'template': {String} // full path to RSS template file
  *   ]
  */
 class Feed {
-  private $_baseUri, $_buildDate, $_collection, $_data, $_feed, $_template;
+  private $_baseUri,
+          $_buildDate,
+          $_collection,
+          $_template;
 
   public function __construct($options) {
-    $this->_baseUri = $options['baseUri'];
+    global $DATA_HOST, $MOUNT_PATH;
+
+    $this->_baseUri = "https://$DATA_HOST$MOUNT_PATH";
     $this->_collection = $options['collection'];
     $this->_template = $options['template'];
+  }
 
-    // Key-value pairs for populating feed template
-    $this->_data = [
+  /**
+   * Create the feed.
+   *
+   * @return $feed {String}
+   */
+  private function _create () {
+    $items = implode("\n", $this->_getItems());
+    $data = [
       'base-uri' => $this->_baseUri,
-      'items' => implode("\n", $this->_getItems()), // string of feed <item>s
       'build-date-rfc' => $this->_buildDate,
+      'items' => $items,
       'pub-date-rfc' => date('D, j M Y H:i:s T')
     ];
-    $this->_feed = $this->_getTemplate();
+    $feed = $this->_getTemplate();
 
-    $this->_createFeed(); // Create the feed
-  }
-
-  /**
-   * Create RSS Feed
-   */
-  private function _createFeed () {
     // Substitute feed data for mustache placeholders
-    foreach ($this->_data as $key => $value) {
+    foreach ($data as $key => $value) {
       $pattern = '{{' . $key . '}}';
-      $this->_feed = str_replace($pattern, $value, $this->_feed);
+      $feed = str_replace($pattern, $value, $feed);
     }
+
+    return $feed;
   }
 
   /**
-   * Create feed <item>
+   * Get the XML content for a feed <item>.
    *
    * @param $seminar {Object}
-   * @param $videoPath {String}
-   * @param $firstItem {Boolean}
-   *     whether this seminar is first in the list (i.e. the 'latest' seminar)
    *
-   * @return $item {String}
+   * @return {String}
    */
-  private function _createItem ($seminar, $videoPath, $firstItem = false) {
-    global $DATA_HOST;
+  private function _getItem ($seminar) {
+    global $DATA_DIR, $DATA_HOST;
 
-    $filesize = filesize($videoPath);
-    $guid = $seminar->year . '/' . $seminar->videoFile;
+    $path = sprintf('%s/%s/%s.mp4',
+      $DATA_DIR,
+      $seminar->year,
+      date('Ymd', $seminar->timestamp)
+    );
+    $filesize = filesize($path);
+    $guid = sprintf('%s/%s.mp4',
+      $seminar->year,
+      date('Ymd', strtotime($seminar->datetime))
+    );
     $link = $this->_baseUri . '/' . $seminar->ID;
-    $pubDate = date('D, j M Y H:i:s T', $seminar->timestamp);
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
     $summary = xmlEntities($seminar->summary);
     $topic = xmlEntities($seminar->topic);
     $url = "https://$DATA_HOST" . $seminar->videoSrc;
 
-    $item = sprintf('<item>
+    return sprintf('
+      <item>
         <title>%s</title>
         <link>%s</link>
         <description>%s</description>
@@ -85,7 +97,7 @@ class Feed {
       $link,
       $topic,
       $guid,
-      $pubDate,
+      $seminar->pubDate,
       $url,
       $filesize,
       $speaker,
@@ -94,43 +106,27 @@ class Feed {
       $this->_baseUri,
       $this->_baseUri
     );
-
-    // Set <lastBuildDate> for channel to latest seminar's <pubDate>
-    if ($firstItem) {
-      $this->_buildDate = $pubDate;
-    }
-
-    return $item;
   }
 
   /**
-   * Get RSS <item>s for feed body
+   * Get the <item>s for the feed body.
    *
    * @return $items {Array}
    */
   private function _getItems () {
-    global $DATA_DIR;
-
     $count = 0;
     $items = [];
 
     foreach ($this->_collection->seminars as $seminar) {
-      $firstItem = false;
-      $videoPath = sprintf('%s/%s/%s',
-        $DATA_DIR,
-        $seminar->year,
-        $seminar->videoFile
-      );
+      if ($count === 10) break; // max 10 (seminars w/o videos are skipped)
 
-      // Don't incl. more than 10 (loop thru more b/c we skip seminars w/o videos)
-      if ($count === 10) break;
-
-      if (file_exists($videoPath)) {
+      if ($seminar->videoSrc) {
         $count ++;
+        $items[] = $this->_getItem($seminar);
+
         if ($count === 1) {
-          $firstItem = true;
+          $this->_buildDate = $seminar->pubDate; // most recent seminar
         }
-        $items[] = $this->_createItem($seminar, $videoPath, $firstItem);
       }
     }
 
@@ -138,18 +134,18 @@ class Feed {
   }
 
   /**
-   * Read xml feed template into a string and return it
+   * Read the XML feed template into a string and return it.
    *
    * @return {String}
    */
-  private function _getTemplate() {
+  private function _getTemplate () {
     return file_get_contents($this->_template);
   }
 
   /**
-   * Render feed data
+   * Render the feed.
    */
   public function render () {
-    print $this->_feed;
+    print $this->_create();
   }
 }

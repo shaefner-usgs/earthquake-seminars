@@ -1,25 +1,20 @@
 <?php
 
-include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
-include_once '../lib/classes/Db.class.php'; // db connector, queries
-
-include_once '_feeds.inc.php'; // sets $feedsHtml
-
 include_once '../lib/classes/Seminar.class.php'; // model
 include_once '../lib/classes/SeminarView.class.php'; // view
+include_once '../lib/classes/SeminarCollection.class.php'; // collection
+include_once '_feeds.inc.php'; // sets $feedsHtml
 
 $id = safeParam('id', '1056');
+$seminarCollection = new seminarCollection();
+$seminarCollection->addSeminarWithId($id);
 
-$db = new Db();
-
-// Db query result: details for selected seminar
-$rsSeminar = $db->querySeminar($id);
-
-// Create seminar model from selected seminar
-if ($rsSeminar->rowCount() > 0) {
-  $rsSeminar->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
-  $seminar = $rsSeminar->fetch();
+if ($seminarCollection->seminars) {
+  $seminar = $seminarCollection->seminars[0];
+} else {
+  $seminar = new Seminar();
+  $seminar->topic = 'Seminar not found';
 }
 
 if (!isset($TEMPLATE)) {

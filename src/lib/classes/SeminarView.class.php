@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Seminar view
- * - creates the HTML for seminar.php
+ * Create the HTML for the given seminar.
  *
  * @author Scott Haefner <shaefner@usgs.gov>
+ *
+ * @param $model {Object}
  */
 class SeminarView {
   private $_model;
@@ -14,104 +15,14 @@ class SeminarView {
   }
 
   /**
-   * Parse playlist XML file to create HTML that VideoPlayer.js uses to
-   * populate jwplayer's playlist option
+   * Create the HTML for the view.
    *
-   * @param $path {String}
-   *
-   * @return $video {String}
+   * @return $html {String}
    */
-  private function _getPlaylist ($path) {
-    $playlist = simplexml_load_file($path);
-
-    $dl = '<dl class="playlist">';
-    foreach($playlist->channel->item as $item) {
-      $captions = '';
-      $description = $item->description;
-      $mp4 = '';
-      $title = $item->title;
-      $vtt = '';
-
-      // Get .mp4 file (jwplayer supports both JWPlayer RSS and Media RSS namespaces)
-      if (is_array($item->xpath('jwplayer:source[1]'))) {
-        $media = $item->xpath('jwplayer:source[1]');
-        $mp4 = $media[0]['file'];
-      } else if (is_array($item->xpath('media:content[1]'))) {
-        $media = $item->xpath('media:content[1]');
-        $mp4 = $media[0]['url'];
-      }
-
-      // Get .vtt file
-      if (is_array($item->xpath('jwplayer:track[1]'))) {
-        $media = $item->xpath('jwplayer:track[1]');
-        $vtt = $media[0]['file'];
-      } else if (is_array($item->xpath('media:subtitle[1]'))) {
-        $media = $item->xpath('media:subtitle[1]');
-        $vtt = $media[0]['url'];
-      }
-      if ($vtt) {
-        $captions = sprintf('<dd class="captions"><a href="%s">CC</a></dd>', $vtt);
-      }
-
-      $dl .= sprintf('<dt>
-          <a href="%s">%s</a>
-        </dt>
-        <dd class="description">%s</dd>
-        %s',
-        $mp4,
-        $title,
-        $description,
-        $captions
-      );
-    }
-
-    $dl .= '</dl>';
-    $video = $this->_getVideoTag($mp4);
-    $video .= $dl;
-
-    return $video;
-  }
-
-  /**
-   * Create HTML for Seminar
-   *
-   * @return $seminarHtml {String}
-   */
-  private function _getSeminar () {
-    if (!$this->_model->ID) {
-      $seminarHtml = '<p class="alert error">ERROR: Seminar Not Found</p>';
-    } else {
-      $captions = '';
-      $host = '';
-      $img = '';
-      $summary = '';
-      $video = $this->_getVideo();
-
-      if ($this->_model->video === 'yes' && $this->_model->status !== 'future') {
-        $captions = '<p class="captions">Closed captions are typically available a
-          few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
-          button on the video player. For older seminars that don&rsquo;t have
-          closed captions, please <a href="mailto:shaefner@usgs.gov">email
-          us</a>, and we will do our best to accommodate your request.</p>';
-      }
-
-      if ($this->_model->host) {
-        $host = '<dt class="host">Host</dt>
-          <dd class="host">' . $this->_model->host . '</dd>';
-      }
-
-      if ($this->_model->imageType === 'upload') {
-        $img = sprintf('<img src="%s" alt="speaker" class="image" width="%d" />',
-          $this->_model->imageSrc,
-          $this->_model->imageWidth
-        );
-      }
-
-      if ($this->_model->summary) {
-        $summary = autop($this->_model->summary); // add <p> tag(s) to summary
-      }
-
-      $seminarHtml = sprintf('
+  private function _create () {
+    if ($this->_model->ID) {
+      $content = $this->_getContent();
+      $html = sprintf('
         <h2>%s</h2>
         <div class="row %s">
           <div class="column two-of-three video">
@@ -119,7 +30,11 @@ class SeminarView {
           </div>
           <div class="column one-of-three details">
             <h4>%s</h4>
-            <p><span class="dayofweek">%s, </span>%s <span class="time">at %s</p>
+            <p>
+              <span class="dayofweek">%s<span>, </span></span>
+              <span class="date">%s %d, %d</span>
+              <span class="time">at %s</span>
+            </p>
             <dl>
               <dt class="location">Location</dt>
               <dd class="location">%s</dd>
@@ -132,115 +47,242 @@ class SeminarView {
         %s',
         $this->_model->topic,
         $this->_model->status,
-        $video,
+        $content['video'],
         $this->_model->speakerWithAffiliation,
+        $this->_model->weekday,
+        $this->_model->month,
         $this->_model->day,
-        $this->_model->date,
+        $this->_model->year,
         $this->_model->time,
         $this->_model->location,
-        $host,
-        $img,
-        $summary,
+        $content['host'],
+        $content['img'],
+        $content['summary'],
+        $content['captions']
+      );
+    } else {
+      $html = '<p class="alert error">ERROR: Seminar not found</p>';
+    }
+
+    return $html;
+  }
+
+  /**
+   * Get the generated content based on the model's values.
+   *
+   * @return {Array}
+   */
+  private function _getContent () {
+    $captions = '';
+    $host = '';
+    $img = '';
+    $summary = '';
+
+    if ($this->_model->video === 'yes' && preg_match('/past/', $this->_model->status)) {
+      $captions = '<p class="captions">Closed captions are typically available a
+        few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
+        button on the video player. For older seminars that don&rsquo;t have
+        closed captions, please <a href="mailto:shaefner@usgs.gov">email
+        us</a>, and we will do our best to accommodate your request.</p>';
+    }
+
+    if ($this->_model->host) {
+      $host = '<dt class="host">Host</dt>';
+      $host .= '<dd class="host">' . $this->_model->host . '</dd>';
+    }
+
+    if ($this->_model->imageType === 'upload') { // skip default podcast img
+      $img = sprintf('<img src="%s" alt="speaker" class="image" width="%d" />',
+        $this->_model->imageSrc,
+        $this->_model->imageWidth
+      );
+    }
+
+    if ($this->_model->summary) {
+      $summary = autop($this->_model->summary);
+    }
+
+    return [
+      'captions' => $captions,
+      'host' => $host,
+      'img' => $img,
+      'summary' => $summary,
+      'video' => $this->_getVideoSection()
+    ];
+  }
+
+  /**
+   * Get the mp4/vtt files from the playlist XML for a given item.
+   * Note: jwplayer supports both JWPlayer and Media RSS namespaces.
+   *
+   * @param $item {Object}
+   *
+   * @return {Array}
+   */
+  private function _getFiles ($item) {
+    $mp4 = '';
+    $vtt = '';
+
+    if (is_array($item->xpath('jwplayer:source[1]'))) {
+      $media = $item->xpath('jwplayer:source[1]');
+      $mp4 = $media[0]['file'];
+    } else if (is_array($item->xpath('media:content[1]'))) {
+      $media = $item->xpath('media:content[1]');
+      $mp4 = $media[0]['url'];
+    }
+
+    if (is_array($item->xpath('jwplayer:track[1]'))) {
+      $media = $item->xpath('jwplayer:track[1]');
+      $vtt = $media[0]['file'];
+    } else if (is_array($item->xpath('media:subtitle[1]'))) {
+      $media = $item->xpath('media:subtitle[1]');
+      $vtt = $media[0]['url'];
+    }
+
+    return [
+      'mp4' => $mp4,
+      'vtt' => $vtt
+    ];
+  }
+
+  /**
+   * Parse the playlist XML file to create the HTML that VideoPlayer.js uses to
+   * populate jwplayer's playlist option.
+   *
+   * @return $html {String}
+   */
+  private function _getPlaylist () {
+    global $DATA_DIR;
+
+    $html = '<dl class="playlist">';
+    $path = sprintf('%s/%s/%s.xml',
+      $DATA_DIR,
+      $this->_model->year,
+      date('Ymd', $this->_model->timestamp)
+    );
+    $playlist = simplexml_load_file($path);
+
+    foreach($playlist->channel->item as $item) {
+      $captions = '';
+      $files = $this->_getFiles($item);
+
+      if ($files['vtt']) {
+        $captions = sprintf('<dd class="captions"><a href="%s">CC</a></dd>',
+          $files['vtt']
+        );
+      }
+
+      $html .= sprintf('
+        <dt>
+          <a href="%s">%s</a>
+        </dt>
+        <dd class="description">%s</dd>
+        %s',
+        $files['mp4'],
+        $item->title,
+        $item->description,
         $captions
       );
     }
 
-    return $seminarHtml;
+    $html .= '</dl>';
+    $html .= $this->_getVideo($files['mp4']);
+
+    return $html;
   }
 
   /**
-   * Get HTML for video player section based on current time relative to
-   * seminar time
+   * Get the HTML for the video tag.
    *
-   * @return $video {String}
+   * @param $src {String}
+   *
+   * @return {String}
    */
-  private function _getVideo () {
-    global $DATA_DIR, $TEAMS_LINK;
+  private function _getVideo ($src) {
+    $track = '';
 
-    $downloadLink = '<a href="https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app">Microsoft Teams</a>';
-    $video = '';
-    $videoPath = sprintf('%s/%s/%s',
-      $DATA_DIR,
-      $this->_model->year,
-      $this->_model->videoFile
+    if ($this->_model->trackSrc) { // vtt file
+      $track = sprintf('
+        <track label="English" kind="captions" src="%s" default="default" />',
+        $this->_model->trackSrc
+      );
+    }
+
+    return sprintf('
+      <video src="%s" width="100%%" controls="controls" crossorigin="anonymous"
+        poster="img/poster.png">%s</video>',
+      $src,
+      $track
     );
-    $playlistPath = str_replace('mp4', 'xml', $videoPath);
+  }
+
+  /**
+   * Get the HTML for the video player section based on the current time
+   * relative to the seminar's time.
+   *
+   * @return $html {String}
+   */
+  private function _getVideoSection () {
+    global $TEAMS_LINK;
+
+    $downloadLink = 'https://www.microsoft.com/en-us/microsoft-365/microsoft-teams/download-app';
+    $html = '';
 
     if ($this->_model->video === 'yes') {
-      if (
-        $this->_model->status === 'past' ||
-        preg_match('/after/', $this->_model->status)
-      ) { // look for recorded video(s)
-        if (file_exists($videoPath)) { // mp4 file
-          $video = $this->_getVideoTag();
-        } else if (file_exists($playlistPath)) { // xml (playlist) file
-          $video = $this->_getPlaylist($playlistPath);
+      if (preg_match('/past/', $this->_model->status)) { // past seminar
+        if ($this->_model->videoSrc) { // mp4 file
+          $html = $this->_getVideo($this->_model->videoSrc);
+        } else if ($this->_model->playlistSrc) { // xml (playlist) file
+          $html = $this->_getPlaylist();
         } else { // no video file
-          $video = '<div class="alert info">
+          $html = '
+            <div class="alert info">
               <h3>Video not found</h3>
-              <p>Please check back later. Videos are usually posted within 24 hours.</p>
+              <p>Please check back later. Videos are usually posted within 24
+                hours.</p>
             </div>';
         }
-      }
-      else if ($this->_model->status === 'today') { // seminar later today
-        $video = '<div class="alert info">
+      } else if ($this->_model->status === 'today') { // seminar later today
+        $html = sprintf('
+          <div class="alert info">
             <h3>This seminar will be live-streamed today</h3>
-            <p><a href="' . $TEAMS_LINK . '">View the live-stream</a>
-              starting at ' . $this->_model->time . ' Pacific (requires ' .
-              $downloadLink . ').</p>
-          </div>';
-      }
-      else if ($this->_model->status === 'live') { // live now
-        $video = '<div class="alert info">
+            <p>
+              <a href="%s">View the live-stream</a> starting at %s Pacific
+              (requires <a href="%s">Microsoft Teams</a>).
+            </p>
+          </div>',
+          $TEAMS_LINK,
+          $this->_model->time,
+          $downloadLink
+        );
+      } else if ($this->_model->status === 'live') { // live now
+        $html = sprintf('
+          <div class="alert info">
             <h3>Live now</h3>
-            <p><a href="' . $TEAMS_LINK . '">View the live-stream</a>
-              (requires ' . $downloadLink . ').</p>
-          </div>';
+            <p>
+              <a href="%s">View the live-stream</a>
+              (requires <a href="%s">Microsoft Teams</a>).
+            </p>
+          </div>',
+          $TEAMS_LINK,
+          $downloadLink
+        );
       }
     } else {
-      $video = '<div class="alert info">
+      $html = '
+        <div class="alert info">
           <h3>No webcast</h3>
           <p>This seminar is not available to view online.</p>
         </div>';
     }
 
-    return $video;
+    return $html;
   }
 
   /**
-   * Get <video> tag
-   *
-   * @param $src {String} default is NULL
-   *     use provided $src or obtain from the model
-   *
-   * @return $videoTag {String}
+   * Render the view.
    */
-  private function _getVideoTag ($src=NULL) {
-    global $DATA_DIR;
-
-    if (!$src) {
-      $src = $this->_model->videoSrc;
-    }
-
-    $trackPath = sprintf('%s/%s/%s',
-      $DATA_DIR,
-      $this->_model->year,
-      str_replace('mp4', 'vtt', $this->_model->videoFile)
-    );
-    $videoTag = '<video src="' . $src . '" width="100%" controls="controls"
-      crossorigin="anonymous" poster="img/poster.png">';
-
-    if (file_exists($trackPath)) { // vtt file
-      $videoTag .= '<track label="English" kind="captions"
-        src="' . $this->_model->videoTrack . '" default="default" />';
-    }
-
-    $videoTag .= '</video>';
-
-    return $videoTag;
-  }
-
   public function render () {
-    print $this->_getSeminar();
+    print $this->_create();
   }
 }

@@ -2,20 +2,17 @@
 <?php
 
 /**
- * PURPOSE: script sends out email announcements of upcoming seminars. Called
- *   by crontab (esc user) every 15 minutes
+ * PURPOSE: script sends out email announcements of upcoming seminars. It is
+ * executed by crontab (esc user) every 15 minutes.
  */
 
 $cwd = dirname(__FILE__);
 
 include_once "$cwd/../../conf/config.inc.php"; // app config
 include_once "$cwd/../_autop.inc.php"; // utility function that creates <p>s and <br>s
-
-include_once "$cwd/../classes/Seminar.class.php"; // model
 include_once "$cwd/../classes/Db.class.php"; // db connector, queries
 include_once "$cwd/../classes/Email.class.php"; // creates, sends email
-
-$db = new Db;
+include_once "$cwd/../classes/SeminarCollection.class.php"; // collection
 
 // 2.5 hour announcement
 prepare('+150 minutes', $USGS_EMAIL);
@@ -27,17 +24,16 @@ prepare('+2 days', $USGS_EMAIL);
 prepare('+7 days', $NASA_EMAIL);
 
 // Test announcement
-// prepare('2021-04-28 10:30:00', $ADMIN_EMAIL);
+// prepare('2022-02-09 10:30:00', $ADMIN_EMAIL);
 
 
 /**
- * Get seminar committee
+ * Get the seminar committee members.
  *
- * @return {Array}
+ * @return $committee {Array}
  */
 function getCommittee () {
-  global $db;
-
+  $db = new Db;
   $committee = [];
   $rsCommittee = $db->queryCommittee();
 
@@ -52,19 +48,25 @@ function getCommittee () {
 }
 
 /**
- * Get key-value pairs used to populate email template with seminar details
+ * Get the key-value pairs used to populate the email template.
  *
  * @param $seminar {Object}
  *
  * @return {Array}
  */
 function getData ($seminar) {
-  global $TEAMS_LINK, $MOUNT_PATH;
+  global $DATA_HOST, $MOUNT_PATH, $TEAMS_LINK;
 
   $committee = getCommittee();
+  $date = sprintf('%s, %s %d%s',
+    $seminar->weekday,
+    $seminar->month,
+    $seminar->day,
+    $seminar->dayOrdinal
+  );
   $displayButton = 'block';
   $displayHost = 'block';
-  $url = "https://earthquake.usgs.gov$MOUNT_PATH/" . $seminar->ID;
+  $url = "https://$DATA_HOST$MOUNT_PATH/$seminar->ID";
   $videoText = 'You can also watch the <a href="' . $url . '">recorded talk</a> later in the archives.';
 
   if (!$seminar->host) {
@@ -78,7 +80,7 @@ function getData ($seminar) {
   return [
     'affiliation' => replaceChars($seminar->affiliation),
     'current-year' => date('Y'),
-    'date' =>  $seminar->dayDate,
+    'date' =>  $date,
     'display-button' => $displayButton,
     'display-host' => $displayHost,
     'email1' => $committee[0]['email'],
@@ -90,7 +92,7 @@ function getData ($seminar) {
     'name1' => replaceChars($committee[0]['name']),
     'name2' => replaceChars($committee[1]['name']),
     'speaker' => replaceChars($seminar->speaker),
-    'speakerWithAffiliation' => $seminar->speakerWithAffiliation,
+    'speakerWithAffiliation' => $seminar->speakerWithAffiliation, // for subject
     'summary' => getSummary($seminar),
     'teams-link' => $TEAMS_LINK,
     'time' => "$seminar->time Pacific",
@@ -100,17 +102,22 @@ function getData ($seminar) {
 }
 
 /**
- * Get HTML for uploaded image if it exists
+ * Get the HTML for an uploaded image if it exists.
+ *
+ * @param $seminar {Object}
  *
  * $return $img {String}
  */
 function getImage ($seminar) {
+  global $DATA_HOST;
+
   $img = '';
   $style = 'border: none; display: block; float: left; margin: 10px 10px 10px 0; outline: 0;';
 
   if ($seminar->imageType === 'upload') {
-    $img = sprintf('<img src="%s" alt="speaker" style="%s" width="%d" />',
-      $seminar->imageUrl,
+    $img = sprintf('<img src="https://%s%s" alt="speaker" style="%s" width="%d" />',
+      $DATA_HOST,
+      $seminar->imageSrc,
       $style,
       $seminar->imageWidth * .75 // reduce slightly
     );
@@ -120,27 +127,27 @@ function getImage ($seminar) {
 }
 
 /**
- * Get email subject
+ * Get the email subject.
  *
  * @param $seminar {Object}
  *
  * @return {String}
  */
 function getSubject ($seminar) {
+  $seminarDate = date('F j, Y', $seminar->timestamp);
   $timestampNow = time();
   $todaysDate = date('F j, Y', $timestampNow);
 
   // Get relative time
-  if ($seminar->date === $todaysDate) {
+  if ($seminarDate === $todaysDate) {
     $when = "today at $seminar->time";
-  }
-  else {
+  } else {
     $sixDays = 60 * 60 * 24 * 6;
 
     if (($seminar->timestamp - $timestampNow) >= $sixDays) {
-      $when = "next $seminar->day";
+      $when = "next $seminar->weekday";
     } else {
-      $when = "this $seminar->day";
+      $when = "this $seminar->weekday";
     }
   }
 
@@ -148,13 +155,12 @@ function getSubject ($seminar) {
 }
 
 /**
- * Use autop to add <p>/<br> tags to summary.
- *
- * $styles (css styles) will be set inline using a modified version of autop
+ * Use autop to add <p>/<br> tags to the summary. $styles (CSS styles) are set
+ * inline using a modified version of autop.
  *
  * @param $seminar {Object}
  *
- * @return $summary {String}
+ * @return {String}
  */
 function getSummary ($seminar) {
   $styles = 'color: #333; line-height: 1.4; Margin:0; Margin-bottom:10px; ' .
@@ -165,24 +171,24 @@ function getSummary ($seminar) {
 }
 
 /**
- * First, check if email needs to be sent, and if so, assemble data and send it
+ * First, check if email needs to be sent, and if so, assemble data and send it.
  *
- * @param $textualTime {String}
+ * @param $timeDescription {String}
  *     English textual datetime description
  * @param $to {String}
  *     email address(es, comma-separated)
  */
-function prepare ($textualTime, $to) {
-  global $cwd, $db;
+function prepare ($timeDescription, $to) {
+  global $cwd;
 
-  $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime($textualTime));
-  $rsSeminars = $db->querySeminars($datetime);
+  $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime($timeDescription));
+  $seminarCollection = new seminarCollection();
+  $seminarCollection->addSeminarAtTime($datetime);
 
-  if ($rsSeminars->rowCount() > 0) {
-    $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
-    $seminar = $rsSeminars->fetch();
+  if ($seminarCollection->seminars) {
+    $seminar = $seminarCollection->seminars[0];
 
-    // Assume -no seminar- if speaker is empty (committee posts "no seminar" msg on web page)
+    // Assume no seminar if speaker is empty (committee posts "no seminar" msg on web page)
     if (!$seminar->speaker || (!$seminar->publish)) {
       return;
     }
@@ -192,7 +198,6 @@ function prepare ($textualTime, $to) {
       $data['name1'],
       $data['email1']
     );
-
     $email = new Email([
       'data' => $data,
       'from' => $from,
@@ -200,6 +205,7 @@ function prepare ($textualTime, $to) {
       'template' => "$cwd/template.html",
       'to' => $to
     ]);
+
     $email->send();
   }
 }

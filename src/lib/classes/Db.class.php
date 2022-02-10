@@ -1,55 +1,58 @@
 <?php
 
 /**
- * Database connector and queries for Seminars app
+ * Database connector and queries.
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Db {
-  private $db;
+  private $_db;
 
   public function __construct() {
     global $DB_DSN, $DB_PASS, $DB_USER;
 
     try {
-      $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASS);
-      $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->_db = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+      $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
-      print '<p class="alert error">ERROR 1: ' . $e->getMessage() . '</p>';
+      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
     }
   }
 
   /**
-   * Perform db query
+   * Perform a db query.
    *
    * @param $sql {String}
    *     SQL query
    * @param $params {Array} default is NULL
    *     key-value substitution params for SQL query
    *
-   * @return $stmt {Object} - PDOStatement object
+   * @return $stmt {Object}
+   *     PDOStatement object upon success
    */
   private function _execQuery ($sql, $params=NULL) {
     try {
-      $stmt = $this->db->prepare($sql);
+      $stmt = $this->_db->prepare($sql);
 
-      // bind sql params
+      // bind SQL params
       if (is_array($params)) {
         foreach ($params as $key => $value) {
           $type = $this->_getType($value);
+
           $stmt->bindValue($key, $value, $type);
         }
       }
+
       $stmt->execute();
 
       return $stmt;
     } catch(Exception $e) {
-      print '<p class="alert error">ERROR 2: ' . $e->getMessage() . '</p>';
+      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
     }
   }
 
   /**
-   * Get data type for a sql parameter (PDO::PARAM_* constant)
+   * Get the data type for a SQL parameter (PDO::PARAM_* constant).
    *
    * @param $var {?}
    *     variable to identify type of
@@ -57,15 +60,15 @@ class Db {
    * @return $type {Integer}
    */
   private function _getType ($var) {
-    $varType = gettype($var);
-    $pdoTypes = array(
+    $pdoTypes = [
       'boolean' => PDO::PARAM_BOOL,
       'integer' => PDO::PARAM_INT,
       'NULL' => PDO::PARAM_NULL,
       'string' => PDO::PARAM_STR
-    );
-
+    ];
     $type = $pdoTypes['string']; // default
+    $varType = gettype($var);
+
     if (isset($pdoTypes[$varType])) {
       $type = $pdoTypes[$varType];
     }
@@ -74,20 +77,20 @@ class Db {
   }
 
   /**
-   * Query db to get seminar committee members
+   * Query the db to get the seminar committee members.
    *
-   * @param $who {String}
+   * @param $who {String} default is NULL
    *     defaults to current committee members only
    *
    * @return {Function}
    */
   public function queryCommittee ($who=NULL) {
     if ($who === 'all') {
-      $order = ' `role` DESC, `name` ASC';
-      $where = ' `role` LIKE "committee%"';
+      $order = '`role` DESC, `name` ASC';
+      $where = '`role` LIKE "committee%"';
     } else {
-      $order = ' `name` ASC';
-      $where = ' `role` = "committee"';
+      $order = '`name` ASC';
+      $where = '`role` = "committee"';
     }
 
     $sql = "SELECT * FROM seminars_staff
@@ -98,68 +101,62 @@ class Db {
   }
 
   /**
-   * Query db to get past seminars w/ videos for podcast
+   * Query the db to get the 15 most recent past seminars for the podcast feed.
    *
    * @return {Function}
    */
-  public function queryPodcastVideos () {
-    // look for seminars at least 90 mins old
-    $datetime = date('Y-m-d H:i:s', strtotime('-90 mins'));
-
+  public function queryRecent () {
+    $datetime = date('Y-m-d H:i:s', strtotime('-90 mins')); // 90+ min ago
     $sql = "SELECT * FROM seminars_list
       WHERE `publish` = 'yes' AND `video` = 'yes' AND `datetime` < '$datetime'
       ORDER BY `datetime` DESC
-      LIMIT 12";
+      LIMIT 15";
 
     return $this->_execQuery($sql);
   }
 
   /**
-   * Query db to get details for given seminar
+   * Query the db to get the seminar that matches the given filter.
    *
-   * @param $id {Int}
+   * @param $filter {String}
+   *     seminar id or datetime
    *
    * @return {Function}
    */
-  public function querySeminar ($id) {
-    $sql = 'SELECT * FROM seminars_list
-      WHERE `id` = :id';
+  public function querySeminar ($filter) {
+    $params = [
+      'filter' => $filter
+    ];
+    $where = '`datetime` = :filter'; // default
 
-    return $this->_execQuery($sql, [
-      'id' => $id
-    ]);
+    if (preg_match('/^\d+$/', $filter)) { // id value
+      $where = '`id` = :filter';
+    }
+
+    $sql = "SELECT * FROM seminars_list WHERE $where";
+
+    return $this->_execQuery($sql, $params);
   }
 
   /**
-   * Query db to get a list of seminars (defaults to upcoming seminars)
+   * Query the db to get a list of all seminars for the given year (excluding
+   * upcoming seminars if $year is the current year). The list of upcoming
+   * seminars is returned by default.
    *
-   * @param $filter {Mixed} default is NULL
-   *     year: filter list to a given year (only past seminars included)
-   *     datetime: filter list to a specific time
+   * @param $year {String} default is NULL
    *
    * @return {Function}
    */
-  public function querySeminars ($filter=NULL) {
-    $today = date('Y-m-d');
-    $where = "`publish` = 'yes'";
-
+  public function querySeminars ($year=NULL) {
     $params = [
-      'today' => $today
+      'today' => date('Y-m-d')
     ];
+    $where = '`publish` = "yes"';
 
-    if ($filter) {
-      if (preg_match('/^\d{4}$/', $filter)) { // year
-        $params['filter'] = "$filter%";
-        // Only include past seminars
-        $where .= ' AND `datetime` LIKE :filter AND `datetime` < :today';
-      }
-      else { // assume datetime
-        unset($params['today']);
-        $params['filter'] = $filter;
-        $where .= ' AND `datetime` = :filter';
-      }
-    }
-    else { // default
+    if (preg_match('/^\d{4}$/', $year)) {
+      $params['year'] = "$year%";
+      $where .= ' AND `datetime` LIKE :year AND `datetime` < :today';
+    } else { // default
       $where .= ' AND `datetime` >= :today';
     }
 

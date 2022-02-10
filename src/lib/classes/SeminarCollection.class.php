@@ -1,23 +1,112 @@
 <?php
 
+include_once __DIR__ . '/Db.class.php'; // db connector, queries
+include_once __DIR__ . '/Seminar.class.php'; // model
+
 /**
- * ESC Seminar Collection
+ * ESC seminar collection.
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class SeminarCollection {
+  private $_db;
   public $seminars;
 
   public function __construct () {
+    $this->_db = new Db();
     $this->seminars = [];
   }
 
   /**
-   * Add a seminar to the collection
+   * Add the given array of seminars to the collection.
    *
-   * @param $seminar {Object}
+   * @param $seminars {Array}
    */
-  public function add ($seminar) {
-    $this->seminars[] = $seminar;
+  private function _add ($seminars) {
+    foreach($seminars as $seminar) {
+      $this->seminars[] = $seminar;
+    }
+  }
+
+  /**
+   * Query the database for a specific seminar and return the result.
+   *
+   * @param $filter {String}
+   *     id or datetime
+   *
+   * @return {Array}
+   */
+  private function _querySeminar ($filter) {
+    $rsSeminars = $this->_db->querySeminar($filter);
+    $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
+
+    return $rsSeminars->fetchAll();
+  }
+
+  /**
+   * Query the database for a list of seminars and return the result.
+   *
+   * @param $year {String} default is NULL
+   *
+   * @return {Array}
+   */
+  private function _querySeminars ($year=NULL) {
+    $rsSeminars = $this->_db->querySeminars($year);
+    $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
+
+    return $rsSeminars->fetchAll();
+  }
+
+  /**
+   * Add the 15 most recent past seminars to the collection.
+   */
+  public function addRecent () {
+    $rsSeminars = $this->_db->queryRecent();
+    $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
+
+    $this->_add($rsSeminars->fetchAll());
+  }
+
+  /**
+   * Add the seminar matching the given datetime to the collection.
+   *
+   * @param $datetime {String}
+   */
+  public function addSeminarAtTime ($datetime) {
+    $seminars = $this->_querySeminar($datetime);
+
+    $this->_add($seminars);
+  }
+
+  /**
+   * Add the seminar matching the given id to the collection.
+   *
+   * @param $id {String}
+   */
+  public function addSeminarWithId ($id) {
+    $seminars = $this->_querySeminar($id);
+
+    $this->_add($seminars);
+  }
+
+  /**
+   * Add all upcoming seminars to the collection.
+   */
+  public function addUpcoming () {
+    $seminars = $this->_querySeminars();
+
+    $this->_add($seminars);
+  }
+
+  /**
+   * Add all seminars matching the given year to the collection (excluding
+   * upcoming seminars).
+   *
+   * @param $year {String}
+   */
+  public function addYear ($year) {
+    $seminars = $this->_querySeminars($year);
+
+    $this->_add($seminars);
   }
 }

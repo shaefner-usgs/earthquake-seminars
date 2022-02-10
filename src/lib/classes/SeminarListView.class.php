@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Create the HTML for a list of seminars
+ * Create the HTML for the given collection of seminars.
  *
  * @author Scott Haefner <shaefner@usgs.gov>
+ *
+ * @param $collection {Object}
  */
 class SeminarListView {
   private $_collection;
@@ -13,39 +15,112 @@ class SeminarListView {
   }
 
   /**
-   * Get <li> for a seminar
+   * Create the HTML for the view.
+   *
+   * @return $html {String}
+   */
+  private function _create () {
+    if ($this->_collection->seminars) {
+      $html = '';
+      $prevMonth = NULL;
+
+      foreach ($this->_collection->seminars as $seminar) {
+        if ($seminar->noSeminar && $seminar->status === 'past') {
+          continue; // skip 'No Seminar' entries in archives list
+        }
+
+        // Show month & year headers; close <ul>s
+        if ($seminar->month !== $prevMonth) {
+          if ($prevMonth) {
+            $html .= '</ul>';
+          }
+
+          $html .= "<h2>$seminar->month $seminar->year</h2>";
+          $html .= '<ul class="list no-style">';
+        }
+
+        $html .= $this->_getItem($seminar);
+        $prevMonth = $seminar->month;
+      }
+
+      $html .= '</ul>';
+    } else {
+      $html = '<p class="alert info">No seminars match the selected time period.</p>';
+    }
+
+    return $html;
+  }
+
+  /**
+   * Flag a future seminar if it isn't on the "regular" day/time.
+   *
+   * @param $seminar {Object}
+   */
+  private function _flagSeminar ($seminar) {
+    $seminar->date = date('D, M j', $seminar->timestamp); // display date
+
+    if ($seminar->weekday !== 'Wednesday' && $seminar->status === 'future') {
+      $seminar->date = "<mark>$seminar->date</mark>";
+    }
+
+    if ($seminar->time !== '10:30 AM' &&
+      ($seminar->status === 'today' || $seminar->status === 'future')
+    ) {
+      $seminar->time = "<mark>$seminar->time</mark>";
+    }
+  }
+
+  /**
+   * Get the HTML for the "Live" button if the given seminar is today.
    *
    * @param $seminar {Object}
    *
-   * @return $liTag {String}
+   * @return $html {String}
    */
-  private function _getLiTag ($seminar) {
-    global $MOUNT_PATH;
+  private function _getButton ($seminar) {
+    $html = '';
 
-    $href = "$MOUNT_PATH/" . $seminar->ID;
-    $liTag = '';
-    $status = '';
-
-    if (!$seminar->noSeminar) {
-      $openTag = '<a href="' . $href . '">';
-      $closeTag = '</a>';
-
-      // Show "Live" button if seminar is today
-      if ($seminar->video && $seminar->status === 'live') {
-        $status = '<div class="status">
+    if ($seminar->video) {
+      if ($seminar->status === 'live') {
+        $html = '
+          <div class="status">
             <button class="red">Live now</button>
           </div>';
-      } else if ($seminar->video && $seminar->status === 'today') {
-        $status = '<div class="status">
+      } else if ($seminar->status === 'today') {
+        $html = '
+          <div class="status">
             <button class="green">Live today</button>
           </div>';
       }
-    } else {
-      $openTag = '<div>';
-      $closeTag = '</div>';
     }
 
-    $liTag .= sprintf('
+    return $html;
+  }
+
+  /**
+   * Get the HTML for a seminar list item.
+   *
+   * @param $seminar {Object}
+   *
+   * @return {String}
+   */
+  private function _getItem ($seminar) {
+    global $MOUNT_PATH;
+
+    $button = $this->_getButton($seminar);
+    $href = "$MOUNT_PATH/$seminar->ID";
+
+    if ($seminar->noSeminar) {
+      $closeTag = '</div>';
+      $openTag = '<div>';
+    } else {
+      $closeTag = '</a>';
+      $openTag = '<a href="' . $href . '">';
+
+      $this->_flagSeminar($seminar);
+    }
+
+    return sprintf('
       <li class="%s">
         %s
           <div class="title">
@@ -64,62 +139,18 @@ class SeminarListView {
       $seminar->topic,
       $seminar->speakerWithAffiliation,
       date('c', $seminar->timestamp),
-      $seminar->dayDateShort,
+      $seminar->date,
       $seminar->time,
       $seminar->imageSrc,
-      $status,
+      $button,
       $closeTag
     );
-
-    return $liTag;
   }
 
   /**
-   * Get HTML for seminars list
-   *
-   * @return $html {String}
+   * Render the view.
    */
-  private function _getList () {
-    if (!$this->_collection->seminars) {
-      $html = '<p class="alert info">No Upcoming Seminars</p>';
-    } else {
-      $prevMonth = NULL;
-      $html = '';
-
-      foreach ($this->_collection->seminars as $seminar) {
-        if ($seminar->noSeminar && $seminar->status === 'past') {
-          continue; // skip 'No Seminar' entries in archives list
-        }
-        // Flag future seminars that aren't on the "regular" day/time
-        if ($seminar->day !== 'Wednesday' && $seminar->status === 'future') {
-          $seminar->dayDateShort = "<mark>$seminar->dayDateShort</mark>";
-        }
-        if ($seminar->time !== '10:30 AM' &&
-          ($seminar->status === 'today' || $seminar->status === 'future')
-        ) {
-          $seminar->time = "<mark>$seminar->time</mark>";
-        }
-
-        // Show month & year headers; open/close <ul>'s
-        if ($seminar->month !== $prevMonth) {
-          if ($prevMonth) {
-            $html .= '</ul>';
-          }
-          $html .= "<h2>$seminar->month $seminar->year</h2>";
-          $html .= '<ul class="list no-style">';
-        }
-        $prevMonth = $seminar->month;
-
-        // Get <li> with seminar details
-        $html .= $this->_getLiTag($seminar);
-      }
-      $html .= '</ul>';
-    }
-
-    return $html;
-  }
-
   public function render () {
-    print $this->_getList();
+    print $this->_create();
   }
 }

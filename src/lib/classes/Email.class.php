@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Create and send an email
+ * Create and send the seminar email reminders.
+ *
+ * @author Scott Haefner <shaefner@usgs.gov>
  *
  * @param $options {Array}
  *   [
@@ -13,7 +15,12 @@
  *   ]
  */
 class Email {
-  private $_data, $_from, $_message, $_template, $_subject, $_to;
+  private $_data,
+          $_from,
+          $_message,
+          $_template,
+          $_subject,
+          $_to;
 
   public function __construct($options) {
     $this->_data = $options['data'];
@@ -22,15 +29,15 @@ class Email {
     $this->_subject = $options['subject'];
     $this->_to = $options['to'];
 
-    $this->_message = $this->_getTemplate();
-
-    $this->_createEmail(); // Create the message
+    $this->_create();
   }
 
   /**
-   * Create email message body
+   * Create the email message body.
    */
-  private function _createEmail() {
+  private function _create() {
+    $this->_message = $this->_getTemplate();
+
     // Substitute seminar data for mustache placeholders
     foreach ($this->_data as $key => $value) {
       $pattern = '{{' . $key . '}}';
@@ -42,7 +49,7 @@ class Email {
   }
 
   /**
-   * Read email template into a string and return it
+   * Read the email template into a string and return it.
    *
    * @return {String}
    */
@@ -51,7 +58,7 @@ class Email {
   }
 
   /**
-   * Send email
+   * Send the email.
    */
   public function send() {
     $headers = [
@@ -60,6 +67,11 @@ class Email {
       'Content-type: text/html; charset=UTF-8'
     ];
 
-    mail($this->_to, $this->_subject, $this->_message, implode("\r\n", $headers));
+    mail(
+      $this->_to,
+      $this->_subject,
+      $this->_message,
+      implode("\r\n", $headers)
+    );
   }
 }
