@@ -22,6 +22,12 @@ class SeminarView {
   private function _create () {
     if ($this->_model->ID) {
       $content = $this->_getContent();
+      $weekday = $this->_model->weekday;
+
+      if (preg_match('/today/', $this->_model->status)) {
+        $weekday = 'Today';
+      }
+
       $html = sprintf('
         <h2>%s</h2>
         <div class="row %s">
@@ -49,7 +55,7 @@ class SeminarView {
         $this->_model->status,
         $content['video'],
         $this->_model->speakerWithAffiliation,
-        $this->_model->weekday,
+        $weekday,
         $this->_model->month,
         $this->_model->day,
         $this->_model->year,

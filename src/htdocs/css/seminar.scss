@@ -16,6 +16,7 @@ dl {
       text-decoration: none;
     }
   }
+
   > dt {
     color: #666;
     font-weight: 300;
@@ -71,6 +72,7 @@ h2 {
     margin-bottom: 0;
     width: 100%;
   }
+
   .video {
     display: none;
   }
@@ -113,6 +115,22 @@ h2 {
 
 .row {
   margin-top: 1.5em;
+}
+
+.today {
+  .date {
+    display: none;
+  }
+
+  /* override .past declarations for a seminar that took place today */
+  .dayofweek,
+  .time {
+    display: inline;
+  }
+
+  .dayofweek span {
+    display: none; /* hide ', ' separator */
+  }
 }
 
 .video {
