@@ -81,10 +81,10 @@ class Seminar {
   private function _getImage () {
     global $DATA_DIR, $MOUNT_PATH;
 
+    $displayWidth = 300;
     $path = "$DATA_DIR/images/" . $this->_data['image'];
     $src = "$MOUNT_PATH/img/podcast-small.png";
     $type = 'default';
-    $width = 300;
 
     if ($this->_data['image'] && file_exists($path)) {
       $src = "$MOUNT_PATH/data/images/" . $this->_data['image'];
@@ -93,14 +93,14 @@ class Seminar {
       list($width, $height) = getimagesize($path);
 
       if ($height > $width) { // display img at 300px in max dimension
-        $width = round(300 * $width / $height);
+        $displayWidth = round(300 * $width / $height);
       }
     }
 
     return [
       'src' => $src,
       'type' => $type,
-      'width' => $width
+      'width' => $displayWidth
     ];
   }
 
