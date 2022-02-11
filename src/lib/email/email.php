@@ -66,8 +66,9 @@ function getData ($seminar) {
   );
   $displayButton = 'block';
   $displayHost = 'block';
-  $url = "https://$DATA_HOST$MOUNT_PATH/$seminar->ID";
-  $videoText = 'You can also watch the <a href="' . $url . '">recorded talk</a> later in the archives.';
+  $urlBase = "https://$DATA_HOST$MOUNT_PATH";
+  $videoText = 'You can also watch the <a href="' . $urlBase . '/$seminar->ID">' .
+    'recorded talk</a> later in the archives.';
 
   if (!$seminar->host) {
     $displayHost = 'none';
@@ -97,6 +98,7 @@ function getData ($seminar) {
     'teams-link' => $TEAMS_LINK,
     'time' => "$seminar->time Pacific",
     'topic' => replaceChars($seminar->topic),
+    'url-base' => $urlBase,
     'video-text' => $videoText
   ];
 }
