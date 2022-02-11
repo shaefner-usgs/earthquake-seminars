@@ -38,7 +38,7 @@ class SeminarView {
             <h4>%s</h4>
             <p>
               <span class="dayofweek">%s<span>, </span></span>
-              <span class="date">%s %d, %d</span>
+              <span class="date">%s %d<span>, %d</span></span>
               <span class="time">at %s Pacific</span>
             </p>
             <dl>

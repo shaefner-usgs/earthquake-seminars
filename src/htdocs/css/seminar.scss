@@ -68,6 +68,9 @@ h2 {
 }
 
 .future {
+  .date span { /* hide year */
+    display: none;
+  }
   .details {
     margin-bottom: 0;
     width: 100%;
