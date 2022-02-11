@@ -118,37 +118,30 @@ class SeminarView {
   }
 
   /**
-   * Get the mp4/vtt files from the playlist XML for a given item.
-   * Note: jwplayer supports both JWPlayer and Media RSS namespaces.
+   * Get the url of the .mp4 file from the playlist XML's XPath. Note: jwplayer
+   * supports both JWPlayer and Media RSS namespaces.
    *
    * @param $item {Object}
    *
-   * @return {Array}
+   * @return $url {String}
    */
-  private function _getFiles ($item) {
-    $mp4 = '';
-    $vtt = '';
-
+  private function _getMp4 ($item) {
+    // Must check if array before assigning value to avoid PHP warning
     if (is_array($item->xpath('jwplayer:source[1]'))) {
       $media = $item->xpath('jwplayer:source[1]');
-      $mp4 = $media[0]['file'];
+
+      if (!empty($media)) {
+        return $media[0]['file'];
+      }
     } else if (is_array($item->xpath('media:content[1]'))) {
       $media = $item->xpath('media:content[1]');
-      $mp4 = $media[0]['url'];
+
+      if (!empty($media)) {
+        return $media[0]['url'];
+      }
     }
 
-    if (is_array($item->xpath('jwplayer:track[1]'))) {
-      $media = $item->xpath('jwplayer:track[1]');
-      $vtt = $media[0]['file'];
-    } else if (is_array($item->xpath('media:subtitle[1]'))) {
-      $media = $item->xpath('media:subtitle[1]');
-      $vtt = $media[0]['url'];
-    }
-
-    return [
-      'mp4' => $mp4,
-      'vtt' => $vtt
-    ];
+    return ''; // default
   }
 
   /**
@@ -170,12 +163,11 @@ class SeminarView {
 
     foreach($playlist->channel->item as $item) {
       $captions = '';
-      $files = $this->_getFiles($item);
+      $mp4 = $this->_getMp4($item);
+      $vtt = $this->_getVtt($item);
 
-      if ($files['vtt']) {
-        $captions = sprintf('<dd class="captions"><a href="%s">CC</a></dd>',
-          $files['vtt']
-        );
+      if ($vtt) {
+        $captions = '<dd class="captions"><a href="' . $vtt . '">CC</a></dd>';
       }
 
       $html .= sprintf('
@@ -184,7 +176,7 @@ class SeminarView {
         </dt>
         <dd class="description">%s</dd>
         %s',
-        $files['mp4'],
+        $mp4,
         $item->title,
         $item->description,
         $captions
@@ -192,7 +184,7 @@ class SeminarView {
     }
 
     $html .= '</dl>';
-    $html .= $this->_getVideo($files['mp4']);
+    $html .= $this->_getVideo($mp4);
 
     return $html;
   }
@@ -283,6 +275,33 @@ class SeminarView {
     }
 
     return $html;
+  }
+
+  /**
+   * Get the url of the .vtt file from the playlist XML's XPath. Note: jwplayer
+   * supports both JWPlayer and Media RSS namespaces.
+   *
+   * @param $item {Object}
+   *
+   * @return $url {String}
+   */
+  private function _getVtt ($item) {
+    // Must check if array before assigning value to avoid PHP warning
+    if (is_array($item->xpath('jwplayer:track[1]'))) {
+      $media = $item->xpath('jwplayer:track[1]');
+
+      if (!empty($media)) {
+        return $media[0]['file'];
+      }
+    } else if (is_array($item->xpath('media:subtitle[1]'))) {
+      $media = $item->xpath('media:subtitle[1]');
+
+      if (!empty($media)) {
+        return $media[0]['url'];
+      }
+    }
+
+    return ''; // default
   }
 
   /**
