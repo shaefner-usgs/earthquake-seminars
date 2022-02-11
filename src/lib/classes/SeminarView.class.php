@@ -84,7 +84,7 @@ class SeminarView {
     $img = '';
     $summary = '';
 
-    if ($this->_model->video === 'yes' && preg_match('/past/', $this->_model->status)) {
+    if ($this->_model->videoSrc || $this->_model->playlistSrc) {
       $captions = '<p class="captions">Closed captions are typically available a
         few days after the seminar. To turn them on, press the &lsquo;CC&rsquo;
         button on the video player. For older seminars that don&rsquo;t have
