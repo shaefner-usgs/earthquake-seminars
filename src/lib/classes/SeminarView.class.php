@@ -39,7 +39,7 @@ class SeminarView {
             <p>
               <span class="dayofweek">%s<span>, </span></span>
               <span class="date">%s %d, %d</span>
-              <span class="time">at %s</span>
+              <span class="time">at %s Pacific</span>
             </p>
             <dl>
               <dt class="location">Location</dt>
