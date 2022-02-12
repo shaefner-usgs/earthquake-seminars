@@ -11,7 +11,7 @@ $year = safeParam('year'); // gets set if user viewing archives
 if (!isset($TEMPLATE)) {
   $TITLE = 'Earthquake Science Center Seminars';
   if ($year) {
-    $TITLETAG = 'Archives | ' . $TITLE;
+    $TITLETAG = "$year Archives | $TITLE";
   }
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="'. $MOUNT_PATH . '/css/index.css" />';
