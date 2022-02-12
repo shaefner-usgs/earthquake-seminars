@@ -57,20 +57,11 @@ h2 {
   }
 }
 
-.flash {
-  border-top: 1px solid #ddd;
-  margin-top: 1.5em;
-  padding: .5em 0;
-
-  &.alert {
-    padding: .5em 3px;
-  }
-}
-
 .future {
-  .date span { /* hide year */
-    display: none;
+  .date span {
+    display: none;  /* hide year */
   }
+
   .details {
     margin-bottom: 0;
     width: 100%;
@@ -86,17 +77,13 @@ h2 {
   margin: 1.25em 1em .75em 0;
 }
 
-.jw-skin-five .jw-display-icon-container {
+.jwplayer .jw-display-icon-container { /* play button */
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
 
   .jw-icon {
     color: #222;
   }
-}
-
-.mobile {
-  margin-bottom: 0;
 }
 
 .past {
