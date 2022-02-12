@@ -24,7 +24,7 @@ class SeminarView {
       $content = $this->_getContent();
       $weekday = $this->_model->weekday;
 
-      if (preg_match('/today/', $this->_model->status)) {
+      if (preg_match('/today|live/', $this->_model->status)) {
         $weekday = 'Today';
       }
 

@@ -77,6 +77,17 @@ h2 {
   }
 }
 
+.live,
+.today {
+  .date {
+    display: none;
+  }
+
+  .dayofweek span {
+    display: none; /* hide ', ' separator */
+  }
+}
+
 .past {
   .dayofweek,
   .host,
@@ -135,18 +146,10 @@ h2 {
 }
 
 .today {
-  .date {
-    display: none;
-  }
-
   /* override .past declarations for a seminar that took place today */
   .dayofweek,
   .time {
     display: inline;
-  }
-
-  .dayofweek span {
-    display: none; /* hide ', ' separator */
   }
 }
 
