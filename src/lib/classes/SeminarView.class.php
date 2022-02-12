@@ -146,9 +146,10 @@ class SeminarView {
 
   /**
    * Parse the playlist XML file to create the HTML that VideoPlayer.js uses to
-   * populate jwplayer's playlist option.
+   * populate jwplayer's playlist option. This HTML also exposes the playlist to
+   * non-javascript environments.
    *
-   * @return $html {String}
+   * @return {String}
    */
   private function _getPlaylist () {
     global $DATA_DIR;
@@ -167,7 +168,7 @@ class SeminarView {
       $vtt = $this->_getVtt($item);
 
       if ($vtt) {
-        $captions = '<dd class="captions"><a href="' . $vtt . '">CC</a></dd>';
+        $captions = '<dd class="cc"><a href="' . $vtt . '">CC</a></dd>';
       }
 
       $html .= sprintf('
@@ -184,9 +185,8 @@ class SeminarView {
     }
 
     $html .= '</dl>';
-    $html .= $this->_getVideo($mp4);
 
-    return $html;
+    return $this->_getVideo($mp4) . $html; // include video player
   }
 
   /**
