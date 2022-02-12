@@ -6,8 +6,8 @@ $feedsHtml = '
 <h3 class="podcast">Video Podcast</h3>
 <ul class="feeds no-style">
   <li class="itunes">
-    <a href="http://itunes.apple.com/us/podcast/usgs-earthquake-science-center/id413770595">
-      iTunes
+    <a href="https://podcasts.apple.com/us/podcast/usgs-earthquake-science-center-seminars/id413770595">
+      Apple Podcasts
     </a>
   </li>
   <li class="xml">
