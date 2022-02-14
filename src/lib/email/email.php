@@ -175,15 +175,15 @@ function getSummary ($seminar) {
 /**
  * First, check if email needs to be sent, and if so, assemble data and send it.
  *
- * @param $timeDescription {String}
+ * @param $relativeTime {String}
  *     English textual datetime description
  * @param $to {String}
  *     email address(es, comma-separated)
  */
-function prepare ($timeDescription, $to) {
+function prepare ($relativeTime, $to) {
   global $cwd;
 
-  $datetime = strftime('%Y-%m-%d %H:%M:00', strtotime($timeDescription));
+  $datetime = date('Y-m-d H:i:00', strtotime($relativeTime));
   $seminarCollection = new seminarCollection();
   $seminarCollection->addSeminarAtTime($datetime);
 
