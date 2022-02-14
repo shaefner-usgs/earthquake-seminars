@@ -21,7 +21,7 @@ class Seminar {
       $this->_now = time();
       $this->_seminarDate = date('Y-m-d', $this->_startTime);
 
-      $this->_addFields();
+      $this->_addProps();
     }
   }
 
@@ -40,10 +40,10 @@ class Seminar {
   }
 
   /**
-   * Add additional fields to the model, which initially includes all fields in
-   * the MySQL table seminars_list.
+   * Add additional properties to the model, which initially includes all fields
+   * in the MySQL table seminars_list.
    */
-  private function _addFields () {
+  private function _addProps () {
     $basename = str_replace('-', '', $this->_seminarDate);
     $image = $this->_getImage();
     $year = date('Y', $this->_startTime);
