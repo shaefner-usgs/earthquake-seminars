@@ -34,27 +34,6 @@ if ($year) {
 }
 
 $view = new SeminarListView($seminarCollection);
-
-?>
-
-<div class="row details">
-  <div class="column one-of-five">
-    <img src="<?php print $MOUNT_PATH; ?>/img/podcast-small.png" alt="podcast icon" />
-  </div>
-  <div class="column four-of-five">
-    <p>Seminars typically take place virtually at <strong>10:30 AM</strong>
-      (Pacific) on <strong>Wednesdays</strong> on Microsoft Teams.<!--in the
-      <strong>Yosemite Conference Room</strong> (Rm 2030A, Bldg 19). The USGS
-      Campus is located at <a href="/contactus/menlo/menloloc.php" title="Campus
-      Map and Directions">350 North Akron Road, Moffett Field, CA</a>.--></p>
-    <p>We record most seminars. You can watch live or
-      <a href="<?php print $MOUNT_PATH; ?>/archives/<?php print $currentYear; ?>">check
-      the archives</a> to view a past seminar.</p>
-  </div>
-</div>
-
-<?php
-
 $view->render();
 
 print $feedsHtml;

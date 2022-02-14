@@ -21,7 +21,7 @@ class SeminarListView {
    */
   private function _create () {
     if ($this->_collection->seminars) {
-      $html = '';
+      $html = $this->_getDetails();
       $prevMonth = NULL;
 
       foreach ($this->_collection->seminars as $seminar) {
@@ -95,6 +95,37 @@ class SeminarListView {
     }
 
     return $html;
+  }
+
+  /**
+   * Get the seminar details list header.
+   *
+   * @return {String}
+   */
+  private function _getDetails () {
+    global $MOUNT_PATH, $currentYear; // year is set in _navigation.inc.php
+
+    return sprintf('
+      <div class="row details">
+        <div class="column one-of-five">
+          <img src="%s/img/podcast-small.png" alt="podcast icon" />
+        </div>
+        <div class="column four-of-five">
+          <p>Seminars typically take place virtually at <strong>10:30 AM</strong>
+            (Pacific) on <strong>Wednesdays</strong> on Microsoft Teams.<!--in
+            the <strong>Yosemite Conference Room</strong> (Rm 2030A, Bldg 19).
+            The USGS Campus is located at <a href="/contactus/menlo/menloloc.php"
+            title="Campus`Map and Directions">350 North Akron Road, Moffett
+            Field, CA</a>.--></p>
+          <p>We record most seminars. You can watch live or
+            <a href="%s/archives/%s">check the archives</a> to view a past
+            seminar.</p>
+        </div>
+      </div>',
+      $MOUNT_PATH,
+      $MOUNT_PATH,
+      $currentYear
+    );
   }
 
   /**
