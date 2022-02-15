@@ -154,6 +154,7 @@ class SeminarView {
   private function _getPlaylist () {
     global $DATA_DIR;
 
+    $count = 0;
     $html = '<dl class="playlist">';
     $path = sprintf('%s/%s/%s.xml',
       $DATA_DIR,
@@ -164,8 +165,13 @@ class SeminarView {
 
     foreach($playlist->channel->item as $item) {
       $captions = '';
+      $count ++;
       $mp4 = $this->_getMp4Url($item);
       $vtt = $this->_getVttUrl($item);
+
+      if ($count === 1) {
+        $firstMp4 = $mp4;
+      }
 
       if ($vtt) {
         $captions = '<dd class="cc"><a href="' . $vtt . '">CC</a></dd>';
@@ -186,7 +192,7 @@ class SeminarView {
 
     $html .= '</dl>';
 
-    return $this->_getVideo($mp4) . $html; // include video player
+    return $this->_getVideo($firstMp4) . $html; // include video player
   }
 
   /**
