@@ -1,4 +1,5 @@
 @import '_feeds.scss';
+@import '_jwplayer.scss';
 @import '_variables.scss';  /* template-level vars. */
 
 dd {
@@ -66,15 +67,6 @@ h2 {
 .image {
   float: left;
   margin: 1.25em 1em .75em 0;
-}
-
-.jwplayer .jw-display-icon-container { /* play button */
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-
-  .jw-icon {
-    color: #222;
-  }
 }
 
 .live,
