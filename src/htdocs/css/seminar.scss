@@ -1,6 +1,6 @@
 @import '_feeds.scss';
 @import '_jwplayer.scss';
-@import '_variables.scss';  /* template-level vars. */
+@import '_variables.scss';  // template-level vars.
 
 dd {
   margin: 0;
@@ -51,7 +51,7 @@ h2 {
 
 .future {
   .date span {
-    display: none;  /* hide year */
+    display: none;  // hide year
   }
 
   .details {
@@ -76,7 +76,7 @@ h2 {
   }
 
   .dayofweek span {
-    display: none; /* hide ', ' separator */
+    display: none; // hide ', ' separator
   }
 }
 
@@ -138,7 +138,7 @@ h2 {
 }
 
 .today {
-  /* override .past declarations for a seminar that took place today */
+  // Override .past declarations for a seminar that took place today
   .dayofweek,
   .time {
     display: inline;

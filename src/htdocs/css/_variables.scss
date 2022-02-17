@@ -1,6 +1,6 @@
-/* Copied from hazdev template b/c import from node_modules is not working */
+// Note: copied from hazdev template b/c import from node_modules is not working
 
-/* Colors */
+// Colors
 
 $text-color: #333333 !default;
 
@@ -19,7 +19,7 @@ $secondary-lighter: $gray-lighter !default;
 $secondary-darker: $gray-darker !default;
 $secondary-text-color: $text-color !default;
 
-/* Template Styles */
+// Template Styles
 
 $font-code: Consolas, monospace, serif;
 $font-sans: 'Source Sans Pro', Helvetica, Arial, sans-serif !default;
