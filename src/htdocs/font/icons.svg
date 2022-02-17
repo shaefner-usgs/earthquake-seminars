@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2022 by original authors @ fontello.com</metadata>
+<defs>
+<font id="icons" horiz-adv-x="1000" >
+<font-face font-family="icons" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="playlist" unicode="&#xe800;" d="M1000 732v-213h-669v213h669z m0-334v-213h-669v213h669z m-804 313v-192h-42v125h-46v29q49 0 56 38h32z m804-648v-213h-669v213h669z m-768 161v-33h-141q1 28 17 49t35 30 34 23 15 30q0 12-7 20t-21 7q-29 0-31-41h-37q0 34 18 55t52 20q28 0 47-16t18-43q0-25-16-41t-40-30-34-30h91z m1-303q0-29-21-46t-50-16q-32 0-51 17t-20 49v3h38q0-37 32-37 14 0 23 8t9 22-10 21-25 7h-9v27h6q34 0 34 24 0 11-7 18t-20 6q-29 0-29-33h-37q1 30 19 47t47 17q26 0 45-13t19-39q0-13-7-24t-20-14q34-8 34-44z" horiz-adv-x="1000" />
+
+<glyph glyph-name="close" unicode="&#xe801;" d="M724 112q0-22-15-38l-76-76q-16-15-38-15t-38 15l-164 165-164-165q-16-15-38-15t-38 15l-76 76q-16 16-16 38t16 38l164 164-164 164q-16 16-16 38t16 38l76 76q16 16 38 16t38-16l164-164 164 164q16 16 38 16t38-16l76-76q15-15 15-38t-15-38l-164-164 164-164q15-15 15-38z" horiz-adv-x="785.7" />
+
+<glyph glyph-name="next" unicode="&#xe802;" d="M618 361l-414-415q-11-10-25-10t-25 10l-93 93q-11 11-11 25t11 25l296 297-296 296q-11 11-11 25t11 25l93 93q10 11 25 11t25-11l414-414q10-11 10-25t-10-25z" horiz-adv-x="714.3" />
+
+<glyph glyph-name="prev" unicode="&#xe803;" d="M654 682l-297-296 297-297q10-10 10-25t-10-25l-93-93q-11-10-25-10t-25 10l-414 415q-11 10-11 25t11 25l414 414q10 11 25 11t25-11l93-93q10-10 10-25t-10-25z" horiz-adv-x="714.3" />
+</font>
+</defs>
+</svg>
