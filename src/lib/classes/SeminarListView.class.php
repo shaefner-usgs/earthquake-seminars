@@ -57,8 +57,6 @@ class SeminarListView {
    * @param $seminar {Object}
    */
   private function _flagSeminar ($seminar) {
-    $seminar->date = date('D, M j', $seminar->timestamp); // display date
-
     if ($seminar->weekday !== 'Wednesday' && $seminar->status === 'future') {
       $seminar->date = "<mark>$seminar->date</mark>";
     }
@@ -140,6 +138,7 @@ class SeminarListView {
 
     $button = $this->_getButton($seminar);
     $href = "$MOUNT_PATH/$seminar->ID";
+    $seminar->date = date('D, M j', $seminar->timestamp); // display date
 
     if ($seminar->noSeminar) {
       $closeTag = '</div>';
