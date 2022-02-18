@@ -38,17 +38,16 @@ h2 {
     > a, > div {
       align-items: center;
       display: flex;
-      font-weight: 300;
       padding: 1em 5px;
     }
     > a {
       background: #fff;
-      color: $text-color;
       text-decoration: none;
-      transition: background .33s ease-in-out;
+      transition: background .3s ease-in;
 
       &:hover {
         background: rgba(255, 255, 0, .10);
+        transition: background .1s ease-out;
       }
     }
 
@@ -62,15 +61,14 @@ h2 {
 
     h3 {
       color: #000;
-      font-family: $font-sans;
-      font-weight: normal;
+      font: normal 1.1em $font-sans;
       margin: 0;
     }
 
     img {
       flex: none;
       height: 60px;
-      margin-left: .25em;
+      margin: 0 .25em 0 1em;
       object-fit: cover;
       order: 3;
       width: 60px;
@@ -83,22 +81,22 @@ h2 {
     }
 
     p {
+      color: $text-color;
       margin: .25em 0 0;
     }
 
     span {
-      color: #999;
       display: block;
-
-      mark {
-        color: rgba(204, 0, 0, .5);
-      }
+      font-weight: 300;
     }
 
     time {
+      color: $text-color;
       flex: none;
+      margin-left: -.75em;
       order: 1;
-      width: 6.5em;
+      text-align: center;
+      width: 7.25em;
     }
 
     .status {

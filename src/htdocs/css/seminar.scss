@@ -2,14 +2,20 @@
 @import '_jwplayer.scss';
 @import '_variables.scss';  // template-level vars.
 
-dd {
-  margin: 0;
+dl {
+  dd {
+    margin: 0;
+  }
+
+  dt {
+    font-weight: normal;
+  }
 }
 
 h2 {
-  font: 500 1.4em $font-sans;
-  line-height: 1.25;
-  margin-top: 1em;
+  color: #000;
+  font: normal 1.75em $font-sans;
+  margin-top: .75em;
 }
 
 .alert {
@@ -34,14 +40,13 @@ h2 {
 
     dt {
       color: #666;
-      font-weight: 300;
       margin-top: 1em;
       text-transform: uppercase;
     }
   }
 
   h4 {
-    font: 500 1.2em $font-sans;
+    font: normal 1.25em $font-sans;
     margin: 0;
   }
   h4 + p {
@@ -104,7 +109,6 @@ h2 {
 
   dt {
     border-top: 1px solid #eee;
-    font-weight: normal;
     margin-top: .5em;
     padding-top: .5em;
 
