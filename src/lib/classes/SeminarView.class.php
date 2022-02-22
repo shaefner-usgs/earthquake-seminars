@@ -58,7 +58,7 @@ class SeminarView {
         </div>',
         $this->_model->status,
         $this->_model->topic,
-        $this->_model->datetime,
+        date('c', $this->_model->timestamp),
         $weekday,
         $this->_model->month,
         $this->_model->day,
