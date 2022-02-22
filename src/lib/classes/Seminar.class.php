@@ -14,9 +14,9 @@ class Seminar {
           $_startTime;
 
   public function __construct () {
-    if (array_key_exists('datetime', $this->_data)) {
+    if ($this->datetime) {
       $this->_buffer = 5 * 60; // 5 mins
-      $this->_startTime = strtotime($this->_data['datetime']);
+      $this->_startTime = strtotime($this->datetime);
       $this->_endTime = $this->_startTime + (60 * 60); // add 60 mins
       $this->_now = time();
       $this->_seminarDate = date('Y-m-d', $this->_startTime);
@@ -51,25 +51,25 @@ class Seminar {
     $trackSrc = $this->_getSrc("$basename.vtt", $year);
     $videoSrc = $this->_getSrc("$basename.mp4", $year);
 
-    $this->_data['day'] = date('j', $this->_startTime);
-    $this->_data['dayOrdinal'] = date('S', $this->_startTime);
-    $this->_data['imageSrc'] = $image['src'];
-    $this->_data['imageType'] = $image['type'];
-    $this->_data['imageWidth'] = $image['width'];
-    $this->_data['month'] = date('F', $this->_startTime);
-    $this->_data['monthShort'] = date('M', $this->_startTime);
-    $this->_data['noSeminar'] = $this->_getNoSeminar();
-    $this->_data['playlistSrc'] = $playlistSrc;
-    $this->_data['pubDate'] = date('D, j M Y H:i:s T', $this->_startTime);
-    $this->_data['speakerWithAffiliation'] = $this->_getSpeaker();
-    $this->_data['status'] = $this->_getStatus($this->_startTime);
-    $this->_data['time'] = date('g:i A', $this->_startTime);
-    $this->_data['timestamp'] = $this->_startTime;
-    $this->_data['trackSrc'] = $trackSrc;
-    $this->_data['videoSrc'] = $videoSrc;
-    $this->_data['weekday'] = date('l', $this->_startTime);
-    $this->_data['weekdayShort'] = date('D', $this->_startTime);
-    $this->_data['year'] = $year;
+    $this->day = date('j', $this->_startTime);
+    $this->dayOrdinal = date('S', $this->_startTime);
+    $this->imageSrc = $image['src'];
+    $this->imageType = $image['type'];
+    $this->imageWidth = $image['width'];
+    $this->month = date('F', $this->_startTime);
+    $this->monthShort = date('M', $this->_startTime);
+    $this->noSeminar = $this->_getNoSeminar();
+    $this->playlistSrc = $playlistSrc;
+    $this->pubDate = date('D, j M Y H:i:s T', $this->_startTime);
+    $this->speakerWithAffiliation = $this->_getSpeaker();
+    $this->status = $this->_getStatus($this->_startTime);
+    $this->time = date('g:i A', $this->_startTime);
+    $this->timestamp = $this->_startTime;
+    $this->trackSrc = $trackSrc;
+    $this->videoSrc = $videoSrc;
+    $this->weekday = date('l', $this->_startTime);
+    $this->weekdayShort = date('D', $this->_startTime);
+    $this->year = $year;
   }
 
   /**
@@ -82,12 +82,12 @@ class Seminar {
     global $DATA_DIR, $MOUNT_PATH;
 
     $displayWidth = 300;
-    $path = "$DATA_DIR/images/" . $this->_data['image'];
+    $path = "$DATA_DIR/images/" . $this->image;
     $src = "$MOUNT_PATH/img/podcast-small.png";
     $type = 'default';
 
-    if ($this->_data['image'] && file_exists($path)) {
-      $src = "$MOUNT_PATH/data/images/" . $this->_data['image'];
+    if ($this->image && file_exists($path)) {
+      $src = "$MOUNT_PATH/data/images/" . $this->image;
       $type = 'upload';
 
       list($width, $height) = getimagesize($path);
@@ -112,7 +112,7 @@ class Seminar {
   private function _getNoSeminar () {
     $noSeminar = false;
 
-    if (!$this->_data['speaker']) {
+    if (!$this->speaker) {
       $noSeminar = true;
     }
 
@@ -125,10 +125,10 @@ class Seminar {
    * @return speaker {String}
    */
   private function _getSpeaker () {
-    $speaker = $this->_data['speaker'];
+    $speaker = $this->speaker;
 
-    if ($this->_data['affiliation']) {
-      $speaker .= ', ' . $this->_data['affiliation'];
+    if ($this->affiliation) {
+      $speaker .= ', ' . $this->affiliation;
     }
 
     return $speaker;
