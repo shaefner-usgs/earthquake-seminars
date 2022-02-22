@@ -10,12 +10,68 @@ dl {
   dt {
     font-weight: normal;
   }
+
+  &.details {
+    margin: 1em 0 1.75em;
+
+    dt {
+      color: #666;
+      margin-top: 1em;
+      text-transform: uppercase;
+
+      &.summary {
+        margin-bottom: -1em;
+      }
+    }
+  }
+
+  &.playlist {
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    padding-bottom: .5em;
+
+    dd {
+      display: inline;
+    }
+
+    dt {
+      border-top: 1px solid #eee;
+      margin-top: .5em;
+      padding-top: .5em;
+
+      &:first-of-type {
+        border-color: #ddd;
+      }
+    }
+
+    .cc {
+      float: right;
+
+      a {
+        background: #999;
+        border-radius: 6px;
+        color: #fff;
+        font-size: .8em;
+        padding: 1px 6px;
+        text-decoration: none;
+      }
+    }
+  }
 }
 
 h2 {
   color: #000;
   font: normal 1.75em $font-sans;
-  margin-top: .75em;
+  margin: .75em 0 .125em;
+}
+
+h4 {
+  font: normal 1.4em $font-sans;
+  margin: 0;
+}
+
+time {
+  font-size: 1.25em;
 }
 
 .alert {
@@ -26,32 +82,9 @@ h2 {
 
 .captions {
   border-top: 1px solid #eee;
-  clear: left;
   color: #666;
   margin-top: 1.5em;
   padding-top: 1.5em;
-}
-
-.details {
-  margin-bottom: 1em;
-
-  dl {
-    margin: 1em 0 .5em;
-
-    dt {
-      color: #666;
-      margin-top: 1em;
-      text-transform: uppercase;
-    }
-  }
-
-  h4 {
-    font: normal 1.25em $font-sans;
-    margin: 0;
-  }
-  h4 + p {
-    margin-top: .25em;
-  }
 }
 
 .future {
@@ -59,19 +92,21 @@ h2 {
     display: none;  // hide year
   }
 
-  .details {
-    margin-bottom: 0;
+  .row {
+    margin: 1em 0 1.25em -1em;
+  }
+
+  .speaker {
     width: 100%;
+
+    div {
+      margin: 0;
+    }
   }
 
   .video {
     display: none;
   }
-}
-
-.image {
-  float: left;
-  margin: 1.25em 1em .75em 0;
 }
 
 .live,
@@ -92,58 +127,33 @@ h2 {
   .time {
     display: none;
   }
-
-  .details {
-    margin-bottom: 0;
-  }
-}
-
-.playlist {
-  border-bottom: 1px solid #ddd;
-  margin: 0;
-  padding-bottom: .5em;
-
-  dd {
-    display: inline;
-  }
-
-  dt {
-    border-top: 1px solid #eee;
-    margin-top: .5em;
-    padding-top: .5em;
-
-    &:first-of-type {
-      border-color: #ddd;
-    }
-  }
-
-  .cc {
-    float: right;
-
-    a {
-      background: #999;
-      border-radius: 6px;
-      color: #fff;
-      font-size: .8em;
-      padding: 1px 6px;
-      text-decoration: none;
-    }
-  }
 }
 
 .podcast {
-  clear: both;
   margin-top: 0;
   padding-top: 1em;
 }
 
 .row {
-  margin-top: 1.5em;
+  margin: 1.5em 0 1em -1em;
 }
 
+.speaker {
+  div {
+    margin: 0 auto;
+    max-width: 100%;
+    width: max-content;
+  }
+
+  .affiliation {
+    margin: 0 0 .5em;
+  }
+}
+
+// Override .past declarations for a seminar that took place today
 .today {
-  // Override .past declarations for a seminar that took place today
   .dayofweek,
+  .host,
   .time {
     display: inline;
   }

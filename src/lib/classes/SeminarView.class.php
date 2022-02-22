@@ -29,40 +29,47 @@ class SeminarView {
       }
 
       $html = sprintf('
-        <h2>%s</h2>
-        <div class="row %s">
-          <div class="column two-of-three video">
-            %s
-          </div>
-          <div class="column one-of-three details">
-            <h4>%s</h4>
-            <p>
-              <span class="dayofweek">%s<span>, </span></span>
-              <span class="date">%s %d<span>, %d</span></span>
-              <span class="time">at %s Pacific</span>
-            </p>
-            <dl>
-              <dt class="location">Location</dt>
-              <dd class="location">%s</dd>
+        <div class="%s">
+          <h2>%s</h2>
+          <time datetime="%s">
+            <span class="dayofweek">%s<span>, </span></span>
+            <span class="date">%s %d<span>, %d</span></span>
+            <span class="time">at %s Pacific</span>
+          </time>
+          <div class="row">
+            <div class="column two-of-three video">
               %s
-            </dl>
+            </div>
+            <div class="column one-of-three speaker">
+              <div>
+                <h4>%s</h4>
+                <p class="affiliation">%s</p>
+                %s
+              </div>
+            </div>
           </div>
-        </div>
-        %s
-        %s
-        %s',
-        $this->_model->topic,
+          <dl class="details">
+            <dt class="location">Location</dt>
+            <dd class="location">%s</dd>
+            %s
+            %s
+          </dl>
+          %s
+        </div>',
         $this->_model->status,
-        $content['video'],
-        $this->_model->speakerWithAffiliation,
+        $this->_model->topic,
+        $this->_model->datetime,
         $weekday,
         $this->_model->month,
         $this->_model->day,
         $this->_model->year,
         $this->_model->time,
+        $content['video'],
+        $this->_model->speaker,
+        $this->_model->affiliation,
+        $content['img'],
         $this->_model->location,
         $content['host'],
-        $content['img'],
         $content['summary'],
         $content['captions']
       );
@@ -98,14 +105,15 @@ class SeminarView {
     }
 
     if ($this->_model->imageType === 'upload') { // skip default podcast img
-      $img = sprintf('<img src="%s" alt="speaker" class="image" width="%d" />',
+      $img = sprintf('<img src="%s" alt="speaker" width="%d" />',
         $this->_model->imageSrc,
         $this->_model->imageWidth
       );
     }
 
     if ($this->_model->summary) {
-      $summary = autop($this->_model->summary);
+      $summary = '<dt class="summary">Summary</dt>';
+      $summary .= '<dd>' . autop($this->_model->summary) . '</dd>';
     }
 
     return [
