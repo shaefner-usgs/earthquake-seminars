@@ -140,6 +140,10 @@ class SeminarListView {
     $href = "$MOUNT_PATH/$seminar->ID";
     $seminar->date = date('D, M j', $seminar->timestamp); // display date
 
+    if (preg_match('/today|live/', $seminar->status)) {
+      $seminar->date = 'Today';
+    }
+
     if ($seminar->noSeminar) {
       $closeTag = '</div>';
       $openTag = '<div>';
