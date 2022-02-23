@@ -67,11 +67,6 @@ h2 {
   margin: .75em 0 .125em;
 }
 
-h3 {
-  font: normal 1.4em $font-sans;
-  margin: 0;
-}
-
 .alert {
   h4 {
     font: normal 1.25em $font-sans;
@@ -168,6 +163,11 @@ h3 {
     margin: 0 auto;
     max-width: 100%;
     width: max-content;
+  }
+
+  h3 {
+    font: normal 1.4em $font-sans;
+    margin: 0;
   }
 
   .affiliation {
