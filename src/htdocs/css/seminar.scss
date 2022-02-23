@@ -115,12 +115,17 @@ h4 {
 }
 
 .past {
-  .datetime span, // 'Time' label
-  .dayofweek,
-  .host,
-  .location,
-  .time {
+  .location {
     display: none;
+  }
+
+  &:not(.today) {
+    .datetime span, // 'Time' label
+    .dayofweek,
+    .host,
+    .time {
+      display: none;
+    }
   }
 }
 
@@ -142,16 +147,6 @@ h4 {
 
   .affiliation {
     margin: 0 0 .5em;
-  }
-}
-
-// Override .past declarations for a seminar that took place today
-.today {
-  .datetime span, // 'Time' label
-  .dayofweek,
-  .host,
-  .time {
-    display: inline;
   }
 }
 
