@@ -112,6 +112,29 @@ h4 {
   .dayofweek span {
     display: none; // hide ', ' separator
   }
+
+  &:not(.past) {
+    .alert {
+      margin: 0;
+    }
+
+    .row {
+      align-items: center;
+    }
+
+    .speaker {
+      order: 1;
+
+      div {
+        margin: 0;
+      }
+    }
+
+    .video {
+      margin: 0;
+      order: 2;
+    }
+  }
 }
 
 .past {
@@ -139,6 +162,8 @@ h4 {
 }
 
 .speaker {
+  order: 2;
+
   div {
     margin: 0 auto;
     max-width: 100%;
@@ -152,6 +177,7 @@ h4 {
 
 .video {
   margin-bottom: 1em;
+  order: 1;
 
   h3 {
     margin-top: 0;
