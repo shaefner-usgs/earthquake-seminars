@@ -120,7 +120,7 @@ class Seminar {
   }
 
   /**
-   * Get the speaker's name (including his/her affiliation if present).
+   * Get the speaker's name, including his/her affiliation if present.
    *
    * @return speaker {String}
    */
