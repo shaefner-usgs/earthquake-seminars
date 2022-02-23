@@ -37,7 +37,7 @@ class SeminarView {
             </div>
             <div class="column one-of-three speaker">
               <div>
-                <h4>%s</h4>
+                <h3>%s</h3>
                 <p class="affiliation">%s</p>
                 %s
               </div>
@@ -252,7 +252,7 @@ class SeminarView {
         } else { // no video file
           $html = '
             <div class="alert info">
-              <h3>Video not found</h3>
+              <h4>Video not found</h4>
               <p>Please check back later. Videos are usually posted within 24
                 hours.</p>
             </div>';
@@ -260,7 +260,7 @@ class SeminarView {
       } else if ($this->_model->status === 'today') { // seminar later today
         $html = sprintf('
           <div class="alert info">
-            <h3>This seminar will be live-streamed today</h3>
+            <h4>This seminar will be live-streamed today</h4>
             <p>
               <a href="%s">View the live-stream</a> starting at %s Pacific
               (requires <a href="%s">Microsoft Teams</a>).
@@ -273,7 +273,7 @@ class SeminarView {
       } else if ($this->_model->status === 'live') { // live now
         $html = sprintf('
           <div class="alert info">
-            <h3>Live now</h3>
+            <h4>Live now</h4>
             <p>
               <a href="%s">View the live-stream</a>
               (requires <a href="%s">Microsoft Teams</a>).
@@ -286,7 +286,7 @@ class SeminarView {
     } else {
       $html = '
         <div class="alert info">
-          <h3>No webcast</h3>
+          <h4>No webcast</h4>
           <p>This seminar is not available to view online.</p>
         </div>';
     }
