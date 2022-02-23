@@ -106,7 +106,7 @@ h4 {
 .live,
 .today {
   .date {
-    display: none;
+    display: none; // displaying 'Today'
   }
 
   .dayofweek span {
@@ -115,7 +115,7 @@ h4 {
 }
 
 .past {
-  .datetime span,
+  .datetime span, // 'Time' label
   .dayofweek,
   .host,
   .location,
@@ -147,7 +147,7 @@ h4 {
 
 // Override .past declarations for a seminar that took place today
 .today {
-  .datetime span,
+  .datetime span, // 'Time' label
   .dayofweek,
   .host,
   .time {
