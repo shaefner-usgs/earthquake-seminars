@@ -70,10 +70,6 @@ h4 {
   margin: 0;
 }
 
-time {
-  font-size: 1.25em;
-}
-
 .alert {
   h3 {
     font: normal 1.25em $font-sans;
@@ -117,6 +113,7 @@ time {
 }
 
 .past {
+  .datetime span,
   .dayofweek,
   .host,
   .location,
@@ -148,6 +145,7 @@ time {
 
 // Override .past declarations for a seminar that took place today
 .today {
+  .datetime span,
   .dayofweek,
   .host,
   .time {

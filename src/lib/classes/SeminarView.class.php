@@ -31,11 +31,6 @@ class SeminarView {
       $html = sprintf('
         <div class="%s">
           <h2>%s</h2>
-          <time datetime="%s">
-            <span class="dayofweek">%s<span>, </span></span>
-            <span class="date">%s %d<span>, %d</span></span>
-            <span class="time">at %s Pacific</span>
-          </time>
           <div class="row">
             <div class="column two-of-three video">
               %s
@@ -49,6 +44,14 @@ class SeminarView {
             </div>
           </div>
           <dl class="details">
+            <dt class="datetime">Date<span> &amp; Time</span></dt>
+            <dd>
+              <time datetime="%s">
+                <span class="dayofweek">%s<span>, </span></span>
+                <span class="date">%s %d<span>, %d</span></span>
+                <span class="time">at %s Pacific</span>
+              </time>
+            </dd>
             <dt class="location">Location</dt>
             <dd class="location">%s</dd>
             %s
@@ -58,16 +61,16 @@ class SeminarView {
         </div>',
         $this->_model->status,
         $this->_model->topic,
+        $content['video'],
+        $this->_model->speaker,
+        $this->_model->affiliation,
+        $content['img'],
         date('c', $this->_model->timestamp),
         $weekday,
         $this->_model->month,
         $this->_model->day,
         $this->_model->year,
         $this->_model->time,
-        $content['video'],
-        $this->_model->speaker,
-        $this->_model->affiliation,
-        $content['img'],
         $this->_model->location,
         $content['host'],
         $content['summary'],
