@@ -36,7 +36,7 @@ class SeminarCollection {
    *
    * @return {Array}
    */
-  private function _querySeminar ($filter) {
+  private function _getSeminar ($filter) {
     $rsSeminars = $this->_db->querySeminar($filter);
     $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
 
@@ -50,7 +50,7 @@ class SeminarCollection {
    *
    * @return {Array}
    */
-  private function _querySeminars ($year=NULL) {
+  private function _getSeminars ($year=NULL) {
     $rsSeminars = $this->_db->querySeminars($year);
     $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
 
@@ -73,7 +73,7 @@ class SeminarCollection {
    * @param $datetime {String}
    */
   public function addSeminarAtTime ($datetime) {
-    $seminars = $this->_querySeminar($datetime);
+    $seminars = $this->_getSeminar($datetime);
 
     $this->_add($seminars);
   }
@@ -84,7 +84,7 @@ class SeminarCollection {
    * @param $id {String}
    */
   public function addSeminarWithId ($id) {
-    $seminars = $this->_querySeminar($id);
+    $seminars = $this->_getSeminar($id);
 
     $this->_add($seminars);
   }
@@ -93,7 +93,7 @@ class SeminarCollection {
    * Add all upcoming seminars to the collection.
    */
   public function addUpcoming () {
-    $seminars = $this->_querySeminars();
+    $seminars = $this->_getSeminars();
 
     $this->_add($seminars);
   }
@@ -105,7 +105,7 @@ class SeminarCollection {
    * @param $year {String}
    */
   public function addYear ($year) {
-    $seminars = $this->_querySeminars($year);
+    $seminars = $this->_getSeminars($year);
 
     $this->_add($seminars);
   }
