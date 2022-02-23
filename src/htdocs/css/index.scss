@@ -99,20 +99,12 @@ h2 {
       width: 7.25em;
     }
 
-    .status {
-      flex: none;
-      order: 3;
-      margin-left: .25em;
-      text-align: right;
-    }
-
     .title {
       flex: auto;
       order: 2;
     }
 
-    &.live img,
-    &.today:not(.past) img,
+    &.live .time,
     &.past:not(.today) .time {
       display: none;
     }

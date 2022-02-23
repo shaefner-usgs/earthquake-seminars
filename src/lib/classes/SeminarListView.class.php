@@ -80,15 +80,9 @@ class SeminarListView {
 
     if ($seminar->video) {
       if ($seminar->status === 'live') {
-        $html = '
-          <div class="status">
-            <button class="red">Live now</button>
-          </div>';
+        $html = '<button class="red">Live now</button>';
       } else if ($seminar->status === 'today') {
-        $html = '
-          <div class="status">
-            <button class="green">Live today</button>
-          </div>';
+        $html = '<button class="green">Live today</button>';
       }
     }
 
@@ -140,7 +134,9 @@ class SeminarListView {
     $href = "$MOUNT_PATH/$seminar->ID";
     $seminar->date = date('D, M j', $seminar->timestamp); // display date
 
-    if (preg_match('/today|live/', $seminar->status)) {
+    if ($button) {
+      $seminar->date = $button;
+    } else if (preg_match('/today/', $seminar->status)) {
       $seminar->date = 'Today';
     }
 
@@ -165,7 +161,6 @@ class SeminarListView {
             %s <span class="time">%s</span>
           </time>
           <img src="%s" alt="icon" />
-          %s
         %s
       </li>',
       $seminar->status,
@@ -176,7 +171,6 @@ class SeminarListView {
       $seminar->date,
       $seminar->time,
       $seminar->imageSrc,
-      $button,
       $closeTag
     );
   }
