@@ -67,8 +67,11 @@ function getData ($seminar) {
   $displayButton = 'block';
   $displayHost = 'block';
   $urlBase = "https://$DATA_HOST$MOUNT_PATH";
-  $videoText = 'You can also watch the <a href="' . $urlBase . '/$seminar->ID">' .
-    'recorded talk</a> later in the archives.';
+  $videoText = sprintf('You can also watch the <a href="%s/%d">recorded talk</a>
+    later in the archives.',
+    $urlBase,
+    $seminar->ID
+  );
 
   if (!$seminar->host) {
     $displayHost = 'none';
