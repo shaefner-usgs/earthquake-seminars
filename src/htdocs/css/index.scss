@@ -88,6 +88,8 @@ h2 {
     span {
       display: block;
       font-weight: 300;
+      line-height: 1;
+      padding: 4px 0 2px;
     }
 
     time {
@@ -96,7 +98,7 @@ h2 {
       margin-left: -.75em;
       order: 1;
       text-align: center;
-      width: 7.25em;
+      width: 7em;
     }
 
     .title {
@@ -107,6 +109,35 @@ h2 {
     &.live .time,
     &.past:not(.today) .time {
       display: none;
+    }
+  }
+}
+
+@media only screen
+  and (max-width: 500px) {
+
+  .list > li {
+    > a {
+      align-items: start;
+      position: relative;
+    }
+
+    img {
+      bottom: 1em;
+      height: 3em;
+      left: 1.5em;
+      margin: 0;
+      position: absolute;
+      width: 3em;
+      z-index: 1;
+    }
+
+    time {
+      background-color: #ffffffe3;
+      position: relative;
+      text-shadow: #fff 1px 1px 1px;
+      width: 7em;
+      z-index: 10;
     }
   }
 }
