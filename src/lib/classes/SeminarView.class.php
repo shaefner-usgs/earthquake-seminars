@@ -8,10 +8,12 @@
  * @param $model {Object}
  */
 class SeminarView {
-  private $_model;
+  private $_model,
+          $_speakers;
 
   public function __construct (Seminar $model) {
     $this->_model = $model;
+    $this->_speakers = [];
   }
 
   /**
@@ -22,7 +24,12 @@ class SeminarView {
   private function _create () {
     if ($this->_model->ID) {
       $content = $this->_getContent();
+      $speakerMeta = $content['img']; // mug shot/poster img
       $weekday = $this->_model->weekday;
+
+      if (!$speakerMeta) {
+        $speakerMeta = $content['speakers']; // speaker list (playlist)
+      }
 
       if (preg_match('/today|live/', $this->_model->status)) {
         $weekday = 'Today';
@@ -64,7 +71,7 @@ class SeminarView {
         $content['video'],
         $this->_model->speaker,
         $this->_model->affiliation,
-        $content['img'],
+        $speakerMeta,
         date('c', $this->_model->timestamp),
         $weekday,
         $this->_model->month,
@@ -92,7 +99,9 @@ class SeminarView {
     $captions = '';
     $host = '';
     $img = '';
+    $speakers = '';
     $summary = '';
+    $video = $this->_getVideoSection(); // also populates $this->_speakers
 
     if ($this->_model->videoSrc || $this->_model->playlistSrc) {
       $captions = '<p class="captions">Closed captions are typically available a
@@ -114,6 +123,12 @@ class SeminarView {
       );
     }
 
+    if (count($this->_speakers)) {
+      $speakers = '<ol><li>';
+      $speakers .= implode('</li><li>', $this->_speakers);
+      $speakers .= '</li></ol>';
+    }
+
     if ($this->_model->summary) {
       $summary = '<dt class="summary">Summary</dt>';
       $summary .= '<dd>' . autop($this->_model->summary) . '</dd>';
@@ -123,8 +138,9 @@ class SeminarView {
       'captions' => $captions,
       'host' => $host,
       'img' => $img,
+      'speakers' => $speakers,
       'summary' => $summary,
-      'video' => $this->_getVideoSection()
+      'video' => $video
     ];
   }
 
@@ -175,6 +191,8 @@ class SeminarView {
     $playlist = simplexml_load_file($path);
 
     foreach($playlist->channel->item as $item) {
+      $this->_speakers[] = $item->description; // array of all speakers
+
       $captions = '';
       $count ++;
       $mp4 = $this->_getMp4Url($item);
@@ -249,7 +267,7 @@ class SeminarView {
           $html = $this->_getVideo($this->_model->videoSrc);
         } else if ($this->_model->playlistSrc) { // xml (playlist) file
           $html = $this->_getPlaylist();
-        } else { // no video file
+        } else { // no file
           $html = '
             <div class="alert info">
               <h4>Video not found</h4>
