@@ -34,6 +34,6 @@ if ($year) {
 }
 
 $view = new SeminarListView($seminarCollection);
-$view->render();
+$view->render($year);
 
 print $feedsHtml;

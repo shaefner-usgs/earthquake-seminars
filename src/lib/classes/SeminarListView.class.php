@@ -17,16 +17,21 @@ class SeminarListView {
   /**
    * Create the HTML for the view.
    *
+   * @param $year {String}
+   *
    * @return $html {String}
    */
-  private function _create () {
+  private function _create ($year) {
     if ($this->_collection->seminars) {
       $html = $this->_getDetails();
       $prevMonth = NULL;
 
       foreach ($this->_collection->seminars as $seminar) {
-        if ($seminar->noSeminar && $seminar->status === 'past') {
-          continue; // skip 'No Seminar' entries in archives list
+        if ( // past 'No Seminar' entry or today's seminar w/ video not yet posted
+          ($seminar->noSeminar && $seminar->status === 'past') ||
+          ($year && preg_match('/today/', $seminar->status) && !$seminar->videoSrc)
+        ) {
+          continue; // skip this seminar in Archives list
         }
 
         // Show month & year headers; close <ul>s
@@ -177,8 +182,10 @@ class SeminarListView {
 
   /**
    * Render the view.
+   *
+   * @param $year {String}
    */
-  public function render () {
-    print $this->_create();
+  public function render ($year) {
+    print $this->_create($year);
   }
 }

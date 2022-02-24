@@ -154,6 +154,7 @@ class Db {
     $where = '`publish` = "yes"';
 
     if (preg_match('/^\d{4}$/', $year)) {
+      $params['today'] .= ' 23:59:59'; // include today's seminar
       $params['year'] = "$year%";
       $where .= ' AND `datetime` LIKE :year AND `datetime` < :today';
     } else { // default
