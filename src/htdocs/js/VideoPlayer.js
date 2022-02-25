@@ -144,7 +144,7 @@ var VideoPlayer = function (options) {
           description = dd.textContent;
         } else if (dd.classList.contains('image')) {
           image = dd.querySelector('img').getAttribute('src');
-        } else if (dd.classList.contains('captions')) {
+        } else if (dd.classList.contains('cc')) {
           captions = dd.querySelector('a').getAttribute('href');
         }
       }
