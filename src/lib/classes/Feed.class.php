@@ -33,14 +33,14 @@ class Feed {
    * @return $feed {String}
    */
   private function _create () {
-    $items = implode("\n", $this->_getItems());
+    $items = implode("\n", $this->_getItems()); // sets $this->_buildDate
     $data = [
       'base-uri' => $this->_baseUri,
       'build-date-rfc' => $this->_buildDate,
       'items' => $items,
       'pub-date-rfc' => date('D, j M Y H:i:s T')
     ];
-    $feed = $this->_getTemplate();
+    $feed = file_get_contents($this->_template);
 
     // Substitute feed data for mustache placeholders
     foreach ($data as $key => $value) {
@@ -131,15 +131,6 @@ class Feed {
     }
 
     return $items;
-  }
-
-  /**
-   * Read the XML feed template into a string and return it.
-   *
-   * @return {String}
-   */
-  private function _getTemplate () {
-    return file_get_contents($this->_template);
   }
 
   /**

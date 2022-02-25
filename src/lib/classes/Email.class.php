@@ -36,7 +36,7 @@ class Email {
    * Create the email message body.
    */
   private function _create() {
-    $this->_message = $this->_getTemplate();
+    $this->_message = file_get_contents($this->_template);
 
     // Substitute seminar data for mustache placeholders
     foreach ($this->_data as $key => $value) {
@@ -46,15 +46,6 @@ class Email {
 
     // Insert line breaks to avoid mailservers' 990-character limit
     $this->_message = wordwrap($this->_message, 80, "\n", false);
-  }
-
-  /**
-   * Read the email template into a string and return it.
-   *
-   * @return {String}
-   */
-  private function _getTemplate() {
-    return file_get_contents($this->_template);
   }
 
   /**
