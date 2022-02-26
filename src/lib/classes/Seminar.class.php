@@ -54,7 +54,6 @@ class Seminar {
     $this->day = date('j', $this->_startTime);
     $this->dayOrdinal = date('S', $this->_startTime);
     $this->imageSrc = $image['src'];
-    $this->imageType = $image['type'];
     $this->imageWidth = $image['width'];
     $this->month = date('F', $this->_startTime);
     $this->monthShort = date('M', $this->_startTime);
@@ -83,8 +82,7 @@ class Seminar {
 
     $displayWidth = 300;
     $path = "$DATA_DIR/images/" . $this->image;
-    $src = "$MOUNT_PATH/img/podcast-small.png";
-    $type = 'default';
+    $src = '';
 
     if ($this->image && file_exists($path)) {
       $src = "$MOUNT_PATH/data/images/" . $this->image;
@@ -99,7 +97,6 @@ class Seminar {
 
     return [
       'src' => $src,
-      'type' => $type,
       'width' => $displayWidth
     ];
   }

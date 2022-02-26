@@ -137,12 +137,17 @@ class SeminarListView {
 
     $button = $this->_getButton($seminar);
     $href = "$MOUNT_PATH/$seminar->ID";
+    $imgSrc = "$MOUNT_PATH/img/podcast-small.png"; // default podcast img
     $seminar->date = date('D, M j', $seminar->timestamp); // display date
 
     if ($button) {
       $seminar->date = $button;
     } else if (preg_match('/today/', $seminar->status)) {
       $seminar->date = 'Today';
+    }
+
+    if ($seminar->imageSrc) {
+      $imgSrc = $seminar->imageSrc;
     }
 
     if ($seminar->noSeminar) {
@@ -175,7 +180,7 @@ class SeminarListView {
       date('c', $seminar->timestamp),
       $seminar->date,
       $seminar->time,
-      $seminar->imageSrc,
+      $imgSrc,
       $closeTag
     );
   }

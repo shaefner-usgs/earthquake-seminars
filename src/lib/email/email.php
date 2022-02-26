@@ -119,12 +119,12 @@ function getImage ($seminar) {
   $img = '';
   $style = 'border: none; display: block; float: left; margin: 10px 10px 10px 0; outline: 0;';
 
-  if ($seminar->imageType === 'upload') {
+  if ($seminar->imageSrc) {
     $img = sprintf('<img src="https://%s%s" alt="speaker" style="%s" width="%d" />',
       $DATA_HOST,
       $seminar->imageSrc,
       $style,
-      $seminar->imageWidth * .75 // reduce slightly
+      $seminar->imageWidth * .75 // reduce size slightly
     );
   }
 

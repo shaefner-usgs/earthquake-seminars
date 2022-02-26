@@ -24,7 +24,7 @@ class SeminarView {
   private function _create () {
     if ($this->_model->ID) {
       $content = $this->_getContent();
-      $speakerMeta = $content['img']; // mug shot/poster img
+      $speakerMeta = $content['img']; // mug shot
       $weekday = $this->_model->weekday;
 
       if (!$speakerMeta) {
@@ -116,7 +116,7 @@ class SeminarView {
       $host .= '<dd class="host">' . $this->_model->host . '</dd>';
     }
 
-    if ($this->_model->imageType === 'upload') { // skip default podcast img
+    if ($this->_model->imageSrc) {
       $img = sprintf('<img src="%s" alt="speaker" width="%d" />',
         $this->_model->imageSrc,
         $this->_model->imageWidth
