@@ -2,15 +2,21 @@
 'use strict';
 
 
-var _COUNT,
-    _DEFAULTS;
-
-_COUNT = 0;
-_DEFAULTS = {
-  key: 'zBOH983t+dtdhriK4drdRPIStHMX02RUk0paAg==' // jwplayer
-};
+var _COUNT = 0;
 
 
+jwplayer.key = 'zBOH983t+dtdhriK4drdRPIStHMX02RUk0paAg==';
+
+
+/**
+ * Create a jwplayer video instance using the given <video> el's attributes.
+ *
+ * @param options {Object}
+ *   {
+ *     el: {Element}
+ *     elPlaylist: {Element} optional
+ *   }
+ */
 var VideoPlayer = function (options) {
   var _this,
       _initialize,
@@ -18,80 +24,102 @@ var VideoPlayer = function (options) {
       _el,
       _elPlaylist,
 
-      _buildOptions,
-      _buildPlaylist,
       _getItems,
-      _setupPlayer;
+      _getOptions,
+      _getPlaylist,
+      _initPlayer;
 
 
   _this = {};
 
   _initialize = function (options) {
-    var jwplayerOpts;
-
-    options = Object.assign({}, _DEFAULTS, options);
-    _el = options.el || document.createElement('video');
-    _elPlaylist = options.elPlaylist; // optional, ok if not set
-
-    // v7+ requires a key
-    jwplayer.key = options.key;
-
     _COUNT ++;
-    jwplayerOpts = _buildOptions();
-    if (jwplayerOpts.file) { // file prop is required by jwplayer
-      _setupPlayer(jwplayerOpts);
-    }
+    _el = options.el || document.createElement('video');
+    _elPlaylist = options.elPlaylist;
+
+    _initPlayer();
   };
 
+  /**
+   * Get the items from the playlist <dl> and associate each <dt> with all of
+   * its <dd>'s.
+   *
+   * @return items {Array}
+   */
+  _getItems = function () {
+    var children,
+        item,
+        items,
+        type;
+
+    children = Array.from(_elPlaylist.children);
+    items = [];
+
+    children.forEach(child => {
+      type = child.nodeName;
+
+      if (type === 'DT') { // create new item
+        item = {
+          dt: child,
+          dds: []
+        };
+
+        items.push(item);
+      } else if (type === 'DD') { // add to existing item
+        if (item === null) {
+          throw new Error('Found DD before DT');
+        }
+
+        item.dds.push(child);
+      } else { // unexpected type
+        throw new Error(`Found unexpected element "${type}"; expected DT or DD`);
+      }
+    });
+
+    return items;
+  };
 
   /**
-   * Create options for jwplayer instance
+   * Get the dynamic jwplayer options from the embedded HTML Elements.
    *
-   * @return {Object}
-   *    options in format jwplayer expects
+   * @return options {Object}
    */
-  _buildOptions = function () {
-    var application,
-        file,
+  _getOptions = function () {
+    var file,
         livestream,
-        opts,
-        stream,
+        options,
+        parts,
         track;
 
-    // check if video is a live stream (rtmp live streaming is supported)
-    // expects this syntax in <video> src attr: {stream}?streamer={application}
-    if (_el.getAttribute('src').search(/streamer=/) !== -1) {
-      application = _el.getAttribute('src').split('?streamer=')[1];
-      livestream = true;
-      stream = _el.getAttribute('src').split('?streamer=')[0];
+    file = _el.getAttribute('src');
+    livestream = false;
+    track = _el.querySelector('track');
 
-      file = application + '/' + stream;
-    } else {
-      file = _el.getAttribute('src');
-      livestream = false;
+    // Check if video is a live stream. RTMP live streaming is supported using
+    // this syntax in the <video> 'src' attr: {stream}?streamer={application}
+    if (_el.getAttribute('src').search(/streamer=/) !== -1) {
+      parts = _el.getAttribute('src').split('?streamer=');
+      file = parts[1] + '/' + parts[0];
+      livestream = true;
     }
 
-    opts = {
-      aspectratio: '16:9',
+    options = Object.assign({}, {
       autostart: _el.hasAttribute('autoplay'),
       controls: _el.hasAttribute('controls'),
       file: file,
       id: _el.getAttribute('id') || 'jwplayer' + _COUNT,
       image: _el.getAttribute('poster') || '',
-      livestream: livestream, // whether or not this is a livestream instance
-      width: '100%'
-    };
+      livestream: livestream
+    });
 
     // NOTE: only 1 playlist per page is supported
-    // (and when using a playlist, only 1 video elem per page is supported)
     if (_elPlaylist) {
-      opts.playlist = _buildPlaylist();
+      options.playlist = _getPlaylist();
     }
 
     // TODO: capture multiple track elems (for multi-language support)
-    track = _el.querySelector('track');
     if (track) {
-      opts.tracks = [{
+      options.tracks = [{
         default: track.hasAttribute('default'),
         file: track.getAttribute('src'),
         kind: track.getAttribute('kind'),
@@ -99,57 +127,46 @@ var VideoPlayer = function (options) {
       }];
     }
 
-    // jwplayer requires an id value on the instantiated elem
-    _el.setAttribute('id', opts.id);
-
-    return opts;
+    return options;
   };
 
-
   /**
-   * Create the playlist array for jwplayer
-   * Expects the playlist to be defined using an html definition list, <dl>
+   * Get the playlist for jwplayer from the embedded playlist <dl> in the HTML.
    *
-   * @return {Array}
-   *    playlist in format jwplayer expects
+   * @return playlist {Array}
    */
-  _buildPlaylist = function () {
-    var captions,
-        description,
-        dd,
-        dt,
-        i,
-        j,
+  _getPlaylist = function () {
+    var description,
         items,
         image,
         playlist,
-        playlist_item,
+        playlistItem,
         title,
+        track,
         video;
 
-    items = _getItems(_elPlaylist);
+    items = _getItems();
     playlist = [];
 
-    for (i = 0; i < items.length; i++) {
-      captions = null;
+    items.forEach(item => {
       description = null;
-      dt = items[i].dt; // <dt> elems (title, video href)
       image = null;
-      title = dt.textContent;
-      video = dt.querySelector('a').getAttribute('href');
+      title = item.dt.textContent;
+      track = null;
+      video = item.dt.querySelector('a').getAttribute('href');
 
-      for (j = 0; j < items[i].dd.length; j++) {
-        dd = items[i].dd[j]; // <dd> elems (description, poster img, captions)
+      // Get optional description, poster img, closed captions
+      item.dds.forEach(dd => {
         if (dd.classList.contains('description')) {
           description = dd.textContent;
         } else if (dd.classList.contains('image')) {
           image = dd.querySelector('img').getAttribute('src');
         } else if (dd.classList.contains('cc')) {
-          captions = dd.querySelector('a').getAttribute('href');
+          track = dd.querySelector('a').getAttribute('href');
         }
-      }
+      });
 
-      playlist_item = {
+      playlistItem = {
         description: description,
         image: image,
         sources: [{
@@ -157,116 +174,44 @@ var VideoPlayer = function (options) {
         }],
         title: title,
         tracks: [{
-          file: captions
+          file: track
         }]
       };
 
-      playlist.push(playlist_item);
-    }
-
-    // Playlist is embedded in jwplayer instance, so remove from DOM
-    _elPlaylist.parentNode.removeChild(_elPlaylist);
+      playlist.push(playlistItem);
+    });
 
     return playlist;
   };
 
-
   /**
-   * Get items from a definition list and associate each <dt> with its <dd>'s
-   *
-   * @param dl {DOMElement}
-   *    definition list
-   *
-   * @return {Object}
-   *    matching items
+   * Instantiate jwplayer.
    */
-  _getItems = function (dl) {
-    var child,
-        children,
-        i,
-        item,
-        items,
-        type;
-
-    items = [];
-
-    children = dl.children;
-    for (i = 0; i < children.length; i++) {
-      child = children[i];
-      type = child.nodeName;
-      if (type === 'DT') {
-        // create new item
-        item = {
-          dt: child,
-          dd: []
-        };
-        items.push(item);
-      } else if (type === 'DD') {
-        // add to existing item
-        if (item === null) {
-          throw new Error('found DD before DT');
-        }
-        item.dd.push(child);
-      } else {
-        throw new Error('found unexpected element "' + type + '",' +
-            ' expected DT or DD');
-      }
-    }
-
-    return items;
-  };
-
-
-  /**
-   * Instantiate jwplayer
-   *
-   * @param opts {Object}
-   *    jwplayer options
-   */
-  _setupPlayer = function (opts) {
-    var fixedOpts;
-
-    // fixedOpts are applied to all jwplayer instances
-    fixedOpts = {
-      skin: {
-        name: 'five'
-      },
+  _initPlayer = function () {
+    var options = Object.assign({}, _getOptions(), {
+      aspectratio: '16:9',
       captions: {
         backgroundOpacity: 60,
         fontSize: 12
       },
-      ga: {} // Google Analytics
-    };
-
-    // merge passed opts with fixed opts
-    opts = Object.assign({}, fixedOpts, opts);
-
-    // instantiate player
-    jwplayer(opts.id).setup(opts);
-
-    // if player can't be setup in livestream mode, assume no Flash, alert user
-    jwplayer(opts.id).on('setupError', function(e) {
-      var flash,
-          p,
-          video;
-
-      console.log(e);
-
-      if (opts.livestream) {
-        flash = document.querySelector('.' + 'flash');
-        if (flash) {
-          flash.classList.add('alert', 'error', 'no-icon');
-        } else {
-          p = document.createElement('p');
-          p.classList.add('alert', 'error', 'no-icon');
-          p.innerHTML = '<a href="http://get.adobe.com/flashplayer/">Adobe' +
-            'Flash Player</a> is <strong>required</strong> to view live webcasts.';
-
-          video = document.querySelector('#' + opts.id);
-          video.parentNode.insertBefore(p, video.nextSibling); // insert after
-        }
-      }
+      skin: {
+        name: 'five'
+      },
+      width: '100%'
     });
+
+    if (options.file) {
+      _el.setAttribute('id', options.id); // jwplayer requires an id on el
+
+      // Instantiate jwplayer and log errors
+      jwplayer(options.id).setup(options).on('setupError', e => {
+        console.log('hi', e);
+      });
+
+      if (_elPlaylist) {
+        _elPlaylist.parentNode.removeChild(_elPlaylist); // included in player
+      }
+    }
   };
 
 
