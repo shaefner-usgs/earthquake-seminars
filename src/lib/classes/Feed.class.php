@@ -71,11 +71,16 @@ class Feed {
       $seminar->year,
       date('Ymd', strtotime($seminar->datetime))
     );
+    $image = $this->_baseUri . '/img/podcast.png'; // default
     $link = $this->_baseUri . '/' . $seminar->ID;
     $speaker = xmlEntities($seminar->speakerWithAffiliation);
     $summary = xmlEntities($seminar->summary);
     $topic = xmlEntities($seminar->topic);
     $url = "https://$DATA_HOST" . $seminar->videoSrc;
+
+    if ($seminar->imageSrc) {
+      $image = "https://$DATA_HOST" . $seminar->imageSrc;
+    }
 
     return sprintf('
       <item>
@@ -94,8 +99,8 @@ class Feed {
         <itunes:duration>60:00</itunes:duration>
         <itunes:episodeType>full</itunes:episodeType>
         <itunes:explicit>no</itunes:explicit>
-        <itunes:image href="%s/img/podcast.png" />
-        <media:thumbnail url="%s/img/podcast-small.png" />
+        <itunes:image href="%s" />
+        <media:thumbnail url="%s" />
       </item>',
       $topic,
       $link,
@@ -106,8 +111,8 @@ class Feed {
       $url,
       $filesize,
       $speaker,
-      $this->_baseUri,
-      $this->_baseUri
+      $image,
+      $image
     );
   }
 
