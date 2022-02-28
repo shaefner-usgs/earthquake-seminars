@@ -87,22 +87,19 @@ class Feed {
         <enclosure url="%s" length="%s" type="video/mp4" />
         <itunes:author>%s</itunes:author>
         <itunes:duration>60:00</itunes:duration>
+        <itunes:episodeType>full</itunes:episodeType>
         <itunes:explicit>no</itunes:explicit>
-        <itunes:subtitle>%s</itunes:subtitle>
-        <itunes:summary>%s</itunes:summary>
-        <itunes:image href="%s/img/podcast.png?20160901" />
+        <itunes:image href="%s/img/podcast.png" />
         <media:thumbnail url="%s/img/podcast-small.png" />
       </item>',
-      $speaker,
-      $link,
       $topic,
+      $link,
+      $summary,
       $guid,
       $seminar->pubDate,
       $url,
       $filesize,
       $speaker,
-      $topic,
-      $summary,
       $this->_baseUri,
       $this->_baseUri
     );
