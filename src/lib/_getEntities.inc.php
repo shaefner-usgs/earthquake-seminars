@@ -84,7 +84,7 @@ function xmlEntities ($str) {
 
   $str = msWordEntities($str);
   $str = htmlentities($str);
-  $str = str_ireplace($search, $replace, $str);
+  $str = str_replace($search, $replace, $str);
 
   return $str;
 }
