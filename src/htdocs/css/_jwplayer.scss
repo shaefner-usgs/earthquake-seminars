@@ -188,6 +188,12 @@ $button-color-bg-hover: rgba(2, 222, 0, 0.5);
     }
   }
 
+  // Closed captions
+  .jw-text-track-cue {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    padding: 1px 0 2px;
+  }
+
   // Hide the title bar on video players w/ a playlist
   .jw-title {
     display: none !important;
