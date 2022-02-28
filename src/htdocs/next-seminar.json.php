@@ -6,7 +6,7 @@ include_once '../lib/classes/SeminarCollection.class.php'; // collection
 // Don't cache
 $now = date(DATE_RFC2822);
 header("Expires: $now");
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 $seminarCollection = new seminarCollection();
 $seminarCollection->addUpcoming();

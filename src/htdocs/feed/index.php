@@ -12,5 +12,5 @@ $feed = new Feed([
   'template' => "$APP_DIR/htdocs/feed/template.xml"
 ]);
 
-header('Content-Type: application/xml');
+header('Content-Type: application/xml; charset=utf-8');
 $feed->render();
