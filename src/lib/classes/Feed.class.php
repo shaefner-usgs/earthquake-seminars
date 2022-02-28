@@ -81,7 +81,12 @@ class Feed {
       <item>
         <title>%s</title>
         <link>%s</link>
-        <description>%s</description>
+        <description>
+          <![CDATA[
+            <p>%s</p>
+            %s
+          ]]>
+        </description>
         <guid>%s</guid>
         <pubDate>%s</pubDate>
         <enclosure url="%s" length="%s" type="video/mp4" />
@@ -94,7 +99,8 @@ class Feed {
       </item>',
       $topic,
       $link,
-      $summary,
+      $speaker,
+      autop($summary),
       $guid,
       $seminar->pubDate,
       $url,
