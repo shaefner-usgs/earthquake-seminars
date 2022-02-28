@@ -4,6 +4,28 @@ include_once __DIR__ . '/_autop.inc.php';
 include_once __DIR__ . '/_getEntities.inc.php';
 
 /**
+ * Check if a file exists on a remote server
+ *
+ * @param $url {String}
+ *    The remote URL to check
+ *
+ * @return {Boolean}
+ *    returns true if found, otherwise nada
+ */
+function remoteFileExists ($url) {
+  $ch = curl_init($url);
+
+  curl_setopt($ch, CURLOPT_NOBODY, true);
+  curl_exec($ch);
+  $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+
+  if ($retcode === 200) {
+    return true;
+  }
+}
+
+/**
  * Get a request parameter from $_GET or $_POST
  *
  * @param $name {String}
@@ -27,26 +49,4 @@ function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
   }
 
   return $value;
-}
-
-/**
- * Check if a file exists on a remote server
- *
- * @param $url {String}
- *    The remote URL to check
- *
- * @return {Boolean}
- *    returns true if found, otherwise nada
- */
-function remoteFileExists ($url) {
-  $ch = curl_init($url);
-
-  curl_setopt($ch, CURLOPT_NOBODY, true);
-  curl_exec($ch);
-  $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  curl_close($ch);
-
-  if ($retcode === 200) {
-    return true;
-  }
 }
