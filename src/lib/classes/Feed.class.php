@@ -16,14 +16,14 @@ include_once __DIR__ . '/../_functions.inc.php'; // app functions
 class Feed {
   private $_baseUri,
           $_buildDate,
-          $_collection,
+          $_seminars,
           $_template;
 
   public function __construct($options) {
     global $DATA_HOST, $MOUNT_PATH;
 
     $this->_baseUri = "https://$DATA_HOST$MOUNT_PATH";
-    $this->_collection = $options['collection'];
+    $this->_seminars = $options['seminars'];
     $this->_template = $options['template'];
   }
 
@@ -117,7 +117,7 @@ class Feed {
     $count = 0;
     $items = [];
 
-    foreach ($this->_collection->seminars as $seminar) {
+    foreach ($this->_seminars as $seminar) {
       if ($count === 10) break; // max 10 (seminars w/o videos are skipped)
 
       if ($seminar->videoSrc) {

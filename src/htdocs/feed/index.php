@@ -8,7 +8,7 @@ $seminarCollection = new seminarCollection();
 $seminarCollection->addRecent();
 
 $feed = new Feed([
-  'collection' => $seminarCollection,
+  'seminars' => $seminarCollection->seminars,
   'template' => "$APP_DIR/htdocs/feed/template.xml"
 ]);
 
