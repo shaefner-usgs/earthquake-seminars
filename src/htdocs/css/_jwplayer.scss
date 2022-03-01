@@ -21,6 +21,11 @@ $button-color-bg-hover: color.adjust($button-color-bg, $alpha: .2);
       background-color: $button-color-bg-hover !important;
       border-color: $button-color-hover;
     }
+    &:active {
+      background-color: $button-color-bg-active !important;
+      border-color: $button-color-active;
+      transition: all .1s ease-in-out;
+    }
 
     .jw-icon {
       color: $button-color;
@@ -29,17 +34,32 @@ $button-color-bg-hover: color.adjust($button-color-bg, $alpha: .2);
       &:hover {
         color: $button-color-hover !important;
       }
+      &:active {
+        color: $button-color-active !important;
+        transition: color .1s ease-in-out;
+      }
     }
   }
 
   // Play button hover styles (for entire video content area)
   .jw-media:hover~.jw-controls .jw-display-icon-container {
     background-color: $button-color-bg-hover !important;
+    border-color: $button-color-hover;
     transition: all .1s ease-out;
 
     .jw-icon {
       color: $button-color-hover;
       transition: all .1s ease-out;
+    }
+  }
+  .jw-media:active~.jw-controls .jw-display-icon-container {
+    background-color: $button-color-bg-active !important;
+    border-color: $button-color-active;
+    transition: all .1s ease-in-out;
+
+    .jw-icon {
+      color: $button-color-active;
+        transition: all .1s ease-in-out;
     }
   }
 
