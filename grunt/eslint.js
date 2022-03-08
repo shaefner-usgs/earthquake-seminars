@@ -5,7 +5,6 @@ var config = require('./config');
 
 var eslint = {
   options: {
-    format: 'stylish',
     overrideConfigFile: '.eslintrc.json'
   },
 
