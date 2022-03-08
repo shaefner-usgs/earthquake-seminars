@@ -6,7 +6,7 @@ var babelify = require('babelify'),
 
 var browserify = {
   options: {
-    banner: '/* browserified: <%= grunt.template.today("mm-dd-yyyy hh:MM:ss") %> */\n',
+    //banner: '/* browserified: <%= grunt.template.today("mm-dd-yyyy hh:MM:ss") %> */\n',
     browserifyOptions: {
       debug: true, // inline sourcemaps
       paths: [
@@ -18,6 +18,9 @@ var browserify = {
       babelify.configure({
         presets: [
           '@babel/preset-env'
+        ],
+        plugins: [
+          '@babel/plugin-transform-runtime'
         ]
       })
     ]
