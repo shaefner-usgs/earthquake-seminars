@@ -32,6 +32,8 @@ class Seminar {
   }
 
   public function __set ($name, $value) {
+    $value = is_null($value) ? '' : $value;
+
     if (preg_match('/^\d+$/', $value)) {
       $value = intVal($value);
     }

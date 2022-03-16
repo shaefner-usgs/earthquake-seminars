@@ -143,11 +143,11 @@ class Db {
    * upcoming seminars if $year is the current year). The list of upcoming
    * seminars is returned by default.
    *
-   * @param $year {String} default is NULL
+   * @param $year {String} default is ''
    *
    * @return {Function}
    */
-  public function querySeminars ($year=NULL) {
+  public function querySeminars ($year='') {
     $params = [
       'today' => date('Y-m-d')
     ];

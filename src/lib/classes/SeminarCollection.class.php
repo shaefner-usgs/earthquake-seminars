@@ -46,11 +46,11 @@ class SeminarCollection {
   /**
    * Query the database for a list of seminars and return the result.
    *
-   * @param $year {String} default is NULL
+   * @param $year {String} default is ''
    *
    * @return {Array}
    */
-  private function _getSeminars ($year=NULL) {
+  private function _getSeminars ($year='') {
     $rsSeminars = $this->_db->querySeminars($year);
     $rsSeminars->setFetchMode(PDO::FETCH_CLASS, 'Seminar');
 

@@ -10,7 +10,7 @@ $url = strtok($_SERVER['REQUEST_URI'], '?'); // strip querystring
 
 if (!isSet($seminar)) {
   $seminar = new stdClass;
-  $seminar->status = null;
+  $seminar->status = '';
 }
 
 // Boolean values used to highlight the appropriate section on the navbar
