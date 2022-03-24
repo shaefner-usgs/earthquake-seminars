@@ -80,14 +80,14 @@ writeConfig($CONFIG_FILE_INI, $PROMPTS);
  * Prompt the user to get the configuration value for the given option.
  *
  * @param $prompt {String}
- * @param $default {String} default null
+ * @param $default {String} default NULL
  * @param $secure {Boolean} default false
  *
  * @return $answer {String}
  */
-function configure ($prompt, $default=null, $secure=false) {
+function configure ($prompt, $default=NULL, $secure=false) {
   print $prompt;
-  if ($default !== null) {
+  if ($default !== NULL) {
     print " [$default]";
   }
   print ': ';
@@ -183,7 +183,7 @@ function writeConfig ($CONFIG_FILE_INI, $PROMPTS) {
   fwrite($FP_CONFIG, sprintf(";; auto generated: %s\n\n", date('r')));
 
   foreach ($PROMPTS as $key => $item) {
-    $default = null;
+    $default = NULL;
 
     if (isset($CONFIG[$key])) {
       $default = $CONFIG[$key]; // prev config option's value
