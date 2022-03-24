@@ -137,13 +137,10 @@ var VideoPlayer = function (options) {
    */
   _getPlaylist = function () {
     var description,
-        items,
         image,
+        items,
         playlist,
-        playlistItem,
-        title,
-        track,
-        video;
+        track;
 
     items = _getItems();
     playlist = [];
@@ -151,9 +148,7 @@ var VideoPlayer = function (options) {
     items.forEach(item => {
       description = null;
       image = null;
-      title = item.dt.textContent;
       track = null;
-      video = item.dt.querySelector('a').getAttribute('href');
 
       // Get optional description, poster img, closed captions
       item.dds.forEach(dd => {
@@ -166,19 +161,15 @@ var VideoPlayer = function (options) {
         }
       });
 
-      playlistItem = {
+      playlist.push({
         description: description,
+        file: item.dt.querySelector('a').getAttribute('href'),
         image: image,
-        sources: [{
-          file: video
-        }],
-        title: title,
+        title: item.dt.querySelector('a').textContent,
         tracks: [{
           file: track
         }]
-      };
-
-      playlist.push(playlistItem);
+      });
     });
 
     return playlist;
@@ -205,7 +196,7 @@ var VideoPlayer = function (options) {
 
       // Instantiate jwplayer and log errors
       jwplayer(options.id).setup(options).on('setupError', e => {
-        console.log('hi', e);
+        console.error(e);
       });
 
       if (_elPlaylist) {
