@@ -1,6 +1,6 @@
 @use 'sass:color';
 
-@import '_icons.scss';
+@use 'icons';
 
 $button-color: rgba(2, 190, 0, 0.85);
 $button-color-active: color.adjust($button-color, $lightness: 10%, $alpha: 1);

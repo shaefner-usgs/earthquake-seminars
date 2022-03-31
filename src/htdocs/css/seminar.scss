@@ -1,6 +1,6 @@
-@import 'node_modules/hazdev-template/src/htdocs/css/_variables.scss';
-@import '_feeds.scss';
-@import '_jwplayer.scss';
+@use 'feeds';
+@use 'jwplayer';
+@use 'variables' as *; // located in node_modules/hazdev-template
 
 dl {
   dd {
