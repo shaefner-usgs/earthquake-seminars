@@ -4,5 +4,5 @@
 dist
 node_modules
 *.sublime-workspace
-src/conf/config.ini*
+src/conf/config.in*
 src/conf/httpd.conf
