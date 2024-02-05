@@ -194,7 +194,7 @@ function prepare ($relativeTime, $to) {
     $seminar = $seminarCollection->seminars[0];
 
     // Assume no seminar if speaker is empty (committee posts "no seminar" msg on web page)
-    if (!$seminar->speaker || (!$seminar->publish)) {
+    if (!$seminar->speaker || ($seminar->publish !== 'yes')) {
       return;
     }
 
