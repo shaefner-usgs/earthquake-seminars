@@ -28,7 +28,7 @@ class SeminarListView {
 
       foreach ($this->_collection->seminars as $seminar) {
         if ( // past 'No Seminar' entry or today's seminar w/ video not yet posted
-          ($seminar->noSeminar && $seminar->status === 'past') ||
+          ($seminar->no_seminar === 'yes' && $seminar->status === 'past') ||
           ($year && preg_match('/today/', $seminar->status) && !$seminar->videoSrc)
         ) {
           continue; // skip this seminar in Archives list
@@ -83,7 +83,7 @@ class SeminarListView {
   private function _getButton ($seminar) {
     $html = '';
 
-    if ($seminar->video) {
+    if ($seminar->video === 'yes') {
       if ($seminar->status === 'live') {
         $html = '<button class="red">Live now</button>';
       } else if ($seminar->status === 'today') {
@@ -150,7 +150,7 @@ class SeminarListView {
       $imgSrc = $seminar->imageSrc;
     }
 
-    if ($seminar->noSeminar) {
+    if ($seminar->no_seminar === 'yes') {
       $closeTag = '</div>';
       $openTag = '<div>';
     } else {
