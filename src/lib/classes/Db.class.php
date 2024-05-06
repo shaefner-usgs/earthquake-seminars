@@ -108,7 +108,8 @@ class Db {
   public function queryRecent () {
     $datetime = date('Y-m-d H:i:s', strtotime('-90 mins')); // 90+ min ago
     $sql = "SELECT * FROM seminars_list
-      WHERE `publish` = 'yes' AND `video` = 'yes' AND `datetime` < '$datetime'
+      WHERE `publish` = 'yes' AND `video` = 'yes' AND `no_seminar` != 'yes'
+        AND `datetime` < '$datetime'
       ORDER BY `datetime` DESC
       LIMIT 15";
 
