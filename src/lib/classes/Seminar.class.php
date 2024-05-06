@@ -59,7 +59,6 @@ class Seminar {
     $this->imageWidth = $image['width'];
     $this->month = date('F', $this->_startTime);
     $this->monthShort = date('M', $this->_startTime);
-    $this->noSeminar = $this->_getNoSeminar();
     $this->playlistSrc = $playlistSrc;
     $this->pubDate = date('D, j M Y H:i:s T', $this->_startTime);
     $this->speakerWithAffiliation = $this->_getSpeaker();
@@ -74,8 +73,8 @@ class Seminar {
   }
 
   /**
-   * Get the attributes of the seminar's uploaded image (or the podcast image
-   * if none).
+   * Get the attributes of the seminar's uploaded image (or the no-seminar image
+   * if 'no_seminar' field is flagged).
    *
    * @return {Array}
    */
@@ -86,9 +85,10 @@ class Seminar {
     $path = "$DATA_DIR/images/" . $this->image;
     $src = '';
 
-    if ($this->image && file_exists($path)) {
+    if ($this->no_seminar === 'yes') {
+      $src = "$MOUNT_PATH/img/no-seminar.png";
+    } else if ($this->image && file_exists($path)) {
       $src = "$MOUNT_PATH/data/images/" . $this->image;
-      $type = 'upload';
 
       list($width, $height) = getimagesize($path);
 
@@ -101,21 +101,6 @@ class Seminar {
       'src' => $src,
       'width' => $displayWidth
     ];
-  }
-
-  /**
-   * Get a flag used to filter out 'no seminar' postings from archives.
-   *
-   * @return $noSeminar {Boolean}
-   */
-  private function _getNoSeminar () {
-    $noSeminar = false;
-
-    if (!$this->speaker) {
-      $noSeminar = true;
-    }
-
-    return $noSeminar;
   }
 
   /**
