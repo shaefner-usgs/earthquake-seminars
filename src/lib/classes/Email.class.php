@@ -9,8 +9,8 @@
  *   [
  *      'data': {Array} // key-value pairs for populating email template
  *      'from': {String}
- *      'template': {String} // full path to template file
  *      'subject': {String}
+ *      'template': {String} // full path to template file
  *      'to': {String}
  *   ]
  */
@@ -18,15 +18,15 @@ class Email {
   private $_data,
           $_from,
           $_message,
-          $_template,
           $_subject,
+          $_template,
           $_to;
 
   public function __construct($options) {
     $this->_data = $options['data'];
     $this->_from = $options['from'];
-    $this->_template = $options['template'];
     $this->_subject = $options['subject'];
+    $this->_template = $options['template'];
     $this->_to = $options['to'];
 
     $this->_create();
