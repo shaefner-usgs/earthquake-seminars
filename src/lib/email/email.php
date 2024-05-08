@@ -58,12 +58,6 @@ function getData ($seminar) {
   global $DATA_HOST, $MOUNT_PATH, $TEAMS_LINK;
 
   $committee = getCommittee();
-  $date = sprintf('%s, %s %d%s',
-    $seminar->weekday,
-    $seminar->month,
-    $seminar->day,
-    $seminar->dayOrdinal
-  );
   $displayButton = 'block';
   $displayHost = 'block';
   $urlBase = "https://$DATA_HOST$MOUNT_PATH";
@@ -84,7 +78,7 @@ function getData ($seminar) {
   return [
     'affiliation' => replaceChars($seminar->affiliation),
     'current-year' => date('Y'),
-    'date' =>  $date,
+    'date' => getFormattedDate($seminar),
     'display-button' => $displayButton,
     'display-host' => $displayHost,
     'email1' => $committee[0]['email'],
@@ -107,7 +101,23 @@ function getData ($seminar) {
 }
 
 /**
- * Get the HTML for an uploaded image if it exists.
+ * Get the seminar's date, formatted for display.
+ *
+ * @param $seminar {Object}
+ *
+ * @return {String}
+ */
+function getFormattedDate ($seminar) {
+  return sprintf('%s, %s %d%s',
+    $seminar->weekday,
+    $seminar->month,
+    $seminar->day,
+    $seminar->dayOrdinal
+  );
+}
+
+/**
+ * Get the HTML for the seminar's uploaded image, if it exists.
  *
  * @param $seminar {Object}
  *
@@ -136,27 +146,33 @@ function getImage ($seminar) {
  *
  * @param $seminar {Object}
  *
- * @return {String}
+ * @return $subject {String}
  */
 function getSubject ($seminar) {
-  $seminarDate = date('F j, Y', $seminar->timestamp);
-  $timestampNow = time();
-  $todaysDate = date('F j, Y', $timestampNow);
-
-  // Get relative time
-  if ($seminarDate === $todaysDate) {
-    $when = "today at $seminar->time";
+  if ($seminar->no_seminar === 'yes') {
+    $subject = 'No ESC Seminar this week';
   } else {
-    $sixDays = 60 * 60 * 24 * 6;
+    $seminarDate = date('F j, Y', $seminar->timestamp);
+    $timestampNow = time();
+    $todaysDate = date('F j, Y', $timestampNow);
 
-    if (($seminar->timestamp - $timestampNow) >= $sixDays) {
-      $when = "next $seminar->weekday";
+    // Get relative time
+    if ($seminarDate === $todaysDate) {
+      $when = "today at $seminar->time";
     } else {
-      $when = "this $seminar->weekday";
+      $sixDays = 60 * 60 * 24 * 6;
+
+      if (($seminar->timestamp - $timestampNow) >= $sixDays) {
+        $when = "next $seminar->weekday";
+      } else {
+        $when = "this $seminar->weekday";
+      }
     }
+
+    $subject = "ESC Seminar $when - $seminar->speakerWithAffiliation";
   }
 
-  return "ESC Seminar $when - $seminar->speakerWithAffiliation";
+  return $subject;
 }
 
 /**
@@ -176,25 +192,54 @@ function getSummary ($seminar) {
 }
 
 /**
- * First, check if email needs to be sent, and if so, assemble data and send it.
+ * Check if an email announcement should be sent.
  *
- * @param $relativeTime {String}
- *     English textual datetime description
+ * @param $seminar {Object}
+ * @param $interval {String}
+ * @param $to {String}
+ *
+ * @return $isNeeded {Boolean}
+ */
+function isNeeded ($seminar, $interval, $to) {
+  global $NASA_EMAIL;
+
+  $isNeeded = true; // default
+  $skip = false; // default
+
+  // Skip 'No seminar' emails on seminar day and to NASA
+  if (
+    $seminar->no_seminar === 'yes' &&
+    ($interval === '+150 minutes' || $to === $NASA_EMAIL)
+  ) {
+    $skip = true;
+  }
+
+  if ($seminar->publish !== 'yes' || $skip) {
+    $isNeeded = false;
+  }
+
+  return $isNeeded;
+}
+
+/**
+ * Create and send the email.
+ *
+ * @param $datetime {String}
+ *     PHP date/time
  * @param $to {String}
  *     email address(es, comma-separated)
  */
-function prepare ($relativeTime, $to) {
+function prepare ($datetime, $to) {
   global $cwd;
 
-  $datetime = date('Y-m-d H:i:00', strtotime($relativeTime));
+  $datetime = date('Y-m-d H:i:00', strtotime($datetime));
   $seminarCollection = new seminarCollection();
   $seminarCollection->addSeminarAtTime($datetime);
 
   if ($seminarCollection->seminars) {
     $seminar = $seminarCollection->seminars[0];
 
-    // Assume no seminar if speaker is empty (committee posts "no seminar" msg on web page)
-    if (!$seminar->speaker || ($seminar->publish !== 'yes')) {
+    if (!isNeeded($seminar, $datetime, $to)) {
       return;
     }
 
@@ -203,11 +248,17 @@ function prepare ($relativeTime, $to) {
       $data['name1'],
       $data['email1']
     );
+    $template = "$cwd/template.html"; // default
+
+    if ($seminar->no_seminar === 'yes') {
+      $template = "$cwd/template-no-seminar.html";
+    }
+
     $email = new Email([
       'data' => $data,
       'from' => $from,
       'subject' => getSubject($seminar),
-      'template' => "$cwd/template.html",
+      'template' => $template,
       'to' => $to
     ]);
 
@@ -216,7 +267,7 @@ function prepare ($relativeTime, $to) {
 }
 
 /**
- * Replace special chars. with HTML entities while preserving HTML tags
+ * Replace special chars. with HTML entities while preserving HTML tags.
  *
  * @param $str {String}
  *
