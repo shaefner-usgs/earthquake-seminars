@@ -224,22 +224,22 @@ function isNeeded ($seminar, $interval, $to) {
 /**
  * Create and send the email.
  *
- * @param $datetime {String}
- *     PHP date/time
+ * @param $interval {String}
+ *     interval in minutes (or any English textual datetime description)
  * @param $to {String}
  *     email address(es, comma-separated)
  */
-function prepare ($datetime, $to) {
+function prepare ($interval, $to) {
   global $cwd;
 
-  $datetime = date('Y-m-d H:i:00', strtotime($datetime));
+  $datetime = date('Y-m-d H:i:00', strtotime($interval));
   $seminarCollection = new seminarCollection();
   $seminarCollection->addSeminarAtTime($datetime);
 
   if ($seminarCollection->seminars) {
     $seminar = $seminarCollection->seminars[0];
 
-    if (!isNeeded($seminar, $datetime, $to)) {
+    if (!isNeeded($seminar, $interval, $to)) {
       return;
     }
 
