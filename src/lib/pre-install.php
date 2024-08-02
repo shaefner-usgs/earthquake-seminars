@@ -61,4 +61,5 @@ RewriteRule ^{$CONFIG['MOUNT_PATH']}/([0-9]+)$ {$CONFIG['MOUNT_PATH']}/seminar.p
   ExpiresActive on
   ExpiresDefault "access plus 30 minutes"
 </Location>
-OUT);
+OUT
+);
